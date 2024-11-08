@@ -3,11 +3,16 @@ import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { TouchableOpacity } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
-import { router } from 'expo-router'
-
+import { Redirect, router } from 'expo-router'
 import { images  } from '../constants/index'
+import { useAuthContext } from '../context/AuthProvider'
+import { isLoading } from 'expo-font'
 
 const index = () => {
+
+    const { token, isLoading } = useAuthContext();
+
+    if(!isLoading && token) return <Redirect href="/home" />
   return (
     <SafeAreaView className="bg-white h-full">
         <ScrollView contentContainerStyle={{height: '100%' }}>

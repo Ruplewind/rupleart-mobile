@@ -4,6 +4,7 @@ import { Text, View } from "react-native";
 import { useFonts } from "expo-font";
 import { useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
+import { AuthProvider } from "../context/AuthProvider";
 
 export default function RootLayout() {
 
@@ -35,21 +36,20 @@ export default function RootLayout() {
   },[fontsLoaded])
 
   if(!fontsLoaded && !error) return null;
+
   
 
   return (
-    <>
+    <AuthProvider>
     <Stack>
       {/* <Stack.Screen name="(tabs)" options={{title: 'Home'}} />
       <Stack.Screen name="login" options={{title: 'Login'}}/> */}
-      <Stack.Screen name="index" options={{ headerShown: false}} />
-      <Stack.Screen name="(auth)" options={{ headerShown: false}} />
       <Stack.Screen name="(tabs)" options={{ headerShown: false}} />
+      <Stack.Screen name="(auth)" options={{ headerShown: false}} />
+      <Stack.Screen name="index" options={{ headerShown: false}} />
       {/* <Stack.Screen name="/search/[query]" options={{ headerShown: false}} /> */}
     </Stack>
-
-      <StatusBar backgroundColor='#161622' style="dark" />
-    </>
+    </AuthProvider>
     
   );
 }

@@ -1,4 +1,4 @@
-import { View, Text, Image, Pressable, TextInput } from 'react-native'
+import { View, Text, Image, Pressable, TextInput, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ScrollView } from 'react-native'
@@ -8,6 +8,7 @@ import FormField from '../../components/FormField'
 import { TouchableOpacity } from 'react-native'
 import { router } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
+import { useAuthContext } from '../../context/AuthProvider'
 
 const Login = () => {
 
@@ -15,11 +16,44 @@ const Login = () => {
     email: null,
     password: null
   })
-
   const [loading, setLoading] = useState(false);
+  const { login } = useAuthContext();
 
   const handleSubmit = () => {
     setLoading(true);
+
+    if(form.email == null || form.password == null){
+      Alert.alert('Error', "All fields must be filled");
+      setLoading(false);
+      return;
+    }
+
+    fetch(`${process.env.EXPO_PUBLIC_API_URL}/user_login`,{
+      method: 'POST',
+      headers: {
+        'Content-type':'application/json'
+      },
+      body: JSON.stringify({
+        email: form.email , password: form.password
+      })
+    })
+    .then((res)=> {
+          res.json().then(response => {
+            if(res.ok){
+                //Alert.alert('Success', "Logged In");
+                login(response.token, response.userId, `${response.first_name} ${response.second_name}`);
+                router.replace('/home');
+                setLoading(false);
+            }else{
+                Alert.alert('Failed', response);
+                setLoading(false);
+            }
+          })
+      })
+    .catch(err => {
+      Alert.alert('Error', err);
+      setLoading(false);
+    })
   }
 
   return (
