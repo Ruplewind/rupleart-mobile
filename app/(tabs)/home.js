@@ -7,6 +7,7 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect, useRef, useState } from "react";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Dropdown from "../../components/DropDown";
+import Products from "../../components/Products";
 
 export default function Home() {
   const { logout, fullName } = useAuthContext();
@@ -28,30 +29,25 @@ export default function Home() {
     },[])
 
   const [expanded, setExpanded] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   return (
     <View
-    className="min-h-screen"
-
+    className="flex-1"
     >
       <View className="p-4 flex-row items-center bg-white">
         <Text className="text-black w-1/2">Sort By Category</Text>
         <View className="flex-row justify-end w-1/2">
-          <Dropdown data={categories} onChange={(item) => {
+          <Dropdown data={[{ _id:1, category: "All"}, ...categories,]} onChange={(item) => {
+            setSelectedCategory(item.category);
           }}
           placeholder="All" 
           />
         </View>
-        
       </View>
-      
-      
 
-      <TouchableOpacity onPress={()=>{
-        logout();
-      }}>
-          <Text className="text-white">Logout</Text>
-      </TouchableOpacity>
+      <Products category={selectedCategory} className=""/>
+      
       <StatusBar backgroundColor="#161622" style='dark' />
     </View>
   );
