@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "rupleart_ecommerce",
-    "slug": "rupleart_ecommerce",
+    "name": "RuplerArt",
+    "slug": "rupleart",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
