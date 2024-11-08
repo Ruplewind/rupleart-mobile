@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     backgroundColor: "white",
     marginTop: 110,
-    width: "30%",
+    width: "42%",
     padding: 10,
     borderRadius: 6,
     maxHeight: 200,
