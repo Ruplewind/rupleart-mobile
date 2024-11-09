@@ -1,24 +1,7 @@
 import { View, Text, ScrollView, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import React, { useEffect, useState } from 'react';
 
-const Products = ({ category }) => {
-    const [loading, setLoading] = useState(true);
-    const [products, setProducts] = useState([]);
-    const [error, setError] = useState(false);
-
-    useEffect(() => {
-        fetch(`${process.env.EXPO_PUBLIC_API_URL}/get_approved_products`)
-            .then((res) => res.json())
-            .then((res) => {
-                setProducts(res);
-                setLoading(false);
-            })
-            .catch((err) => {
-                console.log(err);
-                setLoading(false);
-                setError(true);
-            });
-    }, []);
+const Products = ({ products, category }) => {
 
     const filteredData = products.filter((item) => {
         if (category === '' || category === null || category == "All") {
@@ -62,13 +45,13 @@ const styles = StyleSheet.create({
         padding: 10,
         marginBottom: 5,
         shadowColor: '#000',
-        shadowOpacity: 0.3,
+        shadowOpacity: 0.05,
         shadowRadius: 4,
         elevation: 3, // Adds shadow on Android
     },
     image: {
         width: '100%',
-        height: 150,
+        height: 120,
         borderRadius: 8,
         marginBottom: 8,
     },
@@ -86,7 +69,7 @@ const styles = StyleSheet.create({
     },
     addToCartButton: {
         backgroundColor: '#4A148C',
-        paddingVertical: 8,
+        paddingVertical: 6,
         borderRadius: 6,
         alignItems: 'center',
     },

@@ -13,7 +13,7 @@ export default function TabLayout() {
         screenOptions={{
             headerStyle: {
                 backgroundColor: '#fff',
-                height: 100
+                height: 70
             },
             headerLeft: ()=> (
                 <Ionicons name="menu" size={20} color="black" className="ml-5" />

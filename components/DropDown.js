@@ -101,13 +101,13 @@ const styles = StyleSheet.create({
   },
   options: {
     position: "absolute",
-    backgroundColor: "white",
-    marginTop: 110,
-    width: "42%",
+    backgroundColor: "#e6e6e6",
+    marginTop: 337,
+    width: "39%",
     padding: 10,
     borderRadius: 6,
-    maxHeight: 200,
-    right: 0
+    maxHeight: 205,
+    right: 10
   },
   text: {
     fontSize: 13,
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     flexShrink: 1
   },
   button: {
-    height: 32,
+    height: 25,
     gap: 10,
     justifyContent:"space-between",
     backgroundColor: "#EEEEEE",
