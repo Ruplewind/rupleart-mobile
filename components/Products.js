@@ -1,5 +1,6 @@
 import { View, Text, ScrollView, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import React, { useEffect, useState } from 'react';
+import { router, usePathname } from 'expo-router';
 
 const Products = ({ products, category }) => {
 
@@ -11,11 +12,18 @@ const Products = ({ products, category }) => {
         }
     });
 
+    const pathname =usePathname();
+
     return (
         <ScrollView className="p-4 mb-56 max-h-screen bg-white">
             <View style={styles.container}>
                 {filteredData.map((item) => (
-                    <TouchableOpacity key={item._id} style={styles.card}>
+                    <TouchableOpacity key={item._id} style={styles.card} onPress={()=>{
+                        router.push({
+                            pathname: "preview/[product]", 
+                            params: { product: JSON.stringify(item), allProducts: JSON.stringify(products) } 
+                        })
+                    }}>
                         <Image
                             source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/uploads/${item.image}` }}
                             style={styles.image}
@@ -57,15 +65,15 @@ const styles = StyleSheet.create({
     },
     productName: {
         color: 'black',
-        fontSize: 16,
+        fontSize: 14,
         textAlign:'center',
         marginBottom: 4,
     },
     price: {
         color: 'gray',
-        fontSize: 14,
+        fontSize: 12,
         textAlign:'center',
-        marginBottom: 8,
+        marginBottom: 5,
     },
     addToCartButton: {
         backgroundColor: '#4A148C',
@@ -75,7 +83,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: 'white',
-        fontSize: 14,
+        fontSize: 12,
         fontWeight: 'bold',
     },
 });

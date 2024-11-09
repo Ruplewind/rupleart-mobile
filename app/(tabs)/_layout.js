@@ -6,6 +6,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { Button, Text } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { TouchableOpacity } from 'react-native';
 
 export default function TabLayout() {
     return (
@@ -19,7 +20,9 @@ export default function TabLayout() {
                 <Ionicons name="menu" size={20} color="black" className="ml-5" />
             ),
             headerRight: ()=> (
-                <AntDesign name="shoppingcart" size={22} color="black"  className="mr-5" />
+                <TouchableOpacity>
+                  <AntDesign name="shoppingcart" size={22} color="black"  className="mr-5" />
+                </TouchableOpacity>
             ),
             headerShadowVisible: false,
             headerTintColor: '#25292e',

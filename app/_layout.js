@@ -5,6 +5,8 @@ import { useFonts } from "expo-font";
 import { useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import { AuthProvider } from "../context/AuthProvider";
+import { AntDesign } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native";
 
 export default function RootLayout() {
 
@@ -47,7 +49,12 @@ export default function RootLayout() {
       <Stack.Screen name="(tabs)" options={{ headerShown: false}} />
       <Stack.Screen name="(auth)" options={{ headerShown: false}} />
       <Stack.Screen name="index" options={{ headerShown: false}} />
-      {/* <Stack.Screen name="/search/[query]" options={{ headerShown: false}} /> */}
+      <Stack.Screen name="preview/[product]" options={{ headerShown: true, headerTitle: "Preview", headerBackTitleVisible: false, headerRight: ()=> (
+                <TouchableOpacity>
+                  <AntDesign name="shoppingcart" size={22} color="black"  className="mr-5" />
+                </TouchableOpacity>
+            )}} 
+      />
     </Stack>
     </AuthProvider>
     

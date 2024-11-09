@@ -49,8 +49,8 @@ const LatestItem = ({ activeItem, item }) => {
                 <ImageBackground
                     source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/uploads/${item.image}` }}
                     style={{
-                        width: 148, // equivalent to 13rem
-                        height: 200, // a bit shorter for a card effect
+                        width: 100, // equivalent to 13rem
+                        height: 130, // a bit shorter for a card effect
                         borderRadius: 12,
                         overflow: 'hidden',
                         justifyContent: 'flex-end',
@@ -65,13 +65,13 @@ const LatestItem = ({ activeItem, item }) => {
                     }}>
                         <Text style={{
                             color: '#ffffff',
-                            fontSize: 16,
+                            fontSize: 10,
                             fontWeight: '600',
                             marginBottom: 4,
                         }}>{item.productName}</Text>
                         <Text style={{
                             color: '#f5f5f5',
-                            fontSize: 12,
+                            fontSize: 10,
                         }}>Ksh. {item.price}</Text>
                     </View>
                 </ImageBackground>
@@ -80,9 +80,13 @@ const LatestItem = ({ activeItem, item }) => {
     );
 };
 
-const LatestArtworks = ({ products }) => {
-
-    let filteredProducts = products;
+const RelatedProducts = ({ products }) => {
+    let filteredProducts = [];
+    if(products.length > 6){
+        filteredProducts = products.slice(0,6);
+    }else{
+        filteredProducts = products;
+    }
 
     const [activeItem, setActiveItem] = useState(filteredProducts[0]);
 
@@ -100,12 +104,11 @@ const LatestArtworks = ({ products }) => {
 
   return (
     <View className="p-4" style={{
-        backgroundColor:"#f2f2f2"
+        backgroundColor:"#fff"
     }}>
-        <Text className="text-black mb-2 text-center">Latest Artworks</Text>
         <FlatList
             style={{
-                marginTop:10
+                marginTop:5
             }}
             data={filteredProducts}
             horizontal
@@ -124,5 +127,5 @@ const LatestArtworks = ({ products }) => {
   )
 }
 
-export default LatestArtworks
+export default RelatedProducts
 
