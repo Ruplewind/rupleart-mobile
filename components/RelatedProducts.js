@@ -40,7 +40,6 @@ const LatestItem = ({ activeItem, item, allProducts }) => {
                 }}
                 activeOpacity={0.8}
                 onPress={()=>{
-                    console.log(item);
                     router.push({
                         pathname: "preview/[product]", 
                         params: { product: JSON.stringify(item), allProducts: JSON.stringify(allProducts) } 
