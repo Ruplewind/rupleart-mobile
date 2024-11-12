@@ -48,7 +48,7 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   return (
-    <View
+    <ScrollView
     className="flex-1"
     >
       { !loading && <>
@@ -69,6 +69,6 @@ export default function Home() {
       </> }
       
       <StatusBar backgroundColor="#161622" style='dark' />
-    </View>
+    </ScrollView>
   );
 }

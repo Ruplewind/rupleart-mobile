@@ -52,7 +52,26 @@ export default function RootLayout() {
       <Stack.Screen name="(auth)" options={{ headerShown: false}} />
       <Stack.Screen name="index" options={{ headerShown: false}} />
       <Stack.Screen 
-            name="checkout" 
+            name="cancel" 
+            options={{ 
+              headerBackVisible: false,
+              headerShown: true, 
+              headerLeft: () => null,
+              headerTitle: "Transaction Cancelled", 
+              headerLeft: () => null // Removes the back button
+            }} 
+          />
+          <Stack.Screen 
+            name="confirmtransaction/[id]" 
+            options={{ 
+              headerBackTitleVisible: false, 
+              headerShown: true, 
+              headerTitle: "Order Confirmation", 
+              headerBackVisible: false, // Removes the back button
+            }} 
+          />
+      <Stack.Screen 
+            name="checkout"
             options={{ 
               headerBackTitleVisible: false, 
               headerShown: true, 

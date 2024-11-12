@@ -4,6 +4,7 @@ import useCart from '../context/CartContext';
 import { TouchableOpacity } from 'react-native';
 import Entypo from '@expo/vector-icons/Entypo';
 import { router } from 'expo-router';
+import SuccessTransaction from '../components/SuccessTransaction';
 
 const Cart = () => {
   const { products, total, removeFromCart } = useCart();
