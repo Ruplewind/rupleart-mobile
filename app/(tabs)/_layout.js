@@ -8,6 +8,7 @@ import { Button, Text, View } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { TouchableOpacity } from 'react-native';
 import useCart from '../../context/CartContext';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 export default function TabLayout() {
 
@@ -56,14 +57,6 @@ export default function TabLayout() {
                 <Ionicons name={focused ? 'home-sharp' : 'home-outline'} color={color} size={20} />
             ),
         }} />
-        <Tabs.Screen 
-        name="events" 
-        options={{
-            title: 'Events',
-            tabBarIcon: ({ color, focused}) => (
-                <MaterialIcons name={focused ? 'event' : 'event'} color={color} size={20} />
-            ),
-        }} />
 
         <Tabs.Screen 
         name="myads" 
@@ -75,9 +68,27 @@ export default function TabLayout() {
         }} />
 
         <Tabs.Screen 
+        name="orders" 
+        options={{
+            title: 'My Orders',
+            tabBarIcon: ({ color, focused}) => (
+                <MaterialCommunityIcons name="truck-delivery" size={22} color={color}  />
+            ),
+        }} />
+
+        <Tabs.Screen 
+        name="events" 
+        options={{
+            title: 'Events',
+            tabBarIcon: ({ color, focused}) => (
+                <MaterialIcons name={focused ? 'event' : 'event'} color={color} size={20} />
+            ),
+        }} />
+
+        <Tabs.Screen 
         name="profile" 
         options={{
-            title: 'My Profile',
+            title: 'Profile',
             tabBarIcon: ({ color, focused}) => (
                 <FontAwesome name={focused ? 'user' : 'user'} color={color} size={20} />
             ),
