@@ -1,12 +1,13 @@
-import { SplashScreen, Stack } from "expo-router";
+import { router, SplashScreen, Stack } from "expo-router";
 import "../global.css";
-import { Text, View } from "react-native";
+import { Alert, Text, View } from "react-native";
 import { useFonts } from "expo-font";
 import { useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import { AuthProvider } from "../context/AuthProvider";
 import { AntDesign } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
+import { CartProvider } from "../context/CartContext";
 
 export default function RootLayout() {
 
@@ -42,6 +43,7 @@ export default function RootLayout() {
   
 
   return (
+    <CartProvider>
     <AuthProvider>
     <Stack>
       {/* <Stack.Screen name="(tabs)" options={{title: 'Home'}} />
@@ -49,14 +51,41 @@ export default function RootLayout() {
       <Stack.Screen name="(tabs)" options={{ headerShown: false}} />
       <Stack.Screen name="(auth)" options={{ headerShown: false}} />
       <Stack.Screen name="index" options={{ headerShown: false}} />
-      <Stack.Screen name="preview/[product]" options={{ headerShown: true, headerTitle: "Preview", headerBackTitleVisible: false, headerRight: ()=> (
-                <TouchableOpacity>
+      <Stack.Screen 
+            name="checkout" 
+            options={{ 
+              headerBackTitleVisible: false, 
+              headerShown: true, 
+              headerTitle: "Checkout", 
+              headerLeft: () => null // Removes the back button
+            }} 
+          />
+      <Stack.Screen 
+            name="cart" 
+            options={{ 
+              headerBackTitleVisible: false, 
+              headerShown: true, 
+              headerTitle: "Your Cart", 
+              headerLeft: () => null // Removes the back button
+            }} 
+          />
+      <Stack.Screen name="preview/[product]" 
+      options={{ 
+        headerShown: true, 
+        headerTitle: "Preview", 
+        headerBackTitleVisible: false, 
+        headerRight: ()=> (
+                <TouchableOpacity onPress={()=>{
+                  router.push("cart")
+                }}>
                   <AntDesign name="shoppingcart" size={22} color="black"  className="mr-5" />
                 </TouchableOpacity>
-            )}} 
+            )
+      }}
       />
     </Stack>
+    <StatusBar backgroundColor="#161622" style='dark' />
     </AuthProvider>
-    
+    </CartProvider>
   );
 }

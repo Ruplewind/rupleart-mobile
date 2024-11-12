@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import LatestArtworks from '../../components/LatestArtworks';
 import RelatedProducts from '../../components/RelatedProducts';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import useCart from '../../context/CartContext';
 
 const Preview = () => {
   const { product, allProducts } = useLocalSearchParams();
@@ -31,6 +32,8 @@ const Preview = () => {
   const decreaseQuantity = () => {
     if (quantity > 1) setQuantity(quantity - 1);
   };
+
+  const { addToCart } = useCart();
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -79,7 +82,12 @@ const Preview = () => {
           </View>
         </View>
 
-        <TouchableOpacity className="bg-purple-900 p-2 rounded-full w-3/4 mx-auto shadow-sm">
+        <TouchableOpacity 
+        className="bg-purple-900 p-2 rounded-full w-3/4 mx-auto shadow-sm" 
+        onPress={()=>{
+          addToCart(item)
+        }}
+        >
           <Text className="text-white text-center text-lg font-semibold">Add To Cart</Text>
         </TouchableOpacity>
       </View>

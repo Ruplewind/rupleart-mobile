@@ -1,6 +1,7 @@
 import { View, Text, ScrollView, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { router, usePathname } from 'expo-router';
+import useCart from '../context/CartContext';
 
 const Products = ({ products, category }) => {
 
@@ -13,6 +14,8 @@ const Products = ({ products, category }) => {
     });
 
     const pathname =usePathname();
+
+    const { addToCart } = useCart();
 
     return (
         <ScrollView className="p-4 mb-56 max-h-screen bg-white">
@@ -30,7 +33,12 @@ const Products = ({ products, category }) => {
                         />
                         <Text style={styles.productName}>{item.productName}</Text>
                         <Text style={styles.price}>Ksh {item.price}</Text>
-                        <TouchableOpacity style={styles.addToCartButton}>
+                        <TouchableOpacity 
+                        style={styles.addToCartButton}
+                        onPress={()=>{
+                            addToCart(item)
+                        }}
+                        >
                             <Text style={styles.buttonText}>Add to Cart</Text>
                         </TouchableOpacity>
                     </TouchableOpacity>
