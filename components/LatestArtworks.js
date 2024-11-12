@@ -21,7 +21,7 @@ const zoomOut = {
     }
 }
 
-const LatestItem = ({ activeItem, item }) => {
+const LatestItem = ({ activeItem, item, allProducts }) => {
     return (
         <Animatable.View
             style={{ marginRight: 20 }}
@@ -42,7 +42,7 @@ const LatestItem = ({ activeItem, item }) => {
                 onPress={()=>{
                     router.push({
                         pathname: "preview/[product]", 
-                        params: { product: JSON.stringify(item) } 
+                        params: { product: JSON.stringify(item), allProducts: JSON.stringify(allProducts) } 
                     })
                 }}
             >
@@ -111,7 +111,7 @@ const LatestArtworks = ({ products }) => {
             horizontal
             keyExtractor={(product)=> product._id}
             renderItem={({ item }) => (
-                <LatestItem activeItem={activeItem} item={item} />
+                <LatestItem activeItem={activeItem} item={item} allProducts={products}/>
             )}
             onViewableItemsChanged={viewableItemsChanged}
             viewabilityConfig={{
