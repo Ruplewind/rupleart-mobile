@@ -1,4 +1,4 @@
-import { router, SplashScreen, Stack } from "expo-router";
+import { router, Stack } from "expo-router";
 import "../global.css";
 import { Alert, Text, View } from "react-native";
 import { useFonts } from "expo-font";
@@ -8,6 +8,7 @@ import { AuthProvider } from "../context/AuthProvider";
 import { AntDesign } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 import { CartProvider } from "../context/CartContext";
+import * as SplashScreen from 'expo-splash-screen';
 
 export default function RootLayout() {
 
@@ -35,7 +36,11 @@ export default function RootLayout() {
   useEffect(()=>{
     if(error) throw error;
 
-    if(fontsLoaded) SplashScreen.hideAsync();
+    if(fontsLoaded){
+      setTimeout(async () => {
+        await SplashScreen.hideAsync();
+      }, 1000);
+    }
   },[fontsLoaded])
 
   if(!fontsLoaded && !error) return null;
@@ -46,61 +51,60 @@ export default function RootLayout() {
     <CartProvider>
     <AuthProvider>
     <Stack>
-      {/* <Stack.Screen name="(tabs)" options={{title: 'Home'}} />
-      <Stack.Screen name="login" options={{title: 'Login'}}/> */}
       <Stack.Screen name="(tabs)" options={{ headerShown: false}} />
       <Stack.Screen name="(auth)" options={{ headerShown: false}} />
       <Stack.Screen name="index" options={{ headerShown: false}} />
       <Stack.Screen 
-            name="cancel" 
-            options={{ 
-              headerBackVisible: false,
-              headerShown: true, 
-              headerLeft: () => null,
-              headerTitle: "Transaction Cancelled", 
-              headerLeft: () => null // Removes the back button
-            }} 
-          />
-          <Stack.Screen 
-            name="confirmtransaction/[id]" 
-            options={{ 
-              headerBackTitleVisible: false, 
-              headerShown: true, 
-              headerTitle: "Order Confirmation", 
-              headerBackVisible: false, // Removes the back button
-            }} 
-          />
+        name="cancel" 
+        options={{ 
+          headerBackVisible: false,
+          headerShown: true, 
+          headerLeft: () => null,
+          headerTitle: "Transaction Cancelled", 
+          headerLeft: () => null // Removes the back button
+        }} 
+      />
       <Stack.Screen 
-            name="checkout"
-            options={{ 
-              headerBackTitleVisible: false, 
-              headerShown: true, 
-              headerTitle: "Checkout", 
-              headerLeft: () => null // Removes the back button
-            }} 
-          />
+        name="confirmtransaction/[id]" 
+        options={{ 
+          headerBackTitleVisible: false, 
+          headerShown: true, 
+          headerTitle: "Order Confirmation", 
+          headerBackVisible: false, // Removes the back button
+        }} 
+      />
       <Stack.Screen 
-            name="cart" 
-            options={{ 
-              headerBackTitleVisible: false, 
-              headerShown: true, 
-              headerTitle: "Your Cart", 
-              headerLeft: () => null // Removes the back button
-            }} 
-          />
-      <Stack.Screen name="preview/[product]" 
-      options={{ 
-        headerShown: true, 
-        headerTitle: "Preview", 
-        headerBackTitleVisible: false, 
-        headerRight: ()=> (
-                <TouchableOpacity onPress={()=>{
-                  router.push("cart")
-                }}>
-                  <AntDesign name="shoppingcart" size={22} color="black"  className="mr-5" />
-                </TouchableOpacity>
-            )
-      }}
+        name="checkout"
+        options={{ 
+          headerBackButtonDisplayMode: "minimal",
+          headerShown: true, 
+          headerTitle: "Checkout", 
+          headerLeft: () => null // Removes the back button
+        }} 
+      />
+      <Stack.Screen 
+        name="cart" 
+        options={{ 
+          headerBackButtonDisplayMode: "minimal",
+          headerShown: true, 
+          headerTitle: "Your Cart", 
+          headerLeft: () => null // Removes the back button
+        }} 
+      />
+      <Stack.Screen 
+        name="preview/[product]" 
+        options={{ 
+          headerShown: true, 
+          headerTitle: "Preview", 
+          headerBackTitleVisible: false, 
+          headerRight: ()=> (
+                  <TouchableOpacity onPress={()=>{
+                    router.push("cart")
+                  }}>
+                    <AntDesign name="shoppingcart" size={22} color="black"  className="mr-5" />
+                  </TouchableOpacity>
+              )
+        }}
       />
     </Stack>
     <StatusBar backgroundColor="#161622" style='dark' />
