@@ -72,7 +72,7 @@ const LatestItem = ({ activeItem, item, allProducts }) => {
                         <Text style={{
                             color: '#f5f5f5',
                             fontSize: 12,
-                        }}>Ksh. {item.price}</Text>
+                        }}>Ksh. {item.price.toLocaleString()}</Text>
                     </View>
                 </ImageBackground>
             </TouchableOpacity>

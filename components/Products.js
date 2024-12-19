@@ -32,7 +32,7 @@ const Products = ({ products, category }) => {
                             style={styles.image}
                         />
                         <Text style={styles.productName}>{item.productName}</Text>
-                        <Text style={styles.price}>Ksh {item.price}</Text>
+                        <Text style={styles.price}>Ksh {item.price.toLocaleString()}</Text>
                         <TouchableOpacity 
                         style={styles.addToCartButton}
                         onPress={()=>{

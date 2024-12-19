@@ -33,8 +33,8 @@ const Cart = () => {
               <View>
                 <Text className="text-lg font-montserrat-semibold">{item.productName}</Text>
                 <Text className="mt-1 font-montserrat-light">{item.quantity} Unit(s)</Text>
-                <Text className="mt-2 font-montserrat-regular">Ksh. {item.price} each</Text>
-                <Text className="mt-2 font-montserrat-semibold-italic">Total : Ksh. {Number(item.price) * Number(item.quantity)}</Text>
+                <Text className="mt-2 font-montserrat-regular">Ksh. {item.price.toLocaleString()} each</Text>
+                <Text className="mt-2 font-montserrat-semibold-italic">Total : Ksh. {(Number(item.price) * Number(item.quantity)).toLocaleString()}</Text>
               </View>
             </View>
             <TouchableOpacity className="flex-row items-center mr-5" onPress={()=>{
@@ -59,7 +59,7 @@ const Cart = () => {
         }}>
           <View className="flex-row justify-between mb-5">
             <Text className="font-montserrat-regular">Total</Text>
-            <Text className="font-montserrat-bold">Ksh. {total}</Text>
+            <Text className="font-montserrat-bold">Ksh. {total.toLocaleString()}</Text>
           </View>
           <TouchableOpacity className="bg-purple-900 rounded-2xl p-4 py-3 w-3/4 mx-auto" onPress={()=>{
             router.push("/checkout");
