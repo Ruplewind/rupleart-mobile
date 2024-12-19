@@ -1,17 +1,17 @@
 {
   "expo": {
-    "name": "RuplerArt",
+    "name": "RupleArt",
     "slug": "rupleart",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
+    "resizeMode":"cover",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff",
-      "imageWidth": 50
+      "resizeMode": "cover",
+      "backgroundColor": "#ffffff"
     },
     "ios": {
       "supportsTablet": true,

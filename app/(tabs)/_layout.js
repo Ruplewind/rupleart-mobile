@@ -20,9 +20,9 @@ export default function TabLayout() {
                 backgroundColor: '#fff',
                 height: 70
             },
-            headerLeft: ()=> (
-                <Ionicons name="menu" size={20} color="black" className="ml-5" />
-            ),
+            // headerLeft: ()=> (
+            //     <Ionicons name="menu" size={20} color="black" className="ml-5" />
+            // ),
             headerRight: ()=> (
                 <TouchableOpacity className="flex-row gap-0 mr-5" onPress={()=>{
                     router.push("/cart")
@@ -88,7 +88,8 @@ export default function TabLayout() {
         <Tabs.Screen 
         name="profile" 
         options={{
-            title: 'Profile',
+            title: 'Account',
+            headerTitle:'My Profile',
             tabBarIcon: ({ color, focused}) => (
                 <FontAwesome name={focused ? 'user' : 'user'} color={color} size={20} />
             ),

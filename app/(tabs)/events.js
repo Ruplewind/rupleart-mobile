@@ -61,7 +61,7 @@ export default function Events() {
           !loading && upcomingEvents.length < 1 && <Text className='text-center'>No upcoming Events</Text>
         }
 
-        <Text className='text-center font-montserrat-light my-2 text-sm uppercase mt-10'>Upcoming Events</Text>
+        <Text className='text-center font-montserrat-light my-2 text-sm uppercase mt-10'>Past Events</Text>
         {!loading && pastEvents.length > 0 && pastEvents.map((event, index) => (
         <TouchableOpacity key={index} className='bg-white mx-5 shadow-lg rounded-lg my-2'>
           <Image 

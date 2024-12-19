@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router } from "expo-router";
 import { useEffect, useState } from "react";
 
 const { createContext } = require("react");
@@ -31,6 +32,7 @@ export function AuthProvider({ children }){
         await AsyncStorage.removeItem('rpl$token')
         await AsyncStorage.removeItem('rpl$userId')
         await AsyncStorage.removeItem('rpl$fullname')
+        router.push("login")
     }
 
     const isLoggedIn = async () => {

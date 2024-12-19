@@ -9,6 +9,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 import { CartProvider } from "../context/CartContext";
 import * as SplashScreen from 'expo-splash-screen';
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function RootLayout() {
 
@@ -104,6 +105,14 @@ export default function RootLayout() {
                     <AntDesign name="shoppingcart" size={22} color="black"  className="mr-5" />
                   </TouchableOpacity>
               )
+        }}
+      />
+    <Stack.Screen 
+        name="profile/changepassword" 
+        options={{ 
+          headerShown: true, 
+          headerTitle: "Change Password",
+          headerBackVisible: true
         }}
       />
     </Stack>

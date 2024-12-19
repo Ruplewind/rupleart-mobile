@@ -1,5 +1,5 @@
 import { Link } from "expo-router";
-import { FlatList, ScrollView, TouchableOpacity } from "react-native";
+import { ActivityIndicator, FlatList, ScrollView, TouchableOpacity } from "react-native";
 import { Text, View } from "react-native";
 import { useAuthContext } from "../../context/AuthProvider";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -27,6 +27,7 @@ export default function Home() {
       })
       .catch(()=>{
           setLoading(false);
+          setError(true);
       })
   },[])
 
@@ -51,7 +52,13 @@ export default function Home() {
     <ScrollView
     className="flex-1"
     >
-      { !loading && <>
+      {
+        !loading && error && <Text className="mt-10 text-center font-montserrat-light text-sm">Error Fetching Data. Relaunch app.</Text>
+      }
+      {
+        !error && loading && <ActivityIndicator color="black" size={100} style={{ marginTop: 28 }} />
+      }
+      { !error && !loading && <>
         <LatestArtworks products={products.slice(0,10).reverse()} />    
         
         <View className="p-4 flex-row items-center bg-white text-xs">
