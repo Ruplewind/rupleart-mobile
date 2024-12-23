@@ -115,6 +115,14 @@ export default function RootLayout() {
           headerBackVisible: true
         }}
       />
+      <Stack.Screen 
+        name="myads/postad" 
+        options={{ 
+          headerShown: true, 
+          headerTitle: "Post Ad",
+          headerBackVisible: true
+        }}
+      />
     </Stack>
     <StatusBar backgroundColor="#161622" style='dark' />
     </AuthProvider>

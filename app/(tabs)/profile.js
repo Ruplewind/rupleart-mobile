@@ -123,7 +123,7 @@ const handleSubmit = () =>{
 
         <View className='flex-row justify-center gap-5'>
             <TouchableOpacity 
-            className='border border-purple-900 w-1/2 p-4 rounded-3xl'
+            className='bg-purple-900 w-1/2 p-4 rounded-3xl'
             onPress={()=>{
               handleSubmit();
             }}
@@ -131,18 +131,18 @@ const handleSubmit = () =>{
               { loading ? 
               <ActivityIndicator size={14} color={"purple"}/>
                 : 
-              <Text className='text-purple-900 text-center text-sm'>Save Changes</Text>
+              <Text className='text-white text-center text-sm'>Save Changes</Text>
               }
             </TouchableOpacity>
             <TouchableOpacity 
-              className='bg-purple-900 w-1/2 p-4 rounded-3xl'
+              className='border border-purple-900 w-1/2 p-4 rounded-3xl'
               onPress={()=>{
                 router.push({
                   pathname: "profile/changepassword"
                 })
               }}
             >
-              <Text className='text-white text-center text-sm'>Change Password</Text>
+              <Text className='text-purple-900 text-center text-sm'>Change Password</Text>
             </TouchableOpacity>
           </View>
         </View>

@@ -82,7 +82,14 @@ const Myads = () => {
   return (
     <View className="p-5">
       <View className="flex-row justify-end">
-        <TouchableOpacity className="bg-purple-950 w-1/3 p-2 rounded-lg shadow-lg">
+        <TouchableOpacity 
+        className="bg-purple-950 w-1/3 p-2 rounded-lg shadow-lg"
+        onPress={()=>{
+          router.push({
+            pathname:'myads/postad'
+          })
+        }}
+        >
           <Text className="text-white text-center">+ Post AD</Text>
         </TouchableOpacity>
       </View>
