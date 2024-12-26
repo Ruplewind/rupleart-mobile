@@ -165,7 +165,15 @@ const Myads = () => {
               </View>
 
               <View className="flex-1 w-2/10 flex flex-col items-center justify-evenly">
-                <TouchableOpacity className="">
+                <TouchableOpacity 
+                className=""
+                onPress={()=>{
+                  router.push({
+                    pathname:'myads/[editad]',
+                    params: { product: JSON.stringify(item) } 
+                  })
+                }}
+                >
                   <Entypo name="edit" size={18} color="blue" />
                 </TouchableOpacity>
                 <TouchableOpacity className="" onPress={() => deleteAlert(item._id)}>

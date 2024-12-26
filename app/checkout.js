@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, ScrollView, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, ScrollView, Alert, FlatList } from 'react-native';
 import * as yup from 'yup';
 import { Formik } from 'formik';
 import { ToastAndroid } from 'react-native';
@@ -8,6 +8,7 @@ import useCart from '../context/CartContext';
 import { useAuthContext } from '../context/AuthProvider';
 import { WebView } from 'react-native-webview';
 import RNPickerSelect from 'react-native-picker-select';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 const Checkout = () => {
   const { products, total } = useCart();
@@ -126,123 +127,154 @@ const handleNavigationStateChange = (newNavState) => {
     }
   };
 
+  const [open, setOpen] = useState(false);
+
   return (
-    <ScrollView className="mt-1 mb-10 p-5">
-
-      {showIframe ? (
-        <View style={{ flex: 1, justifyContent: 'center', marginTop: 20 }}>
-            <WebView source={{ uri: link }} style={{ height: 500, width: '100%' }} onNavigationStateChange={handleNavigationStateChange} />
-        </View>
-      
-      ) : (
-        <Formik
-          initialValues={{ firstname: firstName, secondname: secondName, email, phoneNumber, minPrice: deliveryCost + total }}
-          enableReinitialize
-          validationSchema={checkoutSchema}
-          onSubmit={values => handleSubmit(values)}
-        >
-          {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
-            <View className="w-full">
-              <Text className="font-bold mb-5 text-center mt-2">Account Information</Text>
-
-            <View className="flex-row gap-2"> 
-              <View className="w-1/2">
-                <TextInput
-                    placeholder="First name"
-                    value={values.firstname}
-                    onChangeText={handleChange('firstname')}
-                    onBlur={handleBlur('firstname')}
-                    className="border-b p-4 mb-2"
-                />
-                {touched.firstname && errors.firstname && <Text className="text-red-500">{errors.firstname}</Text>}
-              </View>
-
-              <View className="w-1/2">
-                <TextInput
-                    placeholder="Second name"
-                    value={values.secondname}
-                    onChangeText={handleChange('secondname')}
-                    onBlur={handleBlur('secondname')}
-                    className="border-b p-4 mb-2"
-                />
-                {touched.secondname && errors.secondname && <Text className="text-red-500">{errors.secondname}</Text>}
-              </View>
-            </View>
-
-              <TextInput
-                placeholder="Email"
-                value={values.email}
-                onChangeText={handleChange('email')}
-                onBlur={handleBlur('email')}
-                className="border-b p-4 mb-2"
-              />
-              {touched.email && errors.email && <Text className="text-red-500">{errors.email}</Text>}
-
-              <TextInput
-                placeholder="Phone Number"
-                value={values.phoneNumber}
-                onChangeText={handleChange('phoneNumber')}
-                onBlur={handleBlur('phoneNumber')}
-                className="border-b p-4 mb-2"
-              />
-              {touched.phoneNumber && errors.phoneNumber && <Text className="text-red-500">{errors.phoneNumber}</Text>}
-            
-            <View className="my-5">
-              <Text className="font-bold mb-5 text-center">Order Summary</Text>
-              {products.map(product => (
-                <View key={product._id} className="flex-row justify-between mb-2 mx-5">
-                  <Text className="w-1/2 font-montserrat-semibold">{product.productName}</Text>
-                  <Text className="w-1/3">X {product.quantity}</Text>
-                  <Text className="w-1/3 font-montserrat-semibold" >KES. {(product.quantity * product.price).toLocaleString()}</Text>
+      <FlatList
+        scrollEnabled={true}
+        className="mt-1 mb-10 p-5"
+          data={[{ key: 'form' }]}
+          renderItem={() => (
+            <>
+              {showIframe ? (
+                <View style={{ flex: 1, justifyContent: 'center', marginTop: 20 }}>
+                    <WebView source={{ uri: link }} style={{ height: 500, width: '100%' }} onNavigationStateChange={handleNavigationStateChange} />
                 </View>
-              ))}
-            </View>
-
-            {!allVideos && (
-                <View className="w-full">
-                    <Text className="mb-2 font-montserrat-semibold">Select delivery location:</Text>
-                    <View className="border border-gray-400 p-2 py-3 rounded-lg">
-                    <RNPickerSelect
-                        value={location}
-                        onValueChange={(value) => setLocation(value)}
-                        items={towns.map((item) => ({
-                            label: `${item.name} - Ksh. ${item.price}`,
-                            value: item._id, // Use _id as the value, or any other identifier you prefer
-                          }))}                   
-                    />
-                    </View>
-                </View>
-            )}
-
-            <View className="mt-10 bg-white w-full p-3 rounded-lg">
-                <View className="mt-5">
-                    <View className="flex-row justify-between">
-                        <Text className="font-bold">Delivery Cost:</Text>
-                        <Text className="font-bold">KES {deliveryCost.toLocaleString()}</Text>
-                    </View>
-                    <View className="flex-row justify-between">
-                        <Text className="font-bold">Total Items Cost:</Text>
-                        <Text className="font-bold">KES {total.toLocaleString()}</Text>
-                    </View>
-
-                    <View className="flex-row justify-between">
-                        <Text className="font-bold">Total Order Cost:</Text>
-                        <Text className="font-bold">KES {(total +  deliveryCost).toLocaleString()}</Text>
-                    </View>
-                </View>
-
-                <TouchableOpacity
-                onPress={handleSubmit}
-                className="bg-black p-2 py-4 rounded-lg flex justify-center items-center mt-5"
+              
+              ) : (
+                <Formik
+                  initialValues={{ firstname: firstName, secondname: secondName, email, phoneNumber, minPrice: deliveryCost + total }}
+                  enableReinitialize
+                  validationSchema={checkoutSchema}
+                  onSubmit={values => handleSubmit(values)}
                 >
-                {loading ? <ActivityIndicator color="white" /> : <Text className="text-white">PAY</Text>}
-                </TouchableOpacity>
-            </View>
-            </View>
+                  {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+                    <View className="w-full">
+                      <Text className="font-bold mb-5 text-center mt-2">Account Information</Text>
+
+                    <View className="flex-row gap-2"> 
+                      <View className="w-1/2">
+                        <TextInput
+                            placeholder="First name"
+                            value={values.firstname}
+                            onChangeText={handleChange('firstname')}
+                            onBlur={handleBlur('firstname')}
+                            className="border-b p-4 mb-2"
+                        />
+                        {touched.firstname && errors.firstname && <Text className="text-red-500">{errors.firstname}</Text>}
+                      </View>
+
+                      <View className="w-1/2">
+                        <TextInput
+                            placeholder="Second name"
+                            value={values.secondname}
+                            onChangeText={handleChange('secondname')}
+                            onBlur={handleBlur('secondname')}
+                            className="border-b p-4 mb-2"
+                        />
+                        {touched.secondname && errors.secondname && <Text className="text-red-500">{errors.secondname}</Text>}
+                      </View>
+                    </View>
+
+                      <TextInput
+                        placeholder="Email"
+                        value={values.email}
+                        onChangeText={handleChange('email')}
+                        onBlur={handleBlur('email')}
+                        className="border-b p-4 mb-2"
+                      />
+                      {touched.email && errors.email && <Text className="text-red-500">{errors.email}</Text>}
+
+                      <TextInput
+                        placeholder="Phone Number"
+                        value={values.phoneNumber}
+                        onChangeText={handleChange('phoneNumber')}
+                        onBlur={handleBlur('phoneNumber')}
+                        className="border-b p-4 mb-2"
+                      />
+                      {touched.phoneNumber && errors.phoneNumber && <Text className="text-red-500">{errors.phoneNumber}</Text>}
+                    
+                    <View className="my-5">
+                      <Text className="font-bold mb-5 text-center">Order Summary</Text>
+                      {products.map(product => (
+                        <View key={product._id} className="flex-row justify-between mb-2 mx-5">
+                          <Text className="w-1/2 font-montserrat-semibold text-gray-600">{product.productName}</Text>
+                          <Text className="w-1/3 text-gray-600">X {product.quantity}</Text>
+                          <Text className="w-1/3 font-montserrat-semibold text-gray-600" >KES. {(product.quantity * product.price).toLocaleString()}</Text>
+                        </View>
+                      ))}
+                    </View>
+
+                    {!allVideos && (
+                        <View className="w-full">
+                            <Text className="mb-2 font-montserrat-semibold">Select delivery location:</Text>
+                            <View className="rounded-lg">
+                            {/* <RNPickerSelect
+                                value={location}
+                                onValueChange={(value) => setLocation(value)}
+                                items={towns.map((item) => ({
+                                    label: `${item.name} - Ksh. ${item.price}`,
+                                    value: item._id, // Use _id as the value, or any other identifier you prefer
+                                  }))}                   
+                            /> */}
+                            <DropDownPicker
+                                open={open}
+                                value={location}
+                                items={towns.map((item) => ({
+                                  label: `${item.name} - Ksh. ${item.price}`,
+                                  value: item._id,
+                                }))}
+                                setOpen={setOpen}
+                                setValue={setLocation}
+                                style={{
+                                    borderColor:'#EEEEEE',
+                                }}
+                                zIndex={1000}
+                                listMode='SCROLLVIEW'
+                                // flatListProps={{
+                                //   scrollEnabled: true,
+                                //   nestedScrollEnabled: true
+                                // }}
+                                scrollViewProps={{
+                                  scrollEnabled:true,
+                                  nestedScrollEnabled: true
+                                }}
+                            />
+                            </View>
+                        </View>
+                    )}
+
+                    <View className="mt-10 bg-white w-full p-3 rounded-lg">
+                        <View className="mt-5">
+                            <View className="flex-row justify-between">
+                                <Text className="font-bold">Delivery Cost:</Text>
+                                <Text className="font-bold">KES {deliveryCost.toLocaleString()}</Text>
+                            </View>
+                            <View className="flex-row justify-between">
+                                <Text className="font-bold">Total Items Cost:</Text>
+                                <Text className="font-bold">KES {total.toLocaleString()}</Text>
+                            </View>
+
+                            <View className="flex-row justify-between">
+                                <Text className="font-bold">Total Order Cost:</Text>
+                                <Text className="font-bold">KES {(total +  deliveryCost).toLocaleString()}</Text>
+                            </View>
+                        </View>
+
+                        <TouchableOpacity
+                        onPress={handleSubmit}
+                        className="bg-black p-2 py-4 rounded-lg flex justify-center items-center mt-5"
+                        >
+                        {loading ? <ActivityIndicator color="white" /> : <Text className="text-white">PAY</Text>}
+                        </TouchableOpacity>
+                    </View>
+                    </View>
+                  )}
+                </Formik>
+              )}
+            </>
           )}
-        </Formik>
-      )}
-    </ScrollView>
+      />
   );
 };
 

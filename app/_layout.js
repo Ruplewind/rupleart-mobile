@@ -123,6 +123,14 @@ export default function RootLayout() {
           headerBackVisible: true
         }}
       />
+      <Stack.Screen 
+        name="myads/[editad]" 
+        options={{ 
+          headerShown: true, 
+          headerTitle: "Edit Ad",
+          headerBackVisible: true
+        }}
+      />
     </Stack>
     <StatusBar backgroundColor="#161622" style='dark' />
     </AuthProvider>
