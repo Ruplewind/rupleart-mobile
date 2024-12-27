@@ -158,11 +158,21 @@ const postad = () => {
                         label: `${item.category}`,
                         value: item.category
                     }))}
+                placeholder="Select category"
                 setOpen={setOpen}
                 setValue={setType}
                 //   setItems={setItems}
                 style={{
-                    borderColor:'#EEEEEE',
+                  borderColor:'#EEEEEE',
+                }}
+                dropDownContainerStyle={{
+                  borderColor: "#EEEEEE"
+                }}
+                zIndex={1000}
+                listMode='SCROLLVIEW'
+                scrollViewProps={{
+                  scrollEnabled:true,
+                  nestedScrollEnabled: true
                 }}
             />
         }      

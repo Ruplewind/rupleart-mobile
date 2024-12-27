@@ -136,7 +136,7 @@ const Myads = () => {
               <View className="flex-1 w-5/10">
                 <Text className="text-lg font-montserrat-semibold">{item.productName}</Text>
                 <Text className="mt-1 font-montserrat-light">Size: {item.size}</Text>
-                <Text className="mt-2 font-montserrat-regular">Ksh. {item.price}</Text>
+                <Text className="mt-2 font-montserrat-regular">Ksh. {item.price.toLocaleString()}</Text>
                 <View className="text-center mt-2">
                   {item.approvalStatus === 0 ? (
                     <View className="bg-gray-300 text-xs rounded-2xl p-1 w-full px-2">

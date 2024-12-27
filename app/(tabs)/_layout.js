@@ -28,7 +28,7 @@ export default function TabLayout() {
                     router.push("/cart")
                   }}>
                     <View style={{flexDirection: 'row', alignItems: 'flex-start'}}>
-                        <AntDesign name="shoppingcart" size={22} color="black"  className="" />
+                        <AntDesign name="shoppingcart" size={20} color="black"  className="" />
                         <Text style={{fontSize: 11, lineHeight: 10}}>{products.length}</Text>
                     </View>
                 </TouchableOpacity>

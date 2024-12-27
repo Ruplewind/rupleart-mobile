@@ -197,10 +197,10 @@ const handleNavigationStateChange = (newNavState) => {
                     <View className="my-5">
                       <Text className="font-bold mb-5 text-center">Order Summary</Text>
                       {products.map(product => (
-                        <View key={product._id} className="flex-row justify-between mb-2 mx-5">
+                        <View key={product._id} className="flex-row justify-between mb-2 mx-2">
                           <Text className="w-1/2 font-montserrat-semibold text-gray-600">{product.productName}</Text>
-                          <Text className="w-1/3 text-gray-600">X {product.quantity}</Text>
-                          <Text className="w-1/3 font-montserrat-semibold text-gray-600" >KES. {(product.quantity * product.price).toLocaleString()}</Text>
+                          <Text className="w-1/4 text-gray-600">X {product.quantity}</Text>
+                          <Text className="w-1/4 font-montserrat-semibold text-gray-600" >KES. {(product.quantity * product.price).toLocaleString()}</Text>
                         </View>
                       ))}
                     </View>
@@ -228,6 +228,9 @@ const handleNavigationStateChange = (newNavState) => {
                                 setValue={setLocation}
                                 style={{
                                     borderColor:'#EEEEEE',
+                                }}
+                                dropDownContainerStyle={{
+                                  borderColor: "#EEEEEE"
                                 }}
                                 zIndex={1000}
                                 listMode='SCROLLVIEW'

@@ -102,7 +102,7 @@ export default function RootLayout() {
                   <TouchableOpacity onPress={()=>{
                     router.push("cart")
                   }}>
-                    <AntDesign name="shoppingcart" size={22} color="black"  className="mr-5" />
+                    <AntDesign name="shoppingcart" size={20} color="black"  className="mr-5" />
                   </TouchableOpacity>
               )
         }}
@@ -132,7 +132,7 @@ export default function RootLayout() {
         }}
       />
     </Stack>
-    <StatusBar backgroundColor="#161622" style='dark' />
+    {/* <StatusBar backgroundColor="#161622" style='dark' /> */}
     </AuthProvider>
     </CartProvider>
   );

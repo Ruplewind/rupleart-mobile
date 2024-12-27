@@ -9,6 +9,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import Dropdown from "../../components/DropDown";
 import Products from "../../components/Products";
 import LatestArtworks from "../../components/LatestArtworks";
+import DropDownPicker from "react-native-dropdown-picker";
 
 export default function Home() {
   const { logout, fullName } = useAuthContext();
@@ -47,6 +48,7 @@ export default function Home() {
 
   const [expanded, setExpanded] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [open, setOpen] = useState(false);
 
   return (
     <ScrollView
@@ -64,10 +66,38 @@ export default function Home() {
         <View className="p-4 flex-row items-center bg-white text-xs">
           <Text className="text-black w-1/2">Sort By Category</Text>
           <View className="flex-row justify-end w-1/2">
-            <Dropdown data={[{ _id:1, category: "All"}, ...categories,]} onChange={(item) => {
+            {/* <Dropdown data={[{ _id:1, category: "All"}, ...categories,]} onChange={(item) => {
               setSelectedCategory(item.category);
             }}
             placeholder="All" 
+            /> */}
+            <DropDownPicker
+                open={open}
+                value={selectedCategory}
+                items={[
+                    { label: "All", value: "All" },
+                    ...categories.map((item) => ({
+                        label: item.category,
+                        value: item.category
+                    }))
+                ]}
+                placeholder="Select category"
+                setOpen={setOpen}
+                setValue={setSelectedCategory}
+                //   setItems={setItems}
+                style={{
+                    borderColor:'#EEEEEE',
+                    padding:4
+                }}
+                dropDownContainerStyle={{
+                  borderColor: "#EEEEEE"
+                }}
+                zIndex={1000}
+                listMode='SCROLLVIEW'
+                scrollViewProps={{
+                  scrollEnabled:true,
+                  nestedScrollEnabled: true
+                }}
             />
           </View>
         </View>
@@ -75,7 +105,7 @@ export default function Home() {
         <Products products={products} category={selectedCategory} className=""/>
       </> }
       
-      <StatusBar backgroundColor="#161622" style='dark' />
+      {/* <StatusBar backgroundColor="#161622" style='dark' /> */}
     </ScrollView>
   );
 }
