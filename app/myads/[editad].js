@@ -134,7 +134,7 @@ const editad = () => {
 
       { image && 
       <View className='bg-white p-2 mx-5 rounded-2xl'>
-        <Image source={{ uri: image }} style={{ width: '95%', height:110, margin:'auto', borderRadius:10, objectFit:'contain'}} />
+        <Image source={{ uri: $image }} style={{ width: '95%', height:110, margin:'auto', borderRadius:10, objectFit:'contain'}} />
       </View>
       }
       { image && <Button title="Replace Image" onPress={pickImage} /> }
