@@ -59,7 +59,7 @@ const Preview = () => {
         </View>
 
         <View className="flex-row items-center justify-between">
-          <Text className="text-gray-600 leading-6 text-base mb-2">{item.description}</Text>
+          <Text className="text-gray-600 leading-6 text-base mb-2 w-3/4">{item.description}</Text>
           <View className="flex-0 justify-end">
             <Text className="text-gray-600 mb-2 font-bold text-center">Set Quantity</Text>
             <View className="flex-row items-center mb-6">
@@ -85,7 +85,7 @@ const Preview = () => {
         <TouchableOpacity 
         className="bg-purple-900 p-2 rounded-full w-3/4 mx-auto shadow-sm" 
         onPress={()=>{
-          addToCart(item)
+          addToCart({...item, quantity: Number(quantity)})
         }}
         >
           <Text className="text-white text-center text-lg font-semibold">Add To Cart</Text>

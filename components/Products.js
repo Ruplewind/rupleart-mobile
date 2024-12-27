@@ -36,7 +36,7 @@ const Products = ({ products, category }) => {
                         <TouchableOpacity 
                         style={styles.addToCartButton}
                         onPress={()=>{
-                            addToCart(item)
+                            addToCart({...item, quantity: 1})
                         }}
                         >
                             <Text style={styles.buttonText}>Add to Cart</Text>

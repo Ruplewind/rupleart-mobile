@@ -7,7 +7,7 @@ import { StatusBar } from "expo-status-bar";
 import { AuthProvider } from "../context/AuthProvider";
 import { AntDesign } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
-import { CartProvider } from "../context/CartContext";
+import useCart, { CartProvider } from "../context/CartContext";
 import * as SplashScreen from 'expo-splash-screen';
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
@@ -45,8 +45,6 @@ export default function RootLayout() {
   },[fontsLoaded])
 
   if(!fontsLoaded && !error) return null;
-
-  
 
   return (
     <CartProvider>
@@ -102,7 +100,9 @@ export default function RootLayout() {
                   <TouchableOpacity onPress={()=>{
                     router.push("cart")
                   }}>
-                    <AntDesign name="shoppingcart" size={20} color="black"  className="mr-5" />
+                    <View style={{flexDirection: 'row', alignItems: 'flex-start'}}>
+                        <AntDesign name="shoppingcart" size={20} color="black"  className="" />
+                    </View>
                   </TouchableOpacity>
               )
         }}
