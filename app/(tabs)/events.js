@@ -28,7 +28,7 @@ export default function Events() {
     setLoading(false);
   };
     return (
-      <ScrollView className='p-4'>
+      <ScrollView className='p-4 mb-5'>
         { loading && <ActivityIndicator color='black' />}
         <Text className='text-center font-montserrat-light my-2 text-sm uppercase'>Upcoming Events</Text>
         {!loading && upcomingEvents.length > 0 && upcomingEvents.map((event, index) => (

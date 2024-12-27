@@ -81,7 +81,7 @@ const handleSubmit = () =>{
 }
 
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1 }}>
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1, marginBottom: 12 }}>
       {/* <Text className="mt-10 text-center font-montserrat-light uppercase">profile</Text> */}
       <ScrollView
       refreshControl={

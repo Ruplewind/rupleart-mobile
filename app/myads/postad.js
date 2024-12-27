@@ -133,7 +133,7 @@ const postad = () => {
             <View className='flex-row justify-center mt-auto'>
                 <Entypo name="upload-to-cloud" size={32} color="blue" />
             </View>
-            <Text className='text-blue-700 mb-auto mx-auto'>Select an image</Text>
+            <Text className='text-blue-700 mb-auto mx-auto text-center'>Select an image</Text>
         </View>
       </TouchableOpacity> }
 
