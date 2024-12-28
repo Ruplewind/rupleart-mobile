@@ -36,7 +36,7 @@ const index = () => {
             </View>
         </ScrollView>
 
-        <StatusBar backgroundColor="#161622" style='dark' />
+        {/* <StatusBar backgroundColor="#161622" style='dark' /> */}
 
     </SafeAreaView>
   )

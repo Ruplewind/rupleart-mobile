@@ -133,7 +133,7 @@ const Myads = () => {
                   resizeMode="contain"
                 />
               </View>
-              <View className="flex-1 w-5/10">
+              <View className="flex-1 w-6/10">
                 <Text className="text-lg font-montserrat-semibold">{item.productName}</Text>
                 <Text className="mt-1 font-montserrat-light">Size: {item.size}</Text>
                 <Text className="mt-2 font-montserrat-regular">Ksh. {item.price.toLocaleString()}</Text>
@@ -164,8 +164,8 @@ const Myads = () => {
                 </View>
               </View>
 
-              <View className="flex-1 w-2/10 flex flex-col items-center justify-evenly">
-                <TouchableOpacity 
+              <View className="flex-1 w-1/10 flex flex-col items-center justify-evenly">
+                {/* <TouchableOpacity 
                 className=""
                 onPress={()=>{
                   router.push({
@@ -175,7 +175,7 @@ const Myads = () => {
                 }}
                 >
                   <Entypo name="edit" size={18} color="blue" />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <TouchableOpacity className="" onPress={() => deleteAlert(item._id)}>
                   <MaterialIcons name="delete" size={21} color="red" />
                 </TouchableOpacity>

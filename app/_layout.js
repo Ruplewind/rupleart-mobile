@@ -107,7 +107,7 @@ export default function RootLayout() {
               )
         }}
       />
-    <Stack.Screen 
+      <Stack.Screen 
         name="profile/changepassword" 
         options={{ 
           headerShown: true, 
@@ -132,7 +132,7 @@ export default function RootLayout() {
         }}
       />
     </Stack>
-    {/* <StatusBar backgroundColor="#161622" style='dark' /> */}
+    <StatusBar backgroundColor="#000000" style='light' />
     </AuthProvider>
     </CartProvider>
   );

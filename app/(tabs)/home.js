@@ -1,5 +1,5 @@
 import { Link } from "expo-router";
-import { ActivityIndicator, FlatList, ScrollView, TouchableOpacity } from "react-native";
+import { ActivityIndicator, FlatList, ScrollView, TouchableOpacity, useColorScheme } from "react-native";
 import { Text, View } from "react-native";
 import { useAuthContext } from "../../context/AuthProvider";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -18,6 +18,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const [error, setError] = useState(false);
+  const colorScheme = useColorScheme();
 
     useEffect(()=>{
       fetch(`${process.env.EXPO_PUBLIC_API_URL}/get_categories`)
@@ -104,8 +105,8 @@ export default function Home() {
 
         <Products products={products} category={selectedCategory} className=""/>
       </> }
-      
-      {/* <StatusBar backgroundColor="#161622" style='dark' /> */}
+      {/* <StatusBar style={colorScheme === 'dark' ? 'dark' : 'dark'} /> */}
+      {/* <StatusBar backgroundColor="#" style='da' /> */}
     </ScrollView>
   );
 }

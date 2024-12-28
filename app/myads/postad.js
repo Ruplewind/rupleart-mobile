@@ -179,7 +179,13 @@ const postad = () => {
       </View> 
 
       <Text className='my-2 mx-5 font-montserrat-light'>Description:</Text>
-      <TextInput  className='border border-gray-200 p-2 py-3 mx-3 rounded-lg bg-white' onChangeText={setDescription} />
+      <TextInput
+        editable
+        multiline={true}
+        numberOfLines={4} 
+        className='border border-gray-200 p-2 py-3 mx-3 rounded-lg bg-white h-18' 
+        onChangeText={setDescription} 
+      />
 
       <Text className='my-2 mx-5 font-montserrat-light'>Size (in cm):</Text>
       <TextInput className='border border-gray-200 p-2 py-3 mx-3 rounded-lg bg-white' onChangeText={setSize} />
