@@ -10,6 +10,7 @@ import Dropdown from "../../components/DropDown";
 import Products from "../../components/Products";
 import LatestArtworks from "../../components/LatestArtworks";
 import DropDownPicker from "react-native-dropdown-picker";
+import Carousel from "../../components/Carousel";
 
 export default function Home() {
   const { logout, fullName } = useAuthContext();
@@ -62,7 +63,9 @@ export default function Home() {
         !error && loading && <ActivityIndicator color="black" size={100} style={{ marginTop: 28 }} />
       }
       { !error && !loading && <>
-        <LatestArtworks products={products.slice(0,10).reverse()} />    
+        {/* <LatestArtworks products={products.slice(0,10).reverse()} />     */}
+
+        <Carousel />
         
         <View className="p-4 flex-row items-center bg-white text-xs">
           <Text className="text-black w-1/2">Sort By Category</Text>

@@ -28,7 +28,7 @@ const Login = () => {
       return;
     }
 
-    fetch(`${process.env.EXPO_PUBLIC_API_URL}/user_login`,{
+    fetch(`${process.env.EXPO_PUBLIC_API_URL}/user_m_login`,{
       method: 'POST',
       headers: {
         'Content-type':'application/json'
