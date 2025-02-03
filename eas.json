@@ -2,8 +2,7 @@
   "build": {
     "preview": {
       "android": {
-        "buildType": "app-bundle",
-        "versionCode": 2
+        "buildType": "app-bundle"
       },
       "env": {
         "EXPO_PUBLIC_API_URL": "https://api.rupleart.com"
@@ -11,8 +10,7 @@
     },
     "preview2": {
       "android": {
-        "gradleCommand": ":app:assembleRelease",
-        "versionCode": 2
+        "gradleCommand": ":app:assembleRelease"
       },
       "env": {
         "EXPO_PUBLIC_API_URL": "https://api.rupleart.com"
@@ -20,26 +18,18 @@
     },
     "preview3": {
       "developmentClient": true,
-      "android": {
-        "versionCode": 2
-      },
       "env": {
         "EXPO_PUBLIC_API_URL": "https://api.rupleart.com"
       }
     },
     "preview4": {
       "distribution": "internal",
-      "android": {
-        "versionCode": 2
-      },
       "env": {
         "EXPO_PUBLIC_API_URL": "https://api.rupleart.com"
       }
     },
     "production": {
-      "android": {
-        "versionCode": 2
-      },
+      "autoIncrement": true,
       "env": {
         "EXPO_PUBLIC_API_URL": "https://api.rupleart.com"
       }
