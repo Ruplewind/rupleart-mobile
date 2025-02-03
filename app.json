@@ -2,7 +2,7 @@
   "expo": {
     "name": "RupleArt",
     "slug": "rupleart",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "resizeMode": "cover",
@@ -15,14 +15,14 @@
     },
     "ios": {
       "supportsTablet": true,
-      "package": "com.rupleart.app"
+      "package": "com.rupleartapp.app"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.rupleart.app",
+      "package": "com.rupleartapp.app",
       "permissions": [
         "android.permission.RECORD_AUDIO"
       ]
