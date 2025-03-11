@@ -138,7 +138,7 @@ const handleNavigationStateChange = (newNavState) => {
             <>
               {showIframe ? (
                 <View style={{ flex: 1, justifyContent: 'center', marginTop: 20 }}>
-                    <WebView source={{ uri: link }} style={{ height: 500, width: '100%' }} onNavigationStateChange={handleNavigationStateChange} />
+                    <WebView source={{ uri: link }} style={{ height: 450, width: '100%' }} onNavigationStateChange={handleNavigationStateChange} />
                 </View>
               
               ) : (
@@ -150,7 +150,7 @@ const handleNavigationStateChange = (newNavState) => {
                 >
                   {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
                     <View className="w-full">
-                      <Text className="font-bold mb-5 text-center mt-2">Account Information</Text>
+                      <Text className="font-bold mb-3 text-center mt-2">Account Information</Text>
 
                     <View className="flex-row gap-2"> 
                       <View className="w-1/2">
@@ -247,7 +247,7 @@ const handleNavigationStateChange = (newNavState) => {
                         </View>
                     )}
 
-                    <View className="mt-10 bg-white w-full p-3 rounded-lg">
+                    <View className="mt-5 bg-white w-full p-3 rounded-lg mb-10">
                         <View className="mt-5">
                             <View className="flex-row justify-between">
                                 <Text className="font-bold">Delivery Cost:</Text>

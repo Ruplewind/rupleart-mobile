@@ -23,7 +23,7 @@ const Cart = () => {
           <Text className="text-xl font-montserrat-regular"> is empty</Text>
         </View> }
         { products.length > 0 && products.map((item, index) => (
-          <View key={index} className="flex-row bg-white gap-5 mb-2 mx-2 rounded-3xl p-2 py-5 justify-between mt-3">
+          <View key={index} className="flex-row bg-white gap-5 mb-2 mx-2 rounded-3xl p-2 py-3 justify-between mt-3">
             <View className="flex-row w-3/4 gap-10">
               <Image
                 source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/uploads/${item.image}` }}
@@ -31,10 +31,10 @@ const Cart = () => {
                 resizeMode="contain"
               />
               <View>
-                <Text className="text-lg font-montserrat-semibold">{item.productName}</Text>
-                <Text className="mt-1 font-montserrat-light">{item.quantity} Unit(s)</Text>
-                <Text className="mt-2 font-montserrat-regular">Ksh. {item.price.toLocaleString()} each</Text>
-                <Text className="mt-2 font-montserrat-semibold-italic">Total : Ksh. {(Number(item.price) * Number(item.quantity)).toLocaleString()}</Text>
+                <Text className="text-sm font-montserrat-semibold">{item.productName}</Text>
+                <Text className="mt-1 font-montserrat-light text-sm">{item.quantity} Unit(s)</Text>
+                <Text className="mt-1 font-montserrat-regular text-sm">Ksh. {item.price.toLocaleString()} each</Text>
+                <Text className="mt-1 font-montserrat-semibold-italic text-sm">Total : Ksh. {(Number(item.price) * Number(item.quantity)).toLocaleString()}</Text>
               </View>
             </View>
             <TouchableOpacity className="flex-row items-center mr-5" onPress={()=>{
@@ -61,7 +61,7 @@ const Cart = () => {
             <Text className="font-montserrat-regular">Total</Text>
             <Text className="font-montserrat-bold">Ksh. {total.toLocaleString()}</Text>
           </View>
-          <TouchableOpacity className="bg-purple-900 rounded-2xl p-4 py-3 w-3/4 mx-auto" onPress={()=>{
+          <TouchableOpacity className="bg-purple-900 rounded-2xl p-2 py-2 w-3/4 mx-auto" onPress={()=>{
             router.push("/checkout");
           }}>
             <Text className="text-white text-lg text-center">Checkout</Text>

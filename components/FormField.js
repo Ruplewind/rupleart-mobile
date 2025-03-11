@@ -7,7 +7,7 @@ const FormField = ({ title, value, placeholder, handleChangeText, otherStyles, .
     const [isFocused, setIsFocused] = useState(false);
   return (
     <View>
-        <Text className="text-base font-montserrat-medium 500 mb-3 mt-5">{title}</Text>
+        <Text className="text-base font-montserrat-medium 500 mb-2 mt-3">{title}</Text>
         <View 
         className="w-full h-16 mt-2 rounded-xl items-center flex-row" 
         style={{ 
@@ -16,8 +16,8 @@ const FormField = ({ title, value, placeholder, handleChangeText, otherStyles, .
             borderWidth: 2
         }} >
             <TextInput 
-            className="font-montserrat-medium text-sm px-4 py-1" 
-            style={{width: "90%", padding: 16}} 
+            className="font-montserrat-medium text-sm px-2 py-1" 
+            style={{width: "90%", padding: 10}} 
             value={value} placeholder={placeholder} 
             placeholderTextColor={"#7b7b8b"} 
             onChangeText={handleChangeText} 

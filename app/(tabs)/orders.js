@@ -55,9 +55,9 @@ const Orders = () => {
             <ScrollView contentContainerStyle={{ paddingBottom: 120 }} className="p-4">
                 {!loading && orders.length < 1 && (
                     <View className="flex-col justify-center items-center gap-3 mt-52">
-                        <Text className="text-xl font-montserrat-regular">You Have Not Placed Any Order</Text>
+                        <Text className="text-sm font-montserrat-regular">You Have Not Placed Any Order</Text>
                         <TouchableOpacity
-                            className="bg-purple-950 px-2 py-3 w-1/4 mx-auto rounded-3xl shadow-md"
+                            className="bg-purple-950 px-2 py-3 w-1/2 mx-auto rounded-3xl shadow-md"
                             onPress={() => {
                                 router.push('/');
                             }}

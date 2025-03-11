@@ -74,7 +74,7 @@ export default function Events() {
           <View className='p-3'> 
             <Text className='font-montserrat-black text-2xl tracking-wider text-purple-950  text-center mt-5'>{event.title}</Text>
             <Text className='font-montserrat-regular mt-2 mb-2 text-sm'>{event.description}</Text>
-            <View className='flex-row justify-between'>
+            <View className=''>
               <View className='flex-row gap-1 items-center mb-2'>
                 <EvilIcons name="location" size={20} color="black" />
                 <Text className='font-montserrat-light text-sm'>{event.venue}</Text>

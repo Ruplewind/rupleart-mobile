@@ -106,7 +106,7 @@ const Myads = () => {
 
         { !error && !loading && myads.length < 1 && (
           <View className="flex-row justify-center items-center gap-3 mt-52">
-            <Text className="text-base font-montserrat-regular">You Have Not Posted Any Ads</Text>
+            <Text className="text-sm font-montserrat-regular">You Have Not Posted Any Ads</Text>
           </View>
         )}
 
@@ -119,7 +119,7 @@ const Myads = () => {
               key={index}
               className="flex-row w-full gap-5 mb-2 mx-2 rounded-3xl p-2 py-5 mt-3 bg-white"
             >
-              <View className="flex-1 w-3/10">
+              <View className="flex-1 w-2/10">
                 <Image
                   source={{
                     uri: `${process.env.EXPO_PUBLIC_API_URL}/uploads/${item.image}`,
@@ -135,11 +135,11 @@ const Myads = () => {
               </View>
               <View className="flex-1 w-6/10">
                 <Text className="text-lg font-montserrat-semibold">{item.productName}</Text>
-                <Text className="mt-1 font-montserrat-light">Size: {item.size}</Text>
-                <Text className="mt-2 font-montserrat-regular">Ksh. {item.price.toLocaleString()}</Text>
+                <Text className="mt-1 font-montserrat-light text-sm">Size: {item.size}</Text>
+                <Text className="mt-2 font-montserrat-regular text-sm">Ksh. {item.price.toLocaleString()}</Text>
                 <View className="text-center mt-2">
                   {item.approvalStatus === 0 ? (
-                    <View className="bg-gray-300 text-xs rounded-2xl p-1 w-full px-2">
+                    <View className="bg-gray-300 text-xs rounded-2xl p-1 w-full px-1">
                       <Text className="text-center text-xs">Pending approval</Text>
                     </View>
                   ) : item.approvalStatus === 1 ? (

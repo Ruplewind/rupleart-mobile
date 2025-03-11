@@ -89,41 +89,41 @@ const handleSubmit = () =>{
       }
       >
         <View className='bg-purple-950'>
-            <View className='h-32 my-5 w-full'>
+            <View className='h-32 my-4 w-full'>
               <View className='flex-row justify-center'>
-                <FontAwesome name="user-circle" size={70} color="white" /> 
+                <FontAwesome name="user-circle" size={40} color="white" /> 
               </View>
               <Text className='text-white mt-2 text-center'>Account Information</Text>           
             </View>
         </View>
-        <View className='my-2'></View>
+        <View className='my-1'></View>
 
         <View className='-mt-10 bg-white rounded-xl p-5 shadow-lg mx-2'>
         { !loading &&
           <View className=''>
             <View className='gap-2 mb-3'>
-              <Text className='font-montserrat-light'>Email:</Text>
+              <Text className='font-montserrat-light text-sm'>Email:</Text>
               <TextInput value={email} editable={false} onChangeText={setEmail} className='border border-gray-200 p-2 py-3 rounded-lg bg-gray-200'/>
               <Text className='text-xs text-red-400'>* Email is not editable</Text>
             </View>
             <View className='gap-2 mb-3'>
-              <Text className='font-montserrat-light'>First Name:</Text>
-              <TextInput value={firstName} onChangeText={setFirstName} className='border border-gray-200 p-2 py-3 rounded-lg'/>
+              <Text className='font-montserrat-light text-sm'>First Name:</Text>
+              <TextInput value={firstName} onChangeText={setFirstName} className='border border-gray-200 p-2 py-3 rounded-lg text-sm'/>
             </View>
             <View className='gap-2 mb-3'>
-              <Text className='font-montserrat-light'>Last Name:</Text>
-              <TextInput value={secondName} onChangeText={setSecondName} className='border border-gray-200 p-2 py-3 rounded-lg'/>
+              <Text className='font-montserrat-light text-sm'>Last Name:</Text>
+              <TextInput value={secondName} onChangeText={setSecondName} className='border border-gray-200 p-2 py-3 rounded-lg text-sm'/>
             </View>
             <View className='gap-2 mb-5'>
-              <Text className='font-montserrat-light'>Phone Number:</Text>
-              <TextInput value={phoneNumber} onChangeText={setPhoneNumber} className='border border-gray-200 p-2 py-3 rounded-lg'/>
+              <Text className='font-montserrat-light text-sm'>Phone Number:</Text>
+              <TextInput value={phoneNumber} onChangeText={setPhoneNumber} className='border border-gray-200 p-2 py-3 rounded-lg text-sm'/>
             </View>
           </View>      
         }
 
         <View className='flex-row justify-center gap-5'>
             <TouchableOpacity 
-            className='bg-purple-900 w-1/2 p-4 rounded-3xl'
+            className='bg-purple-900 w-1/2 p-2 rounded-xl'
             onPress={()=>{
               handleSubmit();
             }}
@@ -135,7 +135,7 @@ const handleSubmit = () =>{
               }
             </TouchableOpacity>
             <TouchableOpacity 
-              className='border border-purple-900 w-1/2 p-4 rounded-3xl'
+              className='border border-purple-900 w-1/2 p-2 rounded-xl'
               onPress={()=>{
                 router.push({
                   pathname: "profile/changepassword"
@@ -149,7 +149,7 @@ const handleSubmit = () =>{
 
         <View className='mt-5'>
           <TouchableOpacity 
-          className='bg-red-700 p-2 py-4 w-1/2 rounded-full mx-auto'
+          className='bg-red-700 p-2 py-3 w-1/2 rounded-full mx-auto'
           onPress={()=>{
             logout();
           }}

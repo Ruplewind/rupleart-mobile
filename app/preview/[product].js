@@ -10,21 +10,21 @@ import useCart from '../../context/CartContext';
 const Preview = () => {
   const { product, allProducts } = useLocalSearchParams();
   const item = JSON.parse(product);
-  const allNewProducts = JSON.parse(allProducts);
+  // const allNewProducts = JSON.parse(allProducts);
 
 
   const category = item.type;
 
-    const filteredData = allNewProducts.reverse().filter((item)=>{
+    // const filteredData = allNewProducts.reverse().filter((item)=>{
                     
-        if(category === '' || category === null){
-            return item;
-        }else if(
-            item.type.toLowerCase().includes(category.toLowerCase())
-        ){
-            return item;
-        }
-    })
+    //     if(category === '' || category === null){
+    //         return item;
+    //     }else if(
+    //         item.type.toLowerCase().includes(category.toLowerCase())
+    //     ){
+    //         return item;
+    //     }
+    // })
 
   const [quantity, setQuantity] = useState(1);
 
@@ -58,8 +58,8 @@ const Preview = () => {
           <Text className="text-xl font-bold text-purple-900">Ksh. {item.price.toLocaleString()}</Text>
         </View>
 
-        <View className="flex-row items-center justify-between">
-          <Text className="text-gray-600 leading-6 text-base mb-2 w-3/4">{item.description}</Text>
+        <View className="flex-row items-center justify-between mb-3">
+          <Text className="text-gray-600 leading-6 text-base mb-2">{item.description}</Text>
           <View className="flex-0 justify-end">
             <Text className="text-gray-600 mb-2 font-bold text-center">Set Quantity</Text>
             <View className="flex-row items-center mb-6">
@@ -70,7 +70,7 @@ const Preview = () => {
                 <Text className="text-sm font-semibold text-gray-800">-</Text>
               </TouchableOpacity>
               
-              <Text className="text-sm mx-2">{quantity}</Text>
+              <Text className="text-sm mx-1">{quantity}</Text>
               
               <TouchableOpacity
                 onPress={increaseQuantity}
@@ -92,10 +92,10 @@ const Preview = () => {
         </TouchableOpacity>
       </View>
 
-      <View className="bg-white p-2">
+      {/* <View className="bg-white p-2">
         <Text className="font-montserrat-bold text-lg ">Related Products</Text>
         <RelatedProducts products={filteredData} />
-      </View>
+      </View> */}
     </SafeAreaView>
   );
 };

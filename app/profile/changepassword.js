@@ -75,22 +75,22 @@ const changepassword = () => {
       <ScrollView>
         <Text className='font-montserrat-light my-10 text-center'>Change Password</Text>
 
-        <View className='m-5'>
+        <View className='m-3'>
           <Text>Current Password</Text>
-          <TextInput onChangeText={setCurrentPassword} secureTextEntry={true} className='p-4 mt-2 border border-gray-300 rounded-2xl'  />
+          <TextInput onChangeText={setCurrentPassword} secureTextEntry={true} className='p-2 mt-1 border border-gray-300 rounded-xl'  />
         </View>
-        <View className='m-5'>
+        <View className='m-3'>
           <Text>New Password</Text>
-          <TextInput onChangeText={setNewPassword} secureTextEntry={true} className='p-4 mt-2 border border-gray-300 rounded-2xl'  />
+          <TextInput onChangeText={setNewPassword} secureTextEntry={true} className='p-2 mt-1 border border-gray-300 rounded-xl'  />
         </View>
-        <View className='m-5'>
+        <View className='m-3'>
           <Text>Confirm New Password</Text>
-          <TextInput onChangeText={setConfPassword} secureTextEntry={true} className='p-4 mt-2 border border-gray-300 rounded-2xl'  />
+          <TextInput onChangeText={setConfPassword} secureTextEntry={true} className='p-2 mt-1 border border-gray-300 rounded-2xl'  />
         </View>
 
         <View className='flex-row gap-2 justify-between mx-3 my-5'>
             <TouchableOpacity 
-            className='rounded-2xl border border-purple-950 w-1/2 py-4'
+            className='rounded-2xl border border-purple-950 w-1/2 py-2'
             onPress={()=>{
               setConfPassword(null);
               setNewPassword(null);
@@ -103,7 +103,7 @@ const changepassword = () => {
               <Text className='text-center'>Cancel</Text>
             </TouchableOpacity>
             <TouchableOpacity 
-            className='rounded-2xl border bg-purple-950 w-1/2 py-4'
+            className='rounded-2xl border bg-purple-950 w-1/2 py-2'
             onPress={()=>{
               handleSubmit();
             }}
