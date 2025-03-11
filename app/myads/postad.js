@@ -41,8 +41,7 @@ const postad = () => {
         // No permissions request is necessary for launching the image library
         let result = await ImagePicker.launchImageLibraryAsync({
           mediaTypes: ['images', 'videos'],
-          allowsEditing: true,
-          aspect: [4, 3],
+          allowsEditing: false,
           quality: 1,
         });
     

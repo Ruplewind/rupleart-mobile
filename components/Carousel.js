@@ -14,9 +14,9 @@ const Carousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const flatListRef = useRef(null);
   const data = [
-    { id: '1', title: 'Slide 1', image: require('../assets/images/purple.jpg') },
-    { id: '2', title: 'Slide 2', image: require('../assets/images/sticks.jpg') },
-    { id: '3', title: 'Slide 3', image: require('../assets/images/sculpture.jpg') },
+    { id: '1', title: 'Slide 1', image: require('../assets/images/purple-min.jpg') },
+    { id: '2', title: 'Slide 2', image: require('../assets/images/sticks-min.jpg') },
+    { id: '3', title: 'Slide 3', image: require('../assets/images/sculpture-min.jpg') },
   ];
 
   const onViewableItemsChanged = useRef(({ viewableItems }) => {
