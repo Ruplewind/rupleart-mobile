@@ -139,26 +139,26 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     paginationButton: {
-        backgroundColor: '#4A148C',
-        paddingVertical: 8,
-        paddingHorizontal: 12,
+        backgroundColor: 'gray',
+        paddingVertical: 5,
+        paddingHorizontal: 10,
         borderRadius: 6,
     },
     paginationButtonOutline: {
         backgroundColor: '#FFF',
         borderColor:'#4A148C',
-        paddingVertical: 8,
-        paddingHorizontal: 12,
+        paddingVertical: 5,
+        paddingHorizontal: 10,
         borderRadius: 6,
     },
     paginationText: {
         color: 'white',
-        fontSize: 14,
+        fontSize: 13,
         fontWeight: 'bold',
     },
     paginationTextOutline: {
         color: '#4A148C',
-        fontSize: 14,
+        fontSize: 13,
         fontWeight: 'bold',
     }
 });

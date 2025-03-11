@@ -66,7 +66,7 @@ const Orders = () => {
                         </TouchableOpacity>
                     </View>
                 )} 
-                {loading && <ActivityIndicator color="black" size={100} style={{ marginTop: 28 }} />}
+                {loading && <ActivityIndicator color="black" size={80} style={{ marginTop: 28 }} />}
                 {!loading && orders.length > 0 && orders.reverse().map((order, index) => (
                     <TouchableOpacity
                         key={index}
