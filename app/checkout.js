@@ -221,7 +221,7 @@ const handleNavigationStateChange = (newNavState) => {
                                 open={open}
                                 value={location}
                                 items={towns.map((item) => ({
-                                  label: `${item.name} - Ksh. ${item.price}`,
+                                  label: `${item.town} - Ksh. ${item.price}`,
                                   value: item._id,
                                 }))}
                                 setOpen={setOpen}
