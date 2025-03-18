@@ -59,8 +59,8 @@ export default function Events() {
                 <EvilIcons name="location" size={20} color="black" />
                 <Text className='font-montserrat-bold text-sm mt-1'>{event.venue}</Text>
               </View>
-              <View className='flex-row gap-2 items-center mb-2'>
-                <Fontisto name="date" size={16} color="black" />
+              <View className='flex-row gap-3 items-center mb-2'>
+                <Fontisto name="date" size={14} color="black" />
                 <Text className='font-montserrat-bold text-sm mt-1'>{event.date}</Text>
               </View>
             </View>
@@ -90,8 +90,8 @@ export default function Events() {
                 <EvilIcons name="location" size={20} color="black" />
                 <Text className='font-montserrat-bold text-sm mt-1'>{event.venue}</Text>
               </View>
-              <View className='flex-row gap-2 items-center mb-2'>
-                <Fontisto name="date" size={16} color="black" />
+              <View className='flex-row gap-3 items-center mb-2'>
+                <Fontisto name="date" size={14} color="black" />
                 <Text className='font-montserrat-bold text-sm mt-1'>{event.date}</Text>
               </View>
             </View>
