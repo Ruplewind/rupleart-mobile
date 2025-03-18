@@ -199,9 +199,9 @@ const handleNavigationStateChange = (newNavState) => {
                       <Text className="font-bold mb-5 text-center">Order Summary</Text>
                       {products.map(product => (
                         <View key={product._id} className="flex-row justify-between mb-2 mx-2">
-                          <Text className="w-1/2 font-montserrat-semibold text-gray-600">{product.productName}</Text>
-                          <Text className="w-1/4 text-gray-600">X {product.quantity}</Text>
-                          <Text className="w-1/4 font-montserrat-semibold text-gray-600" >KES. {(product.quantity * product.price).toLocaleString()}</Text>
+                          <Text className="w-1/2 font-montserrat-semibold text-gray-600 text-sm">{product.productName}</Text>
+                          <Text className="w-1/4 text-gray-600 ttext-sm">X {product.quantity}</Text>
+                          <Text className="w-1/4 font-montserrat-semibold text-gray-600 text-sm" >KES. {(product.quantity * product.price).toLocaleString()}</Text>
                         </View>
                       ))}
                     </View>

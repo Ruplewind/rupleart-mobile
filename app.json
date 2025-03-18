@@ -4,12 +4,12 @@
     "slug": "rupleart",
     "version": "3.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/newsplash.png",
     "resizeMode": "cover",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/newsplash.png",
       "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },

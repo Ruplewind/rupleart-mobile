@@ -101,7 +101,7 @@ export default function RootLayout() {
                     router.push("cart")
                   }}>
                     <View style={{flexDirection: 'row', alignItems: 'flex-start'}}>
-                        <AntDesign name="shoppingcart" size={20} color="black"  className="" />
+                        <AntDesign name="shoppingcart" size={18} color="black"  className="" />
                     </View>
                   </TouchableOpacity>
               )
