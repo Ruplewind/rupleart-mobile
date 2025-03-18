@@ -42,7 +42,8 @@ const Preview = () => {
         className="w-full h-[300px]"
       />
 
-      <View className="flex-1 -mt-10 bg-white rounded-t-3xl p-5 shadow-lg">
+      {/* <View className="flex-1 -mt-10 bg-white rounded-t-3xl p-5 shadow-lg"> */}
+      <View className="flex-1 bg-white p-5 shadow-lg">
         <View className="flex-row items-center justify-between mb-3">
           <View>
               <Text className="text-2xl font-semibold text-gray-800">{item.productName}</Text>
