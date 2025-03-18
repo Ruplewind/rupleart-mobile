@@ -60,7 +60,7 @@ const Register = () => {
         } else {
           res.json().then(response => {
             if(response == 'Exists'){
-              Alert.alert('Registration Failed', 'Email is already used.')
+              Alert.alert('Registration Failed', 'Email or Phone Number is already used.')
               setLoading(false)
             }else{
               Alert.alert('Failed', 'Registration failed. Try again.')
