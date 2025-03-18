@@ -193,6 +193,7 @@ const handleNavigationStateChange = (newNavState) => {
                         className="border-b p-4 mb-2"
                       />
                       {touched.phoneNumber && errors.phoneNumber && <Text className="text-red-500">{errors.phoneNumber}</Text>}
+                      <Text className='text-blue-500 text-xs'>* Phone number is editable</Text>
                     
                     <View className="my-5">
                       <Text className="font-bold mb-5 text-center">Order Summary</Text>

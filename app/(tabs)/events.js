@@ -43,7 +43,7 @@ export default function Events() {
           <View className='p-3'> 
             <Text className='font-montserrat-black text-2xl tracking-wider text-purple-950  text-center mt-5'>{event.title}</Text>
             <Text className='font-montserrat-regular mt-2 mb-2 text-sm'>{event.description}</Text>
-            <View className='flex-row justify-between'>
+            {/* <View className='flex-row justify-between'>
               <View className='flex-row gap-1 items-center mb-2'>
                 <EvilIcons name="location" size={20} color="black" />
                 <Text className='font-montserrat-light text-sm'>{event.venue}</Text>
@@ -51,6 +51,17 @@ export default function Events() {
               <View className='flex-row gap-2 items-center mb-2'>
                 <Fontisto name="date" size={16} color="black" />
                 <Text className='font-montserrat-light text-sm'>{event.date}</Text>
+              </View>
+            </View> */}
+
+            <View className=''>
+              <View className='flex-row gap-1 items-center mb-1'>
+                <EvilIcons name="location" size={20} color="black" />
+                <Text className='font-montserrat-bold text-sm mt-1'>{event.venue}</Text>
+              </View>
+              <View className='flex-row gap-2 items-center mb-2'>
+                <Fontisto name="date" size={16} color="black" />
+                <Text className='font-montserrat-bold text-sm mt-1'>{event.date}</Text>
               </View>
             </View>
             
@@ -75,13 +86,13 @@ export default function Events() {
             <Text className='font-montserrat-black text-2xl tracking-wider text-purple-950  text-center mt-5'>{event.title}</Text>
             <Text className='font-montserrat-regular mt-2 mb-2 text-sm'>{event.description}</Text>
             <View className=''>
-              <View className='flex-row gap-1 items-center mb-2'>
+              <View className='flex-row gap-1 items-center mb-1'>
                 <EvilIcons name="location" size={20} color="black" />
-                <Text className='font-montserrat-light text-sm'>{event.venue}</Text>
+                <Text className='font-montserrat-bold text-sm mt-1'>{event.venue}</Text>
               </View>
               <View className='flex-row gap-2 items-center mb-2'>
                 <Fontisto name="date" size={16} color="black" />
-                <Text className='font-montserrat-light text-sm'>{event.date}</Text>
+                <Text className='font-montserrat-bold text-sm mt-1'>{event.date}</Text>
               </View>
             </View>
             
