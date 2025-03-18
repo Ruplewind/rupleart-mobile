@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, TouchableOpacity, Image, StyleSheet } from 'react-native';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { router } from 'expo-router';
 import useCart from '../context/CartContext';
 
@@ -8,11 +8,16 @@ const Products = ({ products, category }) => {
     const itemsPerPage = 10;
     const scrollViewRef = useRef(null); // Reference for scrolling
 
+    // Reset page number when category changes
+    useEffect(() => {
+        setPage(0);
+    }, [category]);
+
     const filteredData = products.filter((item) => {
         if (!category || category === "All") {
-            return item;
-        } else if (item.type.toLowerCase().includes(category.toLowerCase())) {
-            return item;
+            return true;
+        } else {
+            return item.type.toLowerCase().includes(category.toLowerCase());
         }
     });
 
@@ -36,7 +41,7 @@ const Products = ({ products, category }) => {
                         onPress={() => {
                             router.push({
                                 pathname: "preview/[product]", 
-                                params: { product: JSON.stringify(item)} // , allProducts: JSON.stringify(products) } 
+                                params: { product: JSON.stringify(item) }
                             });
                         }}
                     >
@@ -44,7 +49,6 @@ const Products = ({ products, category }) => {
                             source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/uploads/${item.image}` }}
                             style={styles.image}
                         />
-                        {/* <Text style={styles.productName}>{item.productName}</Text> */}
                         <Text style={styles.productName} numberOfLines={1} ellipsizeMode="tail">
                             {item.productName}
                         </Text>
@@ -62,7 +66,6 @@ const Products = ({ products, category }) => {
             <View style={styles.paginationContainer}>
                 {page > 0 && (
                     <TouchableOpacity 
-                        // style={styles.paginationButtonOutline} 
                         className='border border-purple-900 p-2 rounded-lg'
                         onPress={() => handlePageChange(page - 1)}
                     >
@@ -111,10 +114,6 @@ const styles = StyleSheet.create({
         fontSize: 14,
         textAlign: 'center',
         marginBottom: 4,
-        numberOfLines: 1, // Ensures only one line is displayed
-        ellipsizeMode: 'tail', // Adds "..." if the text is too long
-        overflow: 'hidden', // Prevents text from overflowing
-        width: '100%', // Ensures proper width handling
     },
     price: {
         color: 'gray',
@@ -140,13 +139,6 @@ const styles = StyleSheet.create({
     },
     paginationButton: {
         backgroundColor: 'gray',
-        paddingVertical: 5,
-        paddingHorizontal: 10,
-        borderRadius: 6,
-    },
-    paginationButtonOutline: {
-        backgroundColor: '#FFF',
-        borderColor:'#4A148C',
         paddingVertical: 5,
         paddingHorizontal: 10,
         borderRadius: 6,
