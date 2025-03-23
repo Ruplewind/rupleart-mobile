@@ -40,6 +40,7 @@ const Preview = () => {
       <Image
         source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/uploads/${item.image}` }}
         className="w-full h-[300px]"
+        resizeMode='contain'
       />
 
       {/* <View className="flex-1 -mt-10 bg-white rounded-t-3xl p-5 shadow-lg"> */}
@@ -47,20 +48,24 @@ const Preview = () => {
         <View className="flex-row items-center justify-between mb-3">
           <View>
               <Text className="text-2xl font-semibold text-gray-800">{item.productName}</Text>
-              <View className="flex-row gap-1">
+              <Text className="text-sm font-montserrat-light text-gray-800">{item.type}</Text>
+              {/* <View className="flex-row gap-1">
                 <AntDesign name="star" size={12} color="#FFD700" />
                 <AntDesign name="star" size={12} color="#FFD700" />
                 <AntDesign name="star" size={12} color="#FFD700" />
                 <AntDesign name="star" size={12} color="#FFD700" />
                 <AntDesign name="staro" size={12} color="black" />
-              </View>
+              </View> */}
           </View>
           
           <Text className="text-xl font-bold text-purple-900">Ksh. {item.price.toLocaleString()}</Text>
         </View>
 
         <View className="flex-row items-center justify-between mb-3">
-          <Text className="text-gray-600 leading-6 text-base mb-2">{item.description}</Text>
+          <View>
+            <Text className="text-gray-700 leading-6 text-base mb-2">{item.description}</Text>
+            <Text className="text-gray-600 leading-6 text-base mb-2">{item.size}</Text>
+          </View>
           <View className="flex-0 justify-end">
             <Text className="text-gray-600 mb-2 font-bold text-center">Set Quantity</Text>
             <View className="flex-row items-center mb-6">
