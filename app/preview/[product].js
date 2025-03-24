@@ -39,7 +39,7 @@ const Preview = () => {
     <SafeAreaView className="flex-1 bg-white">
       <Image
         source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/uploads/${item.image}` }}
-        className="w-full h-[300px]"
+        className="w-full h-[270px]"
         resizeMode='contain'
       />
 
@@ -62,9 +62,11 @@ const Preview = () => {
         </View>
 
         <View className="flex-row items-center justify-between mb-3">
-          <View>
-            <Text className="text-gray-700 leading-6 text-base mb-2">{item.description}</Text>
-            <Text className="text-gray-600 leading-6 text-base mb-2">{item.size}</Text>
+          <View className='w-3/4'>
+            <Text className="text-gray-700 leading-6 text-sm mb-2">{item.description}</Text>
+            <Text className="text-gray-600 leading-6 text-base mb-2">
+              <Text className='text-purple-900'>Size: </Text>{item.size.includes("cm") ? item.size : `${item.size} cm`}
+            </Text>
           </View>
           <View className="flex-0 justify-end">
             <Text className="text-gray-600 mb-2 font-bold text-center">Set Quantity</Text>
