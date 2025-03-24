@@ -6,6 +6,7 @@ import LatestArtworks from '../../components/LatestArtworks';
 import RelatedProducts from '../../components/RelatedProducts';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import useCart from '../../context/CartContext';
+import { ScrollView } from 'react-native';
 
 const Preview = () => {
   const { product, allProducts } = useLocalSearchParams();
@@ -37,6 +38,7 @@ const Preview = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
+    <ScrollView>
       <Image
         source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/uploads/${item.image}` }}
         className="w-full h-[270px]"
@@ -104,6 +106,7 @@ const Preview = () => {
         <Text className="font-montserrat-bold text-lg ">Related Products</Text>
         <RelatedProducts products={filteredData} />
       </View> */}
+      </ScrollView>
     </SafeAreaView>
   );
 };
