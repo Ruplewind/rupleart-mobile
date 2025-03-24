@@ -13,8 +13,7 @@ import { useAuthContext } from '../../context/AuthProvider'
 const Login = () => {
 
   const [form, setForm] = useState({
-    email: null,
-    password: null
+    email: null
   })
   const [loading, setLoading] = useState(false);
   const { login } = useAuthContext();
@@ -22,36 +21,39 @@ const Login = () => {
   const handleSubmit = () => {
     setLoading(true);
 
-    if(form.email == null || form.password == null){
+    if(form.email == null){
       Alert.alert('Error', "All fields must be filled");
       setLoading(false);
       return;
     }
 
-    fetch(`${process.env.EXPO_PUBLIC_API_URL}/user_m_login`,{
+    fetch(`${process.env.EXPO_PUBLIC_API_URL}/forgot_password`,{
       method: 'POST',
       headers: {
         'Content-type':'application/json'
       },
       body: JSON.stringify({
-        email: form.email , password: form.password
+        email: form.email
       })
     })
     .then((res)=> {
           res.json().then(response => {
             if(res.ok){
                 //Alert.alert('Success', "Logged In");
-                login(response.token, response.userId, `${response.first_name} ${response.second_name}`);
-                if(response.firstTime == true)
-                {
-                  router.push({
-                    pathname: "profile/changepassword"
-                  })
-                }
-                else
-                {
-                  router.replace('/home');
-                }
+                router.push('/login');
+                Alert.alert(
+                  'Success',
+                  'An email has been sent with a password. Use it for sign in!',
+                  [
+                    {
+                      text: 'OK',
+                      onPress: () => {
+                        router.push('/login')
+                      }
+                    }
+                  ],
+                  { cancelable: false }
+                )
                 setLoading(false);
             }else{
                 Alert.alert('Failed', response);
@@ -75,8 +77,11 @@ const Login = () => {
               className="w-[50px] h-[50px]"
               resizeMode='contain'
               />
-              <Text className="text-2xl font-bold">Welcome Back!</Text>
-              <Text className="mt-2 font-bold">Log In</Text>
+              <Text className="text-2xl font-bold">Reset Password</Text>
+          </View>
+
+          <View className='mx-5 my-5'>
+            <Text className='text-center font-montserrat-light'>Enter the email address associated with your account and we'll send a password to use for login</Text>
           </View>
       
           <FormField 
@@ -88,28 +93,12 @@ const Login = () => {
             keyboardType="email-address"
           />
 
-          <FormField 
-            title="Password"
-            placeholder={"*************"}
-            value={form.password}
-            handleChangeText={e => setForm({ ...form, password: e})}
-            otherStyles="mt-7"
-          />
-
-          <TouchableOpacity
-          className='my-1 w-full items-end'
-          onPress={()=>{
-            router.push('forgotpassword')
-          }}>
-            <Text className='text-blue-900 text-right'>Forgot password?</Text>
-          </TouchableOpacity>
-
           {
             !loading &&
             <TouchableOpacity className="w-full p-4 bg-purple-900 rounded-xl mt-10" onPress={()=>{
               handleSubmit()
             }}>
-            <Text className="text-white text-center">Login</Text>
+            <Text className="text-white text-center">Send New Password</Text>
           </TouchableOpacity> }
           {
             loading && <Pressable className="bg-gray-500 mt-10 rounded-lg w-full p-4">
@@ -118,11 +107,11 @@ const Login = () => {
           }
 
           <View className="flex-row justify-center gap-2 mt-5">
-            <Text className="font-montserrat-medium">I don't have an account?</Text>
+            <Text className="font-montserrat-medium">Go back to login?</Text>
             <TouchableOpacity onPress={()=>{
-                    router.push('register')
+                    router.push('login')
                 }}>
-                <Text className="text-purple-500 font-montserrat-bold">Sign Up</Text>
+                <Text className="text-purple-500 font-montserrat-bold">Sign In</Text>
             </TouchableOpacity>
           </View>
 
