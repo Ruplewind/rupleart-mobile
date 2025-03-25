@@ -44,7 +44,7 @@ const Preview = () => {
           <View className="flex-row items-center justify-between mb-3">
             <View>
               <Text className="text-2xl font-semibold text-gray-800">{item.productName}</Text>
-              <Text className="text-base font-montserrat-light text-gray-800">{item.type}</Text>
+              <Text className="text-base font-montserrat text-purple-900">{item.type}</Text>
             </View>
             <Text className="text-xl font-bold text-purple-900">Ksh. {item.price.toLocaleString()}</Text>
           </View>
