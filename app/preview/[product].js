@@ -4,6 +4,7 @@ import { useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import useCart from '../../context/CartContext';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import RelatedProducts from '../../components/RelatedProducts';
 
 const Preview = () => {
   const { product } = useLocalSearchParams();
@@ -79,13 +80,17 @@ const Preview = () => {
 
           {/* Share Button */}
           <TouchableOpacity 
-            className="bg-blue-500 p-2 rounded-full w-3/4 mx-auto shadow-sm mt-4 flex-row items-center justify-center" 
+            className="bg-gray-400 p-2 rounded-full w-3/4 mx-auto shadow-sm mt-4 flex-row items-center justify-center" 
             onPress={handleShare}
           >
             <AntDesign name="sharealt" size={20} color="white" />
             <Text className="text-white text-center text-lg font-semibold ml-2">Share</Text>
           </TouchableOpacity>
         </View>
+        <View className='mt-2'>
+          <Text className='px-5 text-lg font-montserrat-bold'>Related Products</Text>
+        </View>
+        <RelatedProducts category={item.type} />
       </ScrollView>
     </SafeAreaView>
   );

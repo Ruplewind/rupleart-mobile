@@ -41,7 +41,7 @@ const Products = ({ products, category }) => {
                         onPress={() => {
                             router.push({
                                 pathname: "preview/[product]", 
-                                params: { product: JSON.stringify(item) }
+                                params: { product: JSON.stringify(item) } // , allProducts : JSON.stringify(products) }
                             });
                         }}
                     >

@@ -1,25 +1,17 @@
-import { View, Text, FlatList, ImageBackground, Image, StyleSheet } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { View, Text, FlatList, ImageBackground, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import * as Animatable from 'react-native-animatable';
-import { TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
+
 const zoomIn = {
-    0 : {
-        scale: 0.9
-    },
-    1 : {
-        scale: 1
-    }
-}
+    0: { scale: 0.9 },
+    1: { scale: 1 }
+};
 
 const zoomOut = {
-    0 : {
-        scale: 1
-    },
-    1 : {
-        scale: 0.9
-    }
-}
+    0: { scale: 1 },
+    1: { scale: 0.9 }
+};
 
 const LatestItem = ({ activeItem, item, allProducts }) => {
     return (
@@ -39,18 +31,18 @@ const LatestItem = ({ activeItem, item, allProducts }) => {
                     shadowRadius: 6,
                 }}
                 activeOpacity={0.8}
-                onPress={()=>{
+                onPress={() => {
                     router.push({
-                        pathname: "preview/[product]", 
-                        params: { product: JSON.stringify(item), allProducts: JSON.stringify(allProducts) } 
-                    })
+                        pathname: "preview/[product]",
+                        params: { product: JSON.stringify(item) }
+                    });
                 }}
             >
                 <ImageBackground
                     source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/uploads/${item.image}` }}
                     style={{
-                        width: 100, // equivalent to 13rem
-                        height: 130, // a bit shorter for a card effect
+                        width: 100,
+                        height: 130,
                         borderRadius: 12,
                         overflow: 'hidden',
                         justifyContent: 'flex-end',
@@ -80,52 +72,56 @@ const LatestItem = ({ activeItem, item, allProducts }) => {
     );
 };
 
-const RelatedProducts = ({ products }) => {
-    let filteredProducts = [];
-    if(products.length > 6){
-        filteredProducts = products.slice(0,6);
-    }else{
-        filteredProducts = products;
-    }
-
-    const [activeItem, setActiveItem] = useState(filteredProducts[0]);
+const RelatedProducts = ({ category }) => {
+    const [products, setProducts] = useState([]);
+    const [filteredProducts, setFilteredProducts] = useState([]);
+    const [activeItem, setActiveItem] = useState(null);
 
     useEffect(() => {
-        if (filteredProducts.length > 0) {
-          setActiveItem(filteredProducts[1]);
+        const fetchProducts = async () => {
+            try {
+                const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/get_approved_products`);
+                const data = await response.json();
+                setProducts(data);
+            } catch (error) {
+                console.error("Error fetching products:", error);
+            }
+        };
+        fetchProducts();
+    }, []);
+
+    useEffect(() => {
+        if (category && products.length > 0) {
+            const related = products.filter(product => product.type === category).slice(0, 6);
+            setFilteredProducts(related);
+            if (related.length > 0) {
+                setActiveItem(related[0]._id);
+            }
         }
-      }, [filteredProducts]);
+    }, [category, products]);
 
-      const viewableItemsChanged = ({ viewableItems }) => {
-        if(viewableItems.length > 0){
-            setActiveItem(viewableItems[0].key)
+    const viewableItemsChanged = ({ viewableItems }) => {
+        if (viewableItems.length > 0) {
+            setActiveItem(viewableItems[0].key);
         }
-      }
+    };
 
-  return (
-    <View className="p-4" style={{
-        backgroundColor:"#fff"
-    }}>
-        <FlatList
-            style={{
-                marginTop:5
-            }}
-            data={filteredProducts}
-            horizontal
-            keyExtractor={(product)=> product._id}
-            renderItem={({ item }) => (
-                <LatestItem activeItem={activeItem} item={item}  allProducts={products}/>
-            )}
-            onViewableItemsChanged={viewableItemsChanged}
-            viewabilityConfig={{
-                itemVisiblePercentThreshold : 70
-            }}
-            contentOffset={{ x: 150 }}
-        />
-    </View>
-    
-  )
-}
+    return (
+        <View className="p-4 px-2" style={{ backgroundColor: "#fff" }}>
+            <FlatList
+                style={{ marginTop: 0 }}
+                data={filteredProducts}
+                horizontal
+                keyExtractor={(product) => product._id}
+                renderItem={({ item }) => (
+                    <LatestItem activeItem={activeItem} item={item} allProducts={filteredProducts} />
+                )}
+                onViewableItemsChanged={viewableItemsChanged}
+                viewabilityConfig={{ itemVisiblePercentThreshold: 70 }}
+                contentOffset={{ x: 150 }}
+            />
+        </View>
+    );
+};
 
-export default RelatedProducts
-
+export default RelatedProducts;
