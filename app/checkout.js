@@ -138,7 +138,7 @@ const handleNavigationStateChange = (newNavState) => {
             <>
               {showIframe ? (
                 <View style={{ flex: 1, justifyContent: 'center', marginTop: 20 }}>
-                    <WebView source={{ uri: link }} style={{ height: 450, width: '100%' }} onNavigationStateChange={handleNavigationStateChange} />
+                    <WebView source={{ uri: link }} style={{ height: 500, width: '100%' }} onNavigationStateChange={handleNavigationStateChange} />
                 </View>
               
               ) : (

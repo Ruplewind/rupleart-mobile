@@ -17,7 +17,10 @@
       "buildNumber": "5",
       "supportsTablet": true,
       "package": "com.rupleartapp.app",
-      "bundleIdentifier": "com.rupleartapp.app"
+      "bundleIdentifier": "com.rupleartapp.app",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "versionCode": 5,

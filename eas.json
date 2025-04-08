@@ -2,7 +2,7 @@
   "build": {
     "preview": {
       "android": {
-        "buildType": "apk"
+        "buildType": "app-bundle"
       },
       "env": {
         "EXPO_PUBLIC_API_URL": "https://api.rupleart.com"
@@ -34,5 +34,8 @@
         "EXPO_PUBLIC_API_URL": "https://api.rupleart.com"
       }
     }
+  },
+  "cli": {
+    "appVersionSource": "remote"
   }
 }

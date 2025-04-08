@@ -42,6 +42,26 @@ const Preview = () => {
         />
 
         <View className="flex-1 bg-white p-5 shadow-lg">
+
+        <View className='flex-row justify-between mr-5 mt-2'>
+          <View>
+            <View className="flex-row gap-1">
+              <AntDesign name="star" size={12} color="#FFD700" />
+              <AntDesign name="star" size={12} color="#FFD700" />
+              <AntDesign name="star" size={12} color="#FFD700" />
+              <AntDesign name="star" size={12} color="#FFD700" />
+              <AntDesign name="staro" size={12} color="black" />
+            </View>
+          </View>
+          <View>
+          <TouchableOpacity  
+            onPress={handleShare}
+          >
+            <AntDesign name="sharealt" size={20} color="#ff9933" />
+          </TouchableOpacity>
+          </View>
+        </View>
+
           <View className="flex-row items-center justify-between mb-3">
             <View>
               <Text className="text-2xl font-semibold text-gray-800">{item.productName}</Text>
@@ -79,13 +99,13 @@ const Preview = () => {
           </TouchableOpacity>
 
           {/* Share Button */}
-          <TouchableOpacity 
+          {/* <TouchableOpacity 
             className="bg-gray-400 p-2 rounded-full w-3/4 mx-auto shadow-sm mt-4 flex-row items-center justify-center" 
             onPress={handleShare}
           >
             <AntDesign name="sharealt" size={20} color="white" />
             <Text className="text-white text-center text-lg font-semibold ml-2">Share</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         <View className='mt-2'>
           <Text className='px-5 text-lg font-montserrat-bold'>Related Products</Text>
