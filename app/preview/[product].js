@@ -1,4 +1,12 @@
-import { View, Text, Image, TouchableOpacity, Share, ScrollView, Dimensions } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  Share,
+  ScrollView,
+  Dimensions
+} from 'react-native';
 import React, { useState, useRef } from 'react';
 import { useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -16,9 +24,9 @@ const Preview = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollRef = useRef(null);
 
-  const increaseQuantity = () => setQuantity(quantity + 1);
+  const increaseQuantity = () => setQuantity((prev) => prev + 1);
   const decreaseQuantity = () => {
-    if (quantity > 1) setQuantity(quantity - 1);
+    if (quantity > 1) setQuantity((prev) => prev - 1);
   };
 
   const handleShare = async () => {
@@ -26,11 +34,7 @@ const Preview = () => {
       const url = `https://rupleart.com/preview/${item._id}`;
       const message = `Check out this amazing artwork: ${item.productName} for Ksh. ${item.price.toLocaleString()}!\n${url}`;
 
-      await Share.share({
-        message,
-        url,
-        title: item.productName,
-      });
+      await Share.share({ message, url, title: item.productName });
     } catch (error) {
       console.error('Error sharing:', error);
     }
@@ -44,22 +48,20 @@ const Preview = () => {
   const nextImage = () => {
     if (activeIndex < item.image.length - 1) {
       scrollRef.current.scrollTo({ x: (activeIndex + 1) * width, animated: true });
-      setActiveIndex(activeIndex + 1);
     }
   };
 
   const prevImage = () => {
     if (activeIndex > 0) {
       scrollRef.current.scrollTo({ x: (activeIndex - 1) * width, animated: true });
-      setActiveIndex(activeIndex - 1);
     }
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <ScrollView>
-        {/* Image Slider */}
-        <View className="w-full h-[270px] relative">
+    <SafeAreaView className="flex-1 bg-gray-50">
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {/* Image Carousel */}
+        <View className="w-full h-[320px] bg-white shadow-md relative">
           <ScrollView
             horizontal
             pagingEnabled
@@ -72,124 +74,110 @@ const Preview = () => {
               <Image
                 key={index}
                 source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/uploads/${img}` }}
-                style={{ width: width, height: 270 }}
+                style={{ width, height: 320 }}
                 resizeMode="contain"
               />
             ))}
           </ScrollView>
 
-          {/* Previous & Next Buttons */}
+          {/* Navigation Arrows */}
           {activeIndex > 0 && (
             <TouchableOpacity
               onPress={prevImage}
-              style={{
-                position: 'absolute',
-                top: '40%',
-                left: 10,
-                backgroundColor: 'rgba(0,0,0,0.3)',
-                padding: 8,
-                borderRadius: 20,
-              }}
+              className="absolute top-[45%] left-3 bg-black/30 p-3 rounded-full"
             >
               <AntDesign name="left" size={20} color="white" />
             </TouchableOpacity>
           )}
-
           {activeIndex < item.image.length - 1 && (
             <TouchableOpacity
               onPress={nextImage}
-              style={{
-                position: 'absolute',
-                top: '40%',
-                right: 10,
-                backgroundColor: 'rgba(0,0,0,0.3)',
-                padding: 8,
-                borderRadius: 20,
-              }}
+              className="absolute top-[45%] right-3 bg-black/30 p-3 rounded-full"
             >
               <AntDesign name="right" size={20} color="white" />
             </TouchableOpacity>
           )}
 
           {/* Dots Indicator */}
-          <View className="absolute bottom-2 left-0 right-0 flex-row justify-center">
+          <View className="absolute bottom-3 w-full flex-row justify-center">
             {item.image.map((_, i) => (
               <View
                 key={i}
-                style={{
-                  width: 8,
-                  height: 8,
-                  borderRadius: 4,
-                  marginHorizontal: 4,
-                  backgroundColor: i === activeIndex ? '#6b21a8' : '#d1d5db', // purple-900 and gray-300
-                }}
+                className={`w-2.5 h-2.5 rounded-full mx-1 ${
+                  i === activeIndex ? 'bg-purple-900' : 'bg-gray-300'
+                }`}
               />
             ))}
           </View>
         </View>
 
-        {/* Product Details */}
-        <View className="flex-1 bg-white p-5 shadow-lg">
-          <View className="flex-row justify-between mr-5 mt-2">
-            <View>
-              <View className="flex-row gap-1">
-                <AntDesign name="star" size={12} color="#FFD700" />
-                <AntDesign name="star" size={12} color="#FFD700" />
-                <AntDesign name="star" size={12} color="#FFD700" />
-                <AntDesign name="star" size={12} color="#FFD700" />
-                <AntDesign name="staro" size={12} color="black" />
-              </View>
+        {/* Product Info */}
+        <View className="p-5 bg-white rounded-t-3xl -mt-4 shadow-lg">
+          {/* Rating & Share */}
+          <View className="flex-row justify-between mb-3">
+            <View className="flex-row gap-1">
+              {[1, 2, 3, 4].map((star) => (
+                <AntDesign key={star} name="star" size={14} color="#FFD700" />
+              ))}
+              <AntDesign name="staro" size={14} color="#9CA3AF" />
             </View>
-            <View>
-              <TouchableOpacity onPress={handleShare}>
-                <AntDesign name="sharealt" size={20} color="#ff9933" />
+            <TouchableOpacity onPress={handleShare}>
+              <AntDesign name="sharealt" size={22} color="#ff9933" />
+            </TouchableOpacity>
+          </View>
+
+          {/* Name & Price */}
+          <View className="flex-row justify-between items-center mb-4">
+            <View className="w-3/5">
+              <Text className="text-2xl font-bold text-gray-800">{item.productName}</Text>
+              <Text className="text-purple-700 text-sm mt-1">{item.type}</Text>
+            </View>
+            <Text className="text-xl font-extrabold text-purple-900">
+              Ksh. {item.price.toLocaleString()}
+            </Text>
+          </View>
+
+          {/* Description & Size */}
+          <Text className="text-gray-700 leading-6 text-base mb-3">{item.description}</Text>
+          <Text className="text-gray-600 mb-5">
+            <Text className="text-purple-900 font-semibold">Size: </Text>
+            {item.size.includes('cm') ? item.size : `${item.size} cm`}
+          </Text>
+
+          {/* Quantity Selector */}
+          <View className="flex-row items-center justify-between mb-5">
+            <Text className="text-gray-800 font-semibold">Quantity</Text>
+            <View className="flex-row items-center bg-gray-100 rounded-full px-2">
+              <TouchableOpacity
+                onPress={decreaseQuantity}
+                className="bg-gray-200 px-4 py-2 rounded-full"
+              >
+                <Text className="text-lg font-bold">-</Text>
+              </TouchableOpacity>
+              <Text className="text-lg mx-4">{quantity}</Text>
+              <TouchableOpacity
+                onPress={increaseQuantity}
+                className="bg-gray-200 px-4 py-2 rounded-full"
+              >
+                <Text className="text-lg font-bold">+</Text>
               </TouchableOpacity>
             </View>
           </View>
 
-          <View className="flex-row items-center justify-between mb-3">
-            <View>
-              <Text className="text-2xl font-semibold text-gray-800">{item.productName}</Text>
-              <Text className="text-base font-montserrat text-purple-900">{item.type}</Text>
-            </View>
-            <Text className="text-xl font-bold text-purple-900">Ksh. {item.price.toLocaleString()}</Text>
-          </View>
-
-          <View className="flex-row items-center justify-between mb-3">
-            <View className="w-3/4">
-              <Text className="text-gray-700 leading-6 text-lg mb-2 pr-2">{item.description}</Text>
-              <Text className="text-gray-600 leading-6 text-base mb-2">
-                <Text className="text-purple-900">Size: </Text>
-                {item.size.includes('cm') ? item.size : `${item.size} cm`}
-              </Text>
-            </View>
-            <View className="flex-0 justify-end">
-              <Text className="text-gray-600 mb-2 font-bold text-center">Set Quantity</Text>
-              <View className="flex-row items-center mb-6">
-                <TouchableOpacity onPress={decreaseQuantity} className="bg-gray-200 px-5 py-2 rounded-lg">
-                  <Text className="text-sm font-semibold text-gray-800">-</Text>
-                </TouchableOpacity>
-                <Text className="text-sm mx-1">{quantity}</Text>
-                <TouchableOpacity onPress={increaseQuantity} className="bg-gray-200 px-5 py-2 rounded-lg">
-                  <Text className="text-sm font-semibold text-gray-800">+</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-
+          {/* Add to Cart Button */}
           <TouchableOpacity
-            className="bg-purple-900 p-2 rounded-full w-3/4 mx-auto shadow-sm"
-            onPress={() => addToCart({ ...item, quantity: Number(quantity) })}
+            className="bg-purple-900 py-4 rounded-full shadow-md"
+            onPress={() => addToCart({ ...item, quantity })}
           >
             <Text className="text-white text-center text-lg font-semibold">Add To Cart</Text>
           </TouchableOpacity>
         </View>
 
         {/* Related Products */}
-        <View className="mt-2">
-          <Text className="px-5 text-lg font-montserrat-bold">Related Products</Text>
+        <View className="mt-6 px-5">
+          <Text className="text-lg font-bold text-gray-800 mb-2">Related Products</Text>
+          <RelatedProducts category={item.type} />
         </View>
-        <RelatedProducts category={item.type} />
       </ScrollView>
     </SafeAreaView>
   );
