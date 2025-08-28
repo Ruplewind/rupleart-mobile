@@ -58,7 +58,6 @@ const Preview = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50">
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Image Carousel */}
         <View className="w-full h-[320px] bg-white shadow-md relative">
@@ -179,7 +178,6 @@ const Preview = () => {
           <RelatedProducts category={item.type} />
         </View>
       </ScrollView>
-    </SafeAreaView>
   );
 };
 
