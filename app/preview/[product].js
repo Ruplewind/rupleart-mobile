@@ -36,7 +36,7 @@ const Preview = () => {
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView>
         <Image
-          source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/uploads/${item.image}` }}
+          source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/uploads/${item.image[0]}` }}
           className="w-full h-[270px]"
           resizeMode='contain'
         />

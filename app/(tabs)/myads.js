@@ -122,7 +122,7 @@ const Myads = () => {
               <View className="flex-1 w-2/10">
                 <Image
                   source={{
-                    uri: `${process.env.EXPO_PUBLIC_API_URL}/uploads/${item.image}`,
+                    uri: `${process.env.EXPO_PUBLIC_API_URL}/uploads/${item.image[0]}`,
                   }}
                   style={{
                     height:100,

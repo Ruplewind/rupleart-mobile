@@ -39,7 +39,7 @@ const LatestItem = ({ activeItem, item, allProducts }) => {
                 }}
             >
                 <ImageBackground
-                    source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/uploads/${item.image}` }}
+                    source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/uploads/${item.image[0]}` }}
                     style={{
                         width: 100,
                         height: 130,

@@ -23,7 +23,7 @@ const Cart = () => {
             <View key={index} className="flex-row bg-white gap-5 mb-2 mx-2 rounded-3xl p-2 py-3 justify-between mt-3">
               <View className="flex-row w-3/4 gap-5">
                 <Image
-                  source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/uploads/${item.image}` }}
+                  source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/uploads/${item.image[0]}` }}
                   style={{ width: 75, height: 75 }}
                   resizeMode="contain"
                 />

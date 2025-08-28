@@ -12,7 +12,7 @@ const editad = () => {
     const { product } = useLocalSearchParams();
     const item = JSON.parse(product);
 
-    const [image, setImage] = useState(item.image);
+    const [image, setImage] = useState(item.image[0]);
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(false);
 

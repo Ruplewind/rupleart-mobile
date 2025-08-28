@@ -46,7 +46,7 @@ const Products = ({ products, category }) => {
                         }}
                     >
                         <Image
-                            source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/uploads/${item.image}` }}
+                            source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/uploads/${item.image[0]}` }}
                             style={styles.image}
                         />
                         <Text style={styles.productName} numberOfLines={1} ellipsizeMode="tail">
