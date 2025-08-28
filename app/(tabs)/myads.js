@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { useAuthContext } from '../../context/AuthProvider';
 import { router } from 'expo-router';
-import Entypo from '@expo/vector-icons/Entypo';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 const Myads = () => {
@@ -115,9 +114,15 @@ const Myads = () => {
         {
         !error && !loading && myads.length > 0 &&
           myads.map((item, index) => (
-            <View
+            <TouchableOpacity
               key={index}
               className="flex-row w-full gap-5 mb-2 mx-2 rounded-3xl p-2 py-5 mt-3 bg-white"
+              onPress={() => {
+                  router.push({
+                      pathname: "myads/[ad]", 
+                      params: { product: JSON.stringify(item) } // , allProducts : JSON.stringify(products) }
+                  });
+              }}
             >
               <View className="flex-1 w-2/10">
                 <Image
@@ -180,7 +185,7 @@ const Myads = () => {
                   <MaterialIcons name="delete" size={21} color="red" />
                 </TouchableOpacity>
               </View>
-            </View>
+            </TouchableOpacity>
           ))}
       </ScrollView>
     </View>

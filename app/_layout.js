@@ -124,6 +124,14 @@ export default function RootLayout() {
         }}
       />
       <Stack.Screen 
+        name="myads/[ad]" 
+        options={{ 
+          headerShown: true, 
+          headerTitle: "Preview Ad",
+          headerBackVisible: true
+        }}
+      />
+      <Stack.Screen 
         name="myads/[editad]" 
         options={{ 
           headerShown: true, 
