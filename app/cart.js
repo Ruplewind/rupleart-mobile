@@ -3,11 +3,13 @@ import React from 'react';
 import useCart from '../context/CartContext';
 import Entypo from '@expo/vector-icons/Entypo';
 import { router } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Cart = () => {
   const { products, total, removeFromCart, addQuantity, minusQuantity } = useCart();
 
   return (
+    <SafeAreaView edges={['top', 'bottom']} style={{ flex: 1 }}>
     <View style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={{ paddingBottom: 120 }} className="p-4">
         {products.length < 1 && (
@@ -85,6 +87,7 @@ const Cart = () => {
         </View>
       )}
     </View>
+    </SafeAreaView>
   );
 };
 

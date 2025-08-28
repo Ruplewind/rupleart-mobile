@@ -95,7 +95,7 @@ export default function RootLayout() {
         options={{ 
           headerShown: true, 
           headerTitle: "Preview", 
-          headerBackTitleVisible: false, 
+          headerBackButtonDisplayMode: "minimal",
           headerRight: ()=> (
                   <TouchableOpacity onPress={()=>{
                     router.push("cart")
@@ -112,7 +112,8 @@ export default function RootLayout() {
         options={{ 
           headerShown: true, 
           headerTitle: "Change Password",
-          headerBackVisible: true
+          headerBackVisible: true,
+          headerBackButtonDisplayMode: "minimal"
         }}
       />
       <Stack.Screen 
@@ -120,7 +121,8 @@ export default function RootLayout() {
         options={{ 
           headerShown: true, 
           headerTitle: "Post Ad",
-          headerBackVisible: true
+          headerBackVisible: true,
+          headerBackButtonDisplayMode: "minimal"
         }}
       />
       <Stack.Screen 
@@ -128,7 +130,8 @@ export default function RootLayout() {
         options={{ 
           headerShown: true, 
           headerTitle: "Preview Ad",
-          headerBackVisible: true
+          headerBackVisible: true,
+          headerBackButtonDisplayMode: "minimal"
         }}
       />
       <Stack.Screen 
@@ -136,7 +139,8 @@ export default function RootLayout() {
         options={{ 
           headerShown: true, 
           headerTitle: "Edit Ad",
-          headerBackVisible: true
+          headerBackVisible: true,
+          headerBackButtonDisplayMode: "minimal"
         }}
       />
     </Stack>

@@ -9,10 +9,12 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { TouchableOpacity } from 'react-native';
 import useCart from '../../context/CartContext';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function TabLayout() {
 
     const { products } = useCart();
+    const insets = useSafeAreaInsets();
     return (
       <Tabs
         screenOptions={{
@@ -38,8 +40,8 @@ export default function TabLayout() {
             tabBarActiveTintColor: '#4A148C',
             tabBarStyle: {
                 backgroundColor: '#fff',
-                padding: 12,
-                height: 55
+                paddingBottom: insets.bottom || 8,
+                height: 55 + (insets.bottom || 0),
             },
             tabBarLabelStyle: {
               marginTop: 0,
