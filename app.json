@@ -14,7 +14,7 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "buildNumber": "7",
+      "buildNumber": "8",
       "supportsTablet": true,
       "package": "com.rupleartapp.app",
       "bundleIdentifier": "com.rupleartapp.app",

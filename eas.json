@@ -37,5 +37,14 @@
   },
   "cli": {
     "appVersionSource": "local"
+  },
+  "submit":{
+    "production":{
+      "ios": {
+        "appleId": "xxxxxx@gmail.com",
+        "ascAppId": "xxxxxxxx",
+        "appleTeamId": "xxxxxx"
+      }
+    }
   }
 }
