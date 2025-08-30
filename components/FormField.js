@@ -16,8 +16,8 @@ const FormField = ({ title, value, placeholder, handleChangeText, otherStyles, .
             borderWidth: 2
         }} >
             <TextInput 
-            className="font-montserrat-medium text-sm px-2 py-3" 
-            style={{width: "90%", padding: 10}} 
+            className="font-montserrat-medium text-sm px-2 py-3 text-black" 
+            style={{width: "90%", padding: 10, color: "#000"}} 
             value={value} placeholder={placeholder} 
             placeholderTextColor={"#7b7b8b"} 
             onChangeText={handleChangeText} 
