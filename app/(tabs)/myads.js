@@ -1,9 +1,11 @@
-import { View, Text, ScrollView, Image, ActivityIndicator, Alert, RefreshControl } from 'react-native';
+import { View, Text, ScrollView, Image, ActivityIndicator, Alert, RefreshControl, Linking } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { useAuthContext } from '../../context/AuthProvider';
 import { router } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import Entypo from '@expo/vector-icons/Entypo';
+import { AntDesign } from '@expo/vector-icons';
 
 const Myads = () => {
   const [myads, setMyads] = useState([]);
@@ -80,7 +82,16 @@ const Myads = () => {
 
   return (
     <View className="p-5">
-      <View className="flex-row justify-end">
+      <View className="flex-row justify-between">
+        <TouchableOpacity
+            className="bg-gray-800 w-1/3 p-2 rounded-lg shadow-lg flex-row items-center justify-center"
+            onPress={() => {
+                Linking.openURL('https://rupleart.com/myads');
+            }}
+        >
+            <AntDesign name="earth" size={18} color="white" style={{ marginRight: 6 }} />
+            <Text className="text-white text-center">View Ads</Text>
+        </TouchableOpacity>
         <TouchableOpacity 
         className="bg-purple-950 w-1/3 p-2 rounded-lg shadow-lg"
         onPress={()=>{
@@ -120,7 +131,7 @@ const Myads = () => {
               onPress={() => {
                   router.push({
                       pathname: "myads/[ad]", 
-                      params: { product: JSON.stringify(item) } // , allProducts : JSON.stringify(products) }
+                      params: { product: JSON.stringify(item) }
                   });
               }}
             >
@@ -170,17 +181,17 @@ const Myads = () => {
               </View>
 
               <View className="flex-1 w-1/10 flex flex-col items-center justify-evenly">
-                {/* <TouchableOpacity 
+                <TouchableOpacity 
                 className=""
                 onPress={()=>{
                   router.push({
-                    pathname:'myads/[editad]',
+                    pathname:'myads/update/[updatead]',
                     params: { product: JSON.stringify(item) } 
                   })
                 }}
                 >
-                  <Entypo name="edit" size={18} color="blue" />
-                </TouchableOpacity> */}
+                  <Entypo name="edit" size={18} color="#581C87" />
+                </TouchableOpacity>
                 <TouchableOpacity className="" onPress={() => deleteAlert(item._id)}>
                   <MaterialIcons name="delete" size={21} color="red" />
                 </TouchableOpacity>

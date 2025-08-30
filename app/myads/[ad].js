@@ -2,9 +2,7 @@ import { View, Text, Image, TouchableOpacity, ScrollView, Dimensions } from 'rea
 import React, { useState, useRef } from 'react';
 import { router, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import useCart from '../../context/CartContext';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import RelatedProducts from '../../components/RelatedProducts';
+import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { Linking, Alert } from 'react-native';
 import { useAuthContext } from '../../context/AuthProvider';
 
@@ -212,8 +210,8 @@ const ad = () => {
 
         {/* Size */}
         <Text className="text-gray-600 text-sm mb-2">
-            <Text className="text-purple-900 font-semibold">Size: </Text>
-            {item.size.includes('cm') ? item.size : `${item.size} cm`}
+            <Text className="text-purple-900 font-semibold">Size (small/medium/large/cm): </Text>
+            <Text className="">{item.size}</Text>
         </Text>
 
         {/* Approval Status */}
@@ -244,7 +242,7 @@ const ad = () => {
         </View>
 
         {/* Notice for Editing */}
-        <View className="bg-yellow-100 border border-yellow-400 rounded-lg p-3 mt-6">
+        {/* <View className="bg-yellow-100 border border-yellow-400 rounded-lg p-3 mt-6">
             <Text className="text-yellow-700 text-sm text-center">
                 To edit this ad, please visit:{" "}
                 <Text
@@ -254,17 +252,36 @@ const ad = () => {
                 https://rupleart.com/myads
                 </Text>
             </Text>
-        </View>
+        </View> */}
 
-        {/* Delete Button */}
-        <TouchableOpacity
-            onPress={() => {
-                deleteAlert(item._id);
-            }}
-            className="bg-red-600 rounded-full mt-6 py-3"
-        >
-            <Text className="text-white text-center text-lg font-semibold">Delete Ad</Text>
-        </TouchableOpacity>
+          {/* Edit Button */}
+          <TouchableOpacity
+              onPress={() => {
+                  router.push({
+                      pathname: "myads/update/[updatead]",
+                      params: { product: encodeURIComponent(JSON.stringify(item)) }
+                  });
+              }}
+              className="bg-purple-900 rounded-full mt-6 py-3 px-4"
+          >
+              <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                  <AntDesign name="edit" size={20} color="white" style={{ marginRight: 8 }} />
+                  <Text className="text-white text-center text-lg font-semibold">Edit Ad</Text>
+              </View>
+          </TouchableOpacity>
+
+          {/* Delete Button */}
+          <TouchableOpacity
+              onPress={() => {
+                  deleteAlert(item._id);
+              }}
+              className="bg-red-600 rounded-full mt-6 py-3 px-4"
+          >
+              <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                  <MaterialIcons name="delete" size={22} color="white" style={{ marginRight: 8 }} />
+                  <Text className="text-white text-center text-lg font-semibold">Delete Ad</Text>
+              </View>
+          </TouchableOpacity>
         </View>
 
 

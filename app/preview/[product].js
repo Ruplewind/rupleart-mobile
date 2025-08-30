@@ -139,8 +139,8 @@ const Preview = () => {
           {/* Description & Size */}
           <Text className="text-gray-700 leading-6 text-base mb-3">{item.description}</Text>
           <Text className="text-gray-600 mb-5">
-            <Text className="text-purple-900 font-semibold">Size: </Text>
-            {item.size.includes('cm') ? item.size : `${item.size} cm`}
+            <Text className="text-purple-900 font-semibold">Size (small/medium/large/cm): </Text>
+            {item.size}
           </Text>
 
           {/* Quantity Selector */}

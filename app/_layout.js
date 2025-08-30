@@ -135,10 +135,10 @@ export default function RootLayout() {
         }}
       />
       <Stack.Screen 
-        name="myads/[editad]" 
+        name="myads/update/[updatead]" 
         options={{ 
           headerShown: true, 
-          headerTitle: "Edit Ad",
+          headerTitle: "Update Ad",
           headerBackVisible: true,
           headerBackButtonDisplayMode: "minimal"
         }}
