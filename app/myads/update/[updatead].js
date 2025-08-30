@@ -11,7 +11,8 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { Button, Image, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
 import Entypo from '@expo/vector-icons/Entypo';
 import Checkbox from 'expo-checkbox';
@@ -215,7 +216,7 @@ const updatead = () => {
 
             <Text className="my-2 mx-5 mb-1 font-montserrat-light text-black">
               Current Category:
-              <Text className="text-purple-900 font-montserrat-bold"> {type}</Text>
+              <Text className="text-purple-900 font-montserrat-bold"> {data.type}</Text>
             </Text>
             <View className="mx-3">
               <DropDownPicker
