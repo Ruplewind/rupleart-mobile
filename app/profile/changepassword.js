@@ -77,15 +77,15 @@ const changepassword = () => {
 
         <View className='m-3'>
           <Text>Current Password</Text>
-          <TextInput onChangeText={setCurrentPassword} secureTextEntry={true} className='p-2 mt-1 border border-gray-300 rounded-xl'  />
+          <TextInput onChangeText={setCurrentPassword} secureTextEntry={true} className='p-2 mt-1 border border-gray-300 rounded-xl text-black'  />
         </View>
         <View className='m-3'>
           <Text>New Password</Text>
-          <TextInput onChangeText={setNewPassword} secureTextEntry={true} className='p-2 mt-1 border border-gray-300 rounded-xl'  />
+          <TextInput onChangeText={setNewPassword} secureTextEntry={true} className='p-2 mt-1 border border-gray-300 rounded-xl text-black'  />
         </View>
         <View className='m-3'>
           <Text>Confirm New Password</Text>
-          <TextInput onChangeText={setConfPassword} secureTextEntry={true} className='p-2 mt-1 border border-gray-300 rounded-2xl'  />
+          <TextInput onChangeText={setConfPassword} secureTextEntry={true} className='p-2 mt-1 border border-gray-300 rounded-2xl text-black'  />
         </View>
 
         <View className='flex-row gap-2 justify-between mx-3 my-5'>

@@ -103,20 +103,20 @@ const handleSubmit = () =>{
           <View className=''>
             <View className='gap-2 mb-3'>
               <Text className='font-montserrat-light text-sm'>Email:</Text>
-              <TextInput value={email} editable={false} onChangeText={setEmail} className='border border-gray-200 p-2 py-3 rounded-lg bg-gray-200'/>
+              <TextInput value={email} editable={false} onChangeText={setEmail} className='border border-gray-200 p-2 py-3 rounded-lg bg-gray-200 text-black'/>
               <Text className='text-xs text-red-400'>* Email is not editable</Text>
             </View>
             <View className='gap-2 mb-3'>
               <Text className='font-montserrat-light text-sm'>First Name:</Text>
-              <TextInput value={firstName} onChangeText={setFirstName} className='border border-gray-200 p-2 py-3 rounded-lg text-sm'/>
+              <TextInput value={firstName} onChangeText={setFirstName} className='border border-gray-200 p-2 py-3 rounded-lg text-sm text-black'/>
             </View>
             <View className='gap-2 mb-3'>
               <Text className='font-montserrat-light text-sm'>Last Name:</Text>
-              <TextInput value={secondName} onChangeText={setSecondName} className='border border-gray-200 p-2 py-3 rounded-lg text-sm'/>
+              <TextInput value={secondName} onChangeText={setSecondName} className='border border-gray-200 p-2 py-3 rounded-lg text-sm text-black'/>
             </View>
             <View className='gap-2 mb-5'>
               <Text className='font-montserrat-light text-sm'>Phone Number:</Text>
-              <TextInput value={phoneNumber} onChangeText={setPhoneNumber} className='border border-gray-200 p-2 py-3 rounded-lg text-sm'/>
+              <TextInput value={phoneNumber} onChangeText={setPhoneNumber} className='border border-gray-200 p-2 py-3 rounded-lg text-sm text-black'/>
             </View>
           </View>      
         }

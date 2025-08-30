@@ -159,7 +159,7 @@ const handleNavigationStateChange = (newNavState) => {
                             value={values.firstname}
                             onChangeText={handleChange('firstname')}
                             onBlur={handleBlur('firstname')}
-                            className="border-b p-4 mb-2"
+                            className="border-b p-4 mb-2 text-black"
                         />
                         {touched.firstname && errors.firstname && <Text className="text-red-500">{errors.firstname}</Text>}
                       </View>
@@ -170,7 +170,7 @@ const handleNavigationStateChange = (newNavState) => {
                             value={values.secondname}
                             onChangeText={handleChange('secondname')}
                             onBlur={handleBlur('secondname')}
-                            className="border-b p-4 mb-2"
+                            className="border-b p-4 mb-2 text-black"
                         />
                         {touched.secondname && errors.secondname && <Text className="text-red-500">{errors.secondname}</Text>}
                       </View>
@@ -181,7 +181,7 @@ const handleNavigationStateChange = (newNavState) => {
                         value={values.email}
                         onChangeText={handleChange('email')}
                         onBlur={handleBlur('email')}
-                        className="border-b p-4 mb-2"
+                        className="border-b p-4 mb-2 text-black"
                       />
                       {touched.email && errors.email && <Text className="text-red-500">{errors.email}</Text>}
 
