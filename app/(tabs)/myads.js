@@ -1,4 +1,5 @@
-import { View, Text, ScrollView, Image, ActivityIndicator, Alert, RefreshControl, Linking } from 'react-native';
+import { View, Text, ScrollView, ActivityIndicator, Alert, RefreshControl, Linking } from 'react-native';
+import { Image } from 'expo-image';
 import React, { useEffect, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { useAuthContext } from '../../context/AuthProvider';
@@ -137,16 +138,11 @@ const Myads = () => {
             >
               <View className="flex-1 w-2/10">
                 <Image
-                  source={{
-                    uri: `${process.env.EXPO_PUBLIC_API_URL}/uploads/${item.image[0]}`,
-                  }}
-                  style={{
-                    height:100,
-                    margin: "auto",
-                    objectFit:"contain"
-                  }}
+                  key={item._id}
+                  source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/uploads/${item.image[0]}` }}
+                  style={{ width: 75, height: 100, marginLeft: 10 }}
                   className="w-full"
-                  resizeMode="contain"
+                  contentFit="contain"
                 />
               </View>
               <View className="flex-1 w-6/10">

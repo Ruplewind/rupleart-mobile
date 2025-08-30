@@ -1,5 +1,6 @@
 import React, { Component, useEffect, useState } from 'react'
-import { ActivityIndicator, Image, ScrollView, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, ScrollView, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native'
+import { Image } from 'expo-image';
 import Fontisto from '@expo/vector-icons/Fontisto';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 
@@ -30,7 +31,7 @@ export default function Events() {
     return (
       <ScrollView className='p-4 mb-5'>
         { loading && <ActivityIndicator color='black' />}
-        <Text className='text-center font-montserrat-light my-2 text-sm uppercase'>Upcoming Events</Text>
+        <Text className='text-center font-montserrat-bold my-2 uppercase mt-10 text-red-500'>Upcoming Events</Text>
         {!loading && upcomingEvents.length > 0 && upcomingEvents.map((event, index) => (
         <TouchableOpacity key={index} className='bg-white mx-5 shadow-lg rounded-lg my-2'>
           <Image 
@@ -72,7 +73,7 @@ export default function Events() {
           !loading && upcomingEvents.length < 1 && <Text className='text-center'>No upcoming Events</Text>
         }
 
-        <Text className='text-center font-montserrat-light my-2 text-sm uppercase mt-10'>Past Events</Text>
+        <Text className='text-center font-montserrat-bold my-2 uppercase mt-10 text-red-500'>Past Events</Text>
         {!loading && pastEvents.length > 0 && pastEvents.map((event, index) => (
         <TouchableOpacity key={index} className='bg-white mx-5 shadow-lg rounded-lg my-2'>
           <Image 

@@ -47,7 +47,7 @@ const LatestItem = ({ activeItem, item, allProducts }) => {
                         overflow: 'hidden',
                         justifyContent: 'flex-end',
                     }}
-                    resizeMode="cover"
+                    contentFit="cover"
                 >
                     <View style={{
                         backgroundColor: 'rgba(0, 0, 0, 0.5)',

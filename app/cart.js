@@ -1,4 +1,5 @@
-import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { Image } from 'expo-image';
 import React from 'react';
 import useCart from '../context/CartContext';
 import Entypo from '@expo/vector-icons/Entypo';
@@ -27,7 +28,7 @@ const Cart = () => {
                 <Image
                   source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/uploads/${item.image[0]}` }}
                   style={{ width: 75, height: 75 }}
-                  resizeMode="contain"
+                  contentFit="contain"
                 />
                 <View>
                   <Text className="text-sm font-montserrat-semibold">{item.productName}</Text>

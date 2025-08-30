@@ -73,7 +73,7 @@ const Login = () => {
               <Image 
               source={images.logo_bg_removed} 
               className="w-[50px] h-[50px]"
-              resizeMode='contain'
+              contentFit='contain'
               />
               <Text className="text-2xl font-bold">Welcome Back!</Text>
               <Text className="mt-2 font-bold">Log In</Text>

@@ -75,7 +75,7 @@ const Login = () => {
               <Image 
               source={images.logo_bg_removed} 
               className="w-[50px] h-[50px]"
-              resizeMode='contain'
+              contentFit='contain'
               />
               <Text className="text-2xl font-bold">Reset Password</Text>
           </View>

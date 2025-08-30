@@ -2,11 +2,11 @@ import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
-  Image,
   FlatList,
   Dimensions,
   StyleSheet,
 } from 'react-native';
+import { Image } from 'expo-image'
 
 const { width } = Dimensions.get('window');
 
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     image: {
       width: '100%',
       height: '100%',
-      resizeMode: 'cover',
+      contentFit: 'cover',
     },
     textOverlay: {
       position: 'absolute',

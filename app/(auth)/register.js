@@ -81,7 +81,7 @@ const Register = () => {
         <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }} enableOnAndroid={true}>
           <View className="w-full px-4 justify-center my-6 min-h-[85vh]">
             <View className="flex-col items-center gap-2">
-              <Image source={images.logo_bg_removed} className="w-[50px] h-[50px]" resizeMode="contain" />
+              <Image source={images.logo_bg_removed} className="w-[50px] h-[50px]" contentFit="contain" />
               <Text className="text-2xl font-bold">Sign Up Here!</Text>
             </View>
 

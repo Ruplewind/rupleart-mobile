@@ -1,12 +1,12 @@
 import {
   View,
   Text,
-  Image,
   TouchableOpacity,
   Share,
   ScrollView,
   Dimensions
 } from 'react-native';
+import { Image } from 'expo-image';
 import React, { useState, useRef } from 'react';
 import { useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -74,7 +74,7 @@ const Preview = () => {
                 key={index}
                 source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/uploads/${img}` }}
                 style={{ width, height: 320 }}
-                resizeMode="contain"
+                contentFit="contain"
               />
             ))}
           </ScrollView>

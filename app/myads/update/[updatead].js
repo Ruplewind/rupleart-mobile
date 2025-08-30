@@ -21,7 +21,7 @@ import { useAuthContext } from '../../../context/AuthProvider';
 
 const updatead = () => {
   const { product } = useLocalSearchParams();
-    const data = JSON.parse(decodeURIComponent(product));
+  const data = JSON.parse(decodeURIComponent(product));
   const { userId, token } = useAuthContext();
 
   const [loading, setLoading] = useState(false);
@@ -213,7 +213,10 @@ const updatead = () => {
               onChangeText={setProductName}
             />
 
-            <Text className="my-2 mx-5 mb-1 font-montserrat-light text-black">Select Category:</Text>
+            <Text className="my-2 mx-5 mb-1 font-montserrat-light text-black">
+              Current Category:
+              <Text className="text-purple-900 font-montserrat-bold"> {type}</Text>
+            </Text>
             <View className="mx-3">
               <DropDownPicker
                 open={open}
@@ -222,7 +225,7 @@ const updatead = () => {
                   label: `${item.category}`,
                   value: item.category,
                 }))}
-                placeholder="Select category"
+                placeholder="Select New Category"
                 setOpen={setOpen}
                 setValue={setType}
                 style={{

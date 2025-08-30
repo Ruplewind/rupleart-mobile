@@ -1,4 +1,5 @@
-import { View, Text, ScrollView, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { Image } from 'expo-image';
 import React, { useState, useRef, useEffect } from 'react';
 import { router } from 'expo-router';
 import useCart from '../context/CartContext';

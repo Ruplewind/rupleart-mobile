@@ -22,7 +22,7 @@ const index = () => {
                 <Image
                     source={images.logo}
                     className="w-[200px] h-[200px]"
-                    resizeMode='contain'
+                    contentFit='contain'
                 />
                 <Text className="mt-5 font-montserrat-bold capitalize text-2xl">For the love of art</Text>
                 <Text className="mt-5 tracking-wider text-sm my-10 text-center font-montserrat-regular">Explore pieces that inspire you and bring creativity into any space—all at your fingertips.</Text>
