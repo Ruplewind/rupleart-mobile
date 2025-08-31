@@ -37,9 +37,9 @@ export default function Events() {
           <Image 
             source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/uploads/${event.poster}` }} 
             style={{
-              height:200,
-              objectFit:"contain"
+              height:200
             }} 
+            contentFit='contain'
           />
           <View className='p-3'> 
             <Text className='font-montserrat-black text-2xl tracking-wider text-purple-950  text-center mt-5'>{event.title}</Text>
@@ -79,9 +79,9 @@ export default function Events() {
           <Image 
             source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/uploads/${event.poster}` }} 
             style={{
-              height:200,
-              objectFit:"contain"
+              height:200
             }} 
+            contentFit='contain'
           />
           <View className='p-3'> 
             <Text className='font-montserrat-black text-2xl tracking-wider text-purple-950  text-center mt-5'>{event.title}</Text>

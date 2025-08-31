@@ -87,11 +87,11 @@ const Myads = () => {
         <TouchableOpacity
             className="bg-gray-800 w-1/3 p-2 rounded-lg shadow-lg flex-row items-center justify-center"
             onPress={() => {
-                Linking.openURL('https://rupleart.com/myads');
+                Linking.openURL('https://rupleart.com/terms');
             }}
         >
             <AntDesign name="earth" size={18} color="white" style={{ marginRight: 6 }} />
-            <Text className="text-white text-center">View Ads</Text>
+            <Text className="text-white text-center">Terms</Text>
         </TouchableOpacity>
         <TouchableOpacity 
         className="bg-purple-950 w-1/3 p-2 rounded-lg shadow-lg"
