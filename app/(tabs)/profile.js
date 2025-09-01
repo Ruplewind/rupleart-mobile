@@ -1,10 +1,9 @@
-import { View, Text, TouchableOpacity, SafeAreaView, Alert, TextInput, ActivityIndicator, ScrollView, KeyboardAvoidingView, Platform, RefreshControl } from 'react-native'
+import { View, Text, TouchableOpacity, SafeAreaView, Alert, TextInput, ActivityIndicator, ScrollView, KeyboardAvoidingView, Platform, RefreshControl, Linking } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useAuthContext } from '../../context/AuthProvider';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { router } from 'expo-router';
-import FormField from '../../components/FormField';
 
 const profile = () => {
 
@@ -17,7 +16,6 @@ const profile = () => {
   const { userId, token, logout } = useAuthContext();
 
   const [refreshing, setRefreshing] = useState(false);
-
 
   const fetchData = () => {
     setRefreshing(true);
@@ -80,9 +78,14 @@ const handleSubmit = () =>{
   })
 }
 
+const handleDeleteAccount = () => {
+  Linking.openURL('https://rupleart.com/delete_account').catch(err => 
+    Alert.alert('Error', 'Could not open the link')
+  );
+};
+
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1, marginBottom: 12 }}>
-      {/* <Text className="mt-10 text-center font-montserrat-light uppercase">profile</Text> */}
       <ScrollView
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={fetchData} />
@@ -124,9 +127,7 @@ const handleSubmit = () =>{
         <View className='flex-row justify-center gap-5'>
             <TouchableOpacity 
             className='bg-purple-900 w-1/2 p-2 rounded-xl'
-            onPress={()=>{
-              handleSubmit();
-            }}
+            onPress={handleSubmit}
             >
               { loading ? 
               <ActivityIndicator size={14} color={"purple"}/>
@@ -150,13 +151,24 @@ const handleSubmit = () =>{
         <View className='mt-5'>
           <TouchableOpacity 
           className='bg-red-700 p-2 py-3 w-1/2 rounded-full mx-auto'
-          onPress={()=>{
-            logout();
-          }}
+          onPress={logout}
           >
             <View className='flex-row gap-2 items-center mx-auto'>
               <MaterialIcons name="logout" size={16} color="white" />
               <Text className='text-white'>Logout</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+
+        {/* New Account Deletion Button */}
+        <View className='mt-3'>
+          <TouchableOpacity 
+          className='border border-red-600 p-2 py-3 w-1/2 rounded-full mx-auto'
+          onPress={handleDeleteAccount}
+          >
+            <View className='flex-row gap-2 items-center mx-auto'>
+              <MaterialIcons name="delete" size={16} color="red" />
+              <Text className='text-red-600'>Delete Account</Text>
             </View>
           </TouchableOpacity>
         </View>
