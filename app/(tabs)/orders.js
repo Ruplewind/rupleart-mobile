@@ -1,4 +1,4 @@
-import { View, Text, Image, ScrollView, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, Image, ScrollView, Alert, ActivityIndicator, Linking } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import Entypo from '@expo/vector-icons/Entypo';
@@ -6,6 +6,7 @@ import { router } from 'expo-router';
 import { useAuthContext } from '../../context/AuthProvider';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { AntDesign } from '@expo/vector-icons';
 
 const Orders = () => {
     const { token, logout } = useAuthContext();
@@ -13,7 +14,12 @@ const Orders = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
 
-    useEffect(() => {
+    const fetchOrders = () => {
+        if (!token) {
+            setLoading(false);
+            return;
+        }
+
         fetch(`${process.env.EXPO_PUBLIC_API_URL}/GetMyOrders`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -48,7 +54,47 @@ const Orders = () => {
                 setError(true);
                 setLoading(false);
             });
-    }, []);
+    };
+
+    useEffect(() => {
+        fetchOrders();
+    }, [token]);
+
+    // If no token, show login button
+    if (!token) {
+        return (
+            <View style={{ flex: 1 }} className="justify-center items-center p-5">
+                <View className="items-center mb-8">
+                    <MaterialIcons name="shopping-cart" size={64} color="#6B7280" />
+                    <Text className="text-lg font-montserrat-semibold mt-4 mb-2">Login Required</Text>
+                    <Text className="text-sm font-montserrat-light text-gray-600 text-center mb-6">
+                        Please login to view your orders and purchase history
+                    </Text>
+                </View>
+                
+                <TouchableOpacity
+                    className="bg-purple-950 w-2/3 p-3 rounded-lg shadow-lg mb-4"
+                    onPress={() => {
+                        router.push({
+                            pathname: "/login", 
+                            params: { referer: "/orders" }
+                        });
+                    }}
+                >
+                    <Text className="text-white text-center font-montserrat-semibold">Login</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    className="bg-gray-800 px-4 py-3 w-2/3 rounded-lg shadow-lg"
+                    onPress={() => {
+                        router.push('/home');
+                    }}
+                >
+                    <Text className="text-white font-montserrat-semibold text-center">Shop Now!</Text>
+                </TouchableOpacity>
+            </View>
+        );
+    }
 
     return (
         <View style={{ flex: 1 }}>

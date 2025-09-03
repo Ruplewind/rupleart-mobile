@@ -11,11 +11,16 @@ import { AntDesign } from '@expo/vector-icons';
 const Myads = () => {
   const [myads, setMyads] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false); // State for pull-to-refresh
+  const [refreshing, setRefreshing] = useState(false);
   const { token } = useAuthContext();
   const [error, setError] = useState(false);
 
   const fetchAds = () => {
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+    
     setLoading(true);
     fetch(`${process.env.EXPO_PUBLIC_API_URL}/my_products`, {
       headers: {
@@ -42,7 +47,7 @@ const Myads = () => {
 
   useEffect(() => {
     fetchAds();
-  }, []);
+  }, [token]);
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -80,6 +85,43 @@ const Myads = () => {
         Alert.alert('Server Error');
       });
   };
+
+  // If no token, show login button
+  if (!token) {
+    return (
+      <View className="p-5 flex-1 justify-center items-center">
+        <View className="items-center mb-8">
+          <AntDesign name="user" size={64} color="#6B7280" />
+          <Text className="text-lg font-montserrat-semibold mt-4 mb-2">Login Required</Text>
+          <Text className="text-sm font-montserrat-light text-gray-600 text-center mb-6">
+            Please login to view and manage your ads
+          </Text>
+        </View>
+        
+        <TouchableOpacity
+          className="bg-purple-950 w-2/3 p-3 rounded-lg shadow-lg mb-4"
+          onPress={() => {
+            router.push({
+                pathname: "/login",
+                params: { referer: "/myads" }
+            });
+          }}
+        >
+          <Text className="text-white text-center font-montserrat-semibold">Login</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          className="bg-gray-800 w-2/3 p-2 rounded-lg shadow-lg flex-row items-center justify-center"
+          onPress={() => {
+            Linking.openURL('https://rupleart.com/terms');
+          }}
+        >
+          <AntDesign name="earth" size={18} color="white" style={{ marginRight: 6 }} />
+          <Text className="text-white text-center">Terms</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   return (
     <View className="p-5">

@@ -14,7 +14,7 @@ const Register = () => {
     firstName: '',
     lastName: '',
     email: '',
-    phoneNumber: '',
+    //phoneNumber: '',
     password: ''
   })
 
@@ -23,7 +23,7 @@ const Register = () => {
   const handleSubmit = () => {
     setLoading(true)
 
-    if (!form.firstName || !form.lastName || !form.password || !form.phoneNumber || !form.email) {
+    if (!form.firstName || !form.lastName || !form.password || !form.email) { //|| !form.phoneNumber
       Alert.alert('Error', 'All fields must be filled')
       setLoading(false)
       return
@@ -38,8 +38,8 @@ const Register = () => {
         first_name: form.firstName,
         second_name: form.lastName,
         email: form.email,
-        password: form.password,
-        phoneNumber: form.phoneNumber
+        password: form.password
+        //phoneNumber: form.phoneNumber
       })
     })
       .then((res) => {
@@ -59,8 +59,9 @@ const Register = () => {
           )
         } else {
           res.json().then(response => {
+            console.log(response)
             if(response == 'Exists'){
-              Alert.alert('Registration Failed', 'Email or Phone Number is already used.')
+              Alert.alert('Registration Failed', 'Email is already used.')
               setLoading(false)
             }else{
               Alert.alert('Failed', 'Registration failed. Try again.')
@@ -115,14 +116,14 @@ const Register = () => {
               keyboardType="email-address"
             />
 
-            <FormField
+            {/* <FormField
               title="Phone Number"
               value={form.phoneNumber}
               placeholder="07XXXXXXXX"
               handleChangeText={(e) => setForm({ ...form, phoneNumber: e })}
               otherStyles="mt-4"
               keyboardType="phone-pad"
-            />
+            /> */}
 
             <FormField
               title="Password"

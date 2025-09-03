@@ -22,7 +22,7 @@ const Checkout = () => {
   const [firstName, setFirstName] = useState('');
   const [secondName, setSecondName] = useState('');
   const [email, setEmail] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
+  //const [phoneNumber, setPhoneNumber] = useState('');
   const [redirected, setRedirected] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -59,7 +59,7 @@ const Checkout = () => {
         setEmail(data.email);
         setFirstName(data.first_name);
         setSecondName(data.second_name);
-        setPhoneNumber(data.phoneNumber);
+        //setPhoneNumber(data.phoneNumber);
       })
       .catch(err => console.error(err));
   }, []);
@@ -68,10 +68,10 @@ const Checkout = () => {
     firstname: yup.string().required().min(3),
     secondname: yup.string().required().min(3),
     email: yup.string().email('Invalid Email').required().min(3),
-    phoneNumber: yup
-      .string()
-      .nullable()
-      .matches(myRegex, { message: 'Phone number is not valid', excludeEmptyString: true }),
+    //phoneNumber: yup
+      // .string()
+      // .nullable()
+      // .matches(myRegex, { message: 'Phone number is not valid', excludeEmptyString: true }),
     minPrice: yup.number().min(deliveryCost + total, `Minimum price is ${deliveryCost + total}`)
   });
 
@@ -136,7 +136,7 @@ const Checkout = () => {
             <View className="flex-1 justify-center mt-5">
               <WebView
                 source={{ uri: link }}
-                style={{ height: 500, width: '100%' }}
+                style={{ height: 600, width: '100%' }}
                 onNavigationStateChange={handleNavigationStateChange}
               />
             </View>
@@ -146,7 +146,7 @@ const Checkout = () => {
                 firstname: firstName,
                 secondname: secondName,
                 email,
-                phoneNumber,
+                //phoneNumber,
                 minPrice: deliveryCost + total
               }}
               enableReinitialize
@@ -196,7 +196,7 @@ const Checkout = () => {
                   />
                   {touched.email && errors.email && <Text className="text-red-500">{errors.email}</Text>}
 
-                  <TextInput
+                  {/* <TextInput
                     placeholder="Phone Number"
                     value={values.phoneNumber}
                     onChangeText={handleChange('phoneNumber')}
@@ -204,10 +204,10 @@ const Checkout = () => {
                     className="border border-gray-300 rounded-lg p-4 mb-2 bg-white text-black"
                   />
                   {touched.phoneNumber && errors.phoneNumber && <Text className="text-red-500">{errors.phoneNumber}</Text>}
-                  <Text className='text-blue-900 text-xs mb-3'>* Phone number is editable</Text>
+                  <Text className='text-blue-900 text-xs mb-3'>* Phone number is editable</Text> */}
 
                   {/* Order Summary */}
-                  <View className="bg-white rounded-lg shadow p-4 mb-4">
+                  <View className="bg-white rounded-lg shadow p-4 mb-4 mt-4">
                     <Text className="font-bold mb-3 text-center text-gray-700">Order Summary</Text>
                     {products.map(product => (
                       <View key={product._id} className="flex-row justify-between mb-2">
@@ -220,7 +220,7 @@ const Checkout = () => {
 
                   {/* Delivery Location */}
                   {!allVideos && (
-                    <View className="mb-4">
+                    <View className="mb-4 mt-4">
                       <Text className="mb-2 font-semibold text-gray-700">Select delivery location:</Text>
                       <DropDownPicker
                         open={open}
@@ -244,14 +244,14 @@ const Checkout = () => {
                   )}
 
                   {/* Delivery Summary */}
-                  <View className="bg-white p-4 rounded-lg shadow">
+                  <View className="bg-white p-4 rounded-lg shadow mt-4">
                     <Text className="text-gray-700 font-bold mb-2 text-center">Price Summary</Text>
                     <View className="flex-row justify-between mb-1">
                       <Text className="text-gray-600">Delivery Cost:</Text>
                       <Text className="font-bold">KES {deliveryCost.toLocaleString()}</Text>
                     </View>
                     <View className="flex-row justify-between mb-1">
-                      <Text className="text-gray-600">Total Items:</Text>
+                      <Text className="text-gray-600">Total Items Cost:</Text>
                       <Text className="font-bold">KES {total.toLocaleString()}</Text>
                     </View>
                     <View className="flex-row justify-between">
