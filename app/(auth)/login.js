@@ -6,7 +6,7 @@ import { ScrollView } from 'react-native'
 import { images  } from '../../constants/index'
 import FormField from '../../components/FormField'
 import { TouchableOpacity } from 'react-native'
-import { router } from 'expo-router'
+import { router, useLocalSearchParams } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { useAuthContext } from '../../context/AuthProvider'
 
@@ -18,6 +18,7 @@ const Login = () => {
   })
   const [loading, setLoading] = useState(false);
   const { login } = useAuthContext();
+  const { referer } = useLocalSearchParams();
 
   const handleSubmit = () => {
     setLoading(true);
@@ -50,7 +51,12 @@ const Login = () => {
                 }
                 else
                 {
-                  router.replace('/home');
+                  // If there's a referer, go back to that route, otherwise go to home
+                  if(referer) {
+                    router.replace(referer);
+                  } else {
+                    router.replace('/home');
+                  }
                 }
                 setLoading(false);
             }else{
@@ -63,6 +69,15 @@ const Login = () => {
       Alert.alert('Error', err);
       setLoading(false);
     })
+  }
+
+  const handleContinueAsGuest = () => {
+    if(referer) {
+      router.replace(referer);
+    } else {
+      // Default fallback if no referer is provided
+      router.replace('/home');
+    }
   }
 
   return (
@@ -116,6 +131,14 @@ const Login = () => {
               <Text className="text-white text-center">Loading .....</Text>
             </Pressable>
           }
+
+          {/* Continue as Guest Button */}
+            <TouchableOpacity 
+              className="w-full p-4 border border-purple-900 rounded-xl mt-3" 
+              onPress={handleContinueAsGuest}
+            >
+              <Text className="text-purple-900 text-center">Continue as Guest</Text>
+            </TouchableOpacity>
 
           <View className="flex-row justify-center gap-2 mt-5">
             <Text className="font-montserrat-medium">I don't have an account?</Text>

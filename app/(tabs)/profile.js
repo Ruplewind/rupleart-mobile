@@ -4,13 +4,14 @@ import { useAuthContext } from '../../context/AuthProvider';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { router } from 'expo-router';
+import { AntDesign } from '@expo/vector-icons';
 
 const profile = () => {
 
   const [ firstName, setFirstName] = useState(null);
   const [ secondName, setSecondName] = useState(null);
   const [ email, setEmail] = useState(null);
-  const [ phoneNumber, setPhoneNumber] = useState(null);
+  //const [ phoneNumber, setPhoneNumber] = useState(null);
   const [ loading, setLoading] = useState(false);
 
   const { userId, token, logout } = useAuthContext();
@@ -18,6 +19,8 @@ const profile = () => {
   const [refreshing, setRefreshing] = useState(false);
 
   const fetchData = () => {
+    if (!token) return;
+    
     setRefreshing(true);
       fetch(`${process.env.EXPO_PUBLIC_API_URL}/profile`,{
           method: 'GET',
@@ -36,7 +39,7 @@ const profile = () => {
           setEmail(data.email);
           setFirstName(data.first_name);
           setSecondName(data.second_name);
-          setPhoneNumber(data.phoneNumber);
+          //setPhoneNumber(data.phoneNumber);
           setLoading(false);        
           setRefreshing(false);
 
@@ -48,9 +51,10 @@ const profile = () => {
 
       })
   }
+  
   useEffect(()=>{
     fetchData();
-},[]);
+  },[token]);
 
 const handleSubmit = () =>{
   setLoading(true);
@@ -62,7 +66,7 @@ const handleSubmit = () =>{
           'Authorization':`Bearer ${token}`
       },
       body: JSON.stringify({
-        firstname: firstName, secondname: secondName, email, phoneNumber
+        firstname: firstName, secondname: secondName, email, //phoneNumber
       })
   })
   .then((res)=>{
@@ -83,6 +87,44 @@ const handleDeleteAccount = () => {
     Alert.alert('Error', 'Could not open the link')
   );
 };
+
+  // If no token, show login button
+  if (!token) {
+    return (
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1 }}>
+        <View className="flex-1 justify-center items-center p-5">
+          <View className="items-center mb-8">
+            <FontAwesome name="user-circle" size={64} color="#6B7280" />
+            <Text className="text-lg font-montserrat-semibold mt-4 mb-2">Login Required</Text>
+            <Text className="text-sm font-montserrat-light text-gray-600 text-center mb-6">
+              Please login to view and manage your profile
+            </Text>
+          </View>
+          
+          <TouchableOpacity
+            className="bg-purple-950 w-2/3 p-3 rounded-lg shadow-lg mb-4"
+            onPress={() => {
+              router.push({
+                  pathname: "/login", 
+                  params: { referer: "/profile" }
+              });
+            }}
+          >
+            <Text className="text-white text-center font-montserrat-semibold">Login</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            className="bg-gray-800 w-2/3 p-2 rounded-lg shadow-lg flex-row items-center justify-center"
+            onPress={() => {
+              router.push('/register')
+            }}
+          >
+            <Text className="text-white text-center">Sign Up</Text>
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
+    );
+  }
 
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1, marginBottom: 12 }}>
@@ -117,10 +159,10 @@ const handleDeleteAccount = () => {
               <Text className='font-montserrat-light text-sm'>Last Name:</Text>
               <TextInput value={secondName} onChangeText={setSecondName} className='border border-gray-200 p-2 py-3 rounded-lg text-sm text-black'/>
             </View>
-            <View className='gap-2 mb-5'>
+            {/* <View className='gap-2 mb-5'>
               <Text className='font-montserrat-light text-sm'>Phone Number:</Text>
               <TextInput value={phoneNumber} onChangeText={setPhoneNumber} className='border border-gray-200 p-2 py-3 rounded-lg text-sm text-black'/>
-            </View>
+            </View> */}
           </View>      
         }
 

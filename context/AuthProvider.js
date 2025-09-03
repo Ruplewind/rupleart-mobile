@@ -32,7 +32,7 @@ export function AuthProvider({ children }){
         await AsyncStorage.removeItem('rpl$token')
         await AsyncStorage.removeItem('rpl$userId')
         await AsyncStorage.removeItem('rpl$fullname')
-        router.push("login")
+        router.push("home")
     }
 
     const isLoggedIn = async () => {

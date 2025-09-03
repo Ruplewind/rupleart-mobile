@@ -1,13 +1,43 @@
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { Image } from 'expo-image';
 import React from 'react';
 import useCart from '../context/CartContext';
 import Entypo from '@expo/vector-icons/Entypo';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useAuthContext } from '../context/AuthProvider';
 
 const Cart = () => {
   const { products, total, removeFromCart, addQuantity, minusQuantity } = useCart();
+  const { token } = useAuthContext();
+
+  const handleCheckout = () => {
+    if (!token) {
+      Alert.alert(
+        'Login Required',
+        'Please login to proceed with checkout',
+        [
+          {
+            text: 'Cancel',
+            style: 'cancel',
+          },
+          {
+            text: 'OK',
+            onPress: () => {
+              router.push({
+                  pathname: "/login", 
+                  params: { referer: "/cart" }
+              });
+            } 
+          },
+        ]
+      );
+      return;
+    }
+    
+    // If user is logged in, proceed to checkout
+    router.push('/checkout');
+  };
 
   return (
     <SafeAreaView edges={['top', 'bottom']} style={{ flex: 1 }}>
@@ -82,7 +112,7 @@ const Cart = () => {
             <Text className="font-montserrat-regular">Total</Text>
             <Text className="font-montserrat-bold">Ksh. {total.toLocaleString()}</Text>
           </View>
-          <TouchableOpacity className="bg-purple-900 rounded-2xl p-2 py-2 w-3/4 mx-auto" onPress={() => router.push('/checkout')}>
+          <TouchableOpacity className="bg-purple-900 rounded-2xl p-2 py-2 w-3/4 mx-auto" onPress={handleCheckout}>
             <Text className="text-white text-lg text-center">Checkout</Text>
           </TouchableOpacity>
         </View>

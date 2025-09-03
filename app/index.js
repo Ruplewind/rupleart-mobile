@@ -27,10 +27,10 @@ const index = () => {
                 <Text className="mt-5 font-montserrat-bold capitalize text-2xl">For the love of art</Text>
                 <Text className="mt-5 tracking-wider text-sm my-10 text-center font-montserrat-regular">Explore pieces that inspire you and bring creativity into any space—all at your fingertips.</Text>
                 <TouchableOpacity onPress={()=>{
-                    router.push('login')
+                    router.push('home')
                 }} className="bg-purple-950 text-white p-5 w-3/4 mt-5 rounded-lg">
                     <View className="flex justify-center gap-5">
-                        <Text className="text-white text-center font-bold text-lg capitalize">Continue With Email</Text>
+                        <Text className="text-white text-center font-bold text-lg capitalize">Explore</Text>
                     </View>
                 </TouchableOpacity>
             </View>
