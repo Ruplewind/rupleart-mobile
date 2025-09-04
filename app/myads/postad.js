@@ -218,7 +218,7 @@ const postad = () => {
               onChangeText={setDescription}
             />
 
-            <Text className="my-2 mx-5 font-montserrat-light">Size (in cm):</Text>
+            <Text className="my-2 mx-5 font-montserrat-light">Size (small/medium/large/cm):</Text>
             <TextInput
               className="border border-gray-200 p-2 py-3 mx-3 rounded-lg bg-white text-black"
               onChangeText={setSize}
