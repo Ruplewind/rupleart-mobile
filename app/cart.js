@@ -61,6 +61,7 @@ const Cart = () => {
                   contentFit="contain"
                 />
                 <View>
+                  <Text className="text-sm font-montserrat-semibold text-blue-600">#{item.productId}</Text>
                   <Text className="text-sm font-montserrat-semibold">{item.productName}</Text>
                   <Text className="mt-1 font-montserrat-light text-sm">Ksh. {item.price.toLocaleString()} each</Text>
                   <Text className="mt-1 font-montserrat-semibold-italic text-sm">

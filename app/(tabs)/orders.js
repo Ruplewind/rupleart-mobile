@@ -130,7 +130,7 @@ const Orders = () => {
                         
                         {order.items.map((item) => (
                             <View key={item._id} className="flex-row items-center mb-2">
-                                <Text className="text-sm font-montserrat-semibold w-1/2">{item.productName}</Text>
+                                <Text className="text-sm font-montserrat-semibold w-1/2">{item.productName} #{item.productId}</Text>
                                 <Text className="text-sm font-montserrat-light w-1/4">{item.quantity} Unit(s)</Text>
                                 <Text className="text-sm font-montserrat-regular w-1/4">Ksh. {item.price} each</Text>
                             </View>

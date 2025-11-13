@@ -14,7 +14,7 @@ const Register = () => {
     firstName: '',
     lastName: '',
     email: '',
-    //phoneNumber: '',
+    phoneNumber: '',
     password: ''
   })
 
@@ -23,7 +23,7 @@ const Register = () => {
   const handleSubmit = () => {
     setLoading(true)
 
-    if (!form.firstName || !form.lastName || !form.password || !form.email) { //|| !form.phoneNumber
+    if (!form.firstName || !form.lastName || !form.password || !form.email || !form.phoneNumber) {
       Alert.alert('Error', 'All fields must be filled')
       setLoading(false)
       return
@@ -38,8 +38,8 @@ const Register = () => {
         first_name: form.firstName,
         second_name: form.lastName,
         email: form.email,
-        password: form.password
-        //phoneNumber: form.phoneNumber
+        password: form.password,
+        phoneNumber: form.phoneNumber
       })
     })
       .then((res) => {
@@ -91,7 +91,7 @@ const Register = () => {
                 <FormField
                   title="First Name"
                   value={form.firstName}
-                  placeholder="John"
+                  placeholder="Ruple"
                   handleChangeText={(e) => setForm({ ...form, firstName: e })}
                   otherStyles="mt-4"
                 />
@@ -100,7 +100,7 @@ const Register = () => {
                 <FormField
                   title="Last Name"
                   value={form.lastName}
-                  placeholder="Doe"
+                  placeholder="Art"
                   handleChangeText={(e) => setForm({ ...form, lastName: e })}
                   otherStyles="mt-4"
                 />
@@ -110,20 +110,20 @@ const Register = () => {
             <FormField
               title="Email"
               value={form.email}
-              placeholder="johndoe@gmail.com"
+              placeholder="rupleart@gmail.com"
               handleChangeText={(e) => setForm({ ...form, email: e })}
               otherStyles="mt-4"
               keyboardType="email-address"
             />
 
-            {/* <FormField
+            <FormField
               title="Phone Number"
               value={form.phoneNumber}
-              placeholder="07XXXXXXXX"
+              placeholder="0759324250"
               handleChangeText={(e) => setForm({ ...form, phoneNumber: e })}
               otherStyles="mt-4"
               keyboardType="phone-pad"
-            /> */}
+            />
 
             <FormField
               title="Password"

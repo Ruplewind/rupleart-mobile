@@ -205,6 +205,7 @@ const postad = () => {
                     scrollEnabled: true,
                     nestedScrollEnabled: true,
                   }}
+                  dropDownDirection='BOTTOM'
                 />
               )}
             </View>

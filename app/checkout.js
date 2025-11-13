@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, FlatList, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, FlatList, Alert, ScrollView } from 'react-native';
 import * as yup from 'yup';
 import { Formik } from 'formik';
 import { router } from 'expo-router';
@@ -22,7 +22,7 @@ const Checkout = () => {
   const [firstName, setFirstName] = useState('');
   const [secondName, setSecondName] = useState('');
   const [email, setEmail] = useState('');
-  //const [phoneNumber, setPhoneNumber] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [redirected, setRedirected] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -59,7 +59,7 @@ const Checkout = () => {
         setEmail(data.email);
         setFirstName(data.first_name);
         setSecondName(data.second_name);
-        //setPhoneNumber(data.phoneNumber);
+        setPhoneNumber(data.phoneNumber);
       })
       .catch(err => console.error(err));
   }, []);
@@ -68,10 +68,10 @@ const Checkout = () => {
     firstname: yup.string().required().min(3),
     secondname: yup.string().required().min(3),
     email: yup.string().email('Invalid Email').required().min(3),
-    //phoneNumber: yup
-      // .string()
-      // .nullable()
-      // .matches(myRegex, { message: 'Phone number is not valid', excludeEmptyString: true }),
+    phoneNumber: yup
+      .string()
+      .nullable()
+      .matches(myRegex, { message: 'Phone number is not valid', excludeEmptyString: true }),
     minPrice: yup.number().min(deliveryCost + total, `Minimum price is ${deliveryCost + total}`)
   });
 
@@ -126,12 +126,11 @@ const Checkout = () => {
   };
 
   return (
-    <FlatList
-      scrollEnabled
+    <ScrollView
+      nestedScrollEnabled={true}
       className="mt-1 mb-10 p-4 bg-gray-100"
-      data={[{ key: 'form' }]}
-      renderItem={() => (
-        <>
+      >
+        <View>
           {showIframe ? (
             <View className="flex-1 justify-center mt-5">
               <WebView
@@ -146,7 +145,7 @@ const Checkout = () => {
                 firstname: firstName,
                 secondname: secondName,
                 email,
-                //phoneNumber,
+                phoneNumber,
                 minPrice: deliveryCost + total
               }}
               enableReinitialize
@@ -196,7 +195,7 @@ const Checkout = () => {
                   />
                   {touched.email && errors.email && <Text className="text-red-500">{errors.email}</Text>}
 
-                  {/* <TextInput
+                  <TextInput
                     placeholder="Phone Number"
                     value={values.phoneNumber}
                     onChangeText={handleChange('phoneNumber')}
@@ -204,14 +203,14 @@ const Checkout = () => {
                     className="border border-gray-300 rounded-lg p-4 mb-2 bg-white text-black"
                   />
                   {touched.phoneNumber && errors.phoneNumber && <Text className="text-red-500">{errors.phoneNumber}</Text>}
-                  <Text className='text-blue-900 text-xs mb-3'>* Phone number is editable</Text> */}
+                  <Text className='text-blue-900 text-xs mb-3'>* Phone number is editable</Text>
 
                   {/* Order Summary */}
                   <View className="bg-white rounded-lg shadow p-4 mb-4 mt-4">
                     <Text className="font-bold mb-3 text-center text-gray-700">Order Summary</Text>
                     {products.map(product => (
                       <View key={product._id} className="flex-row justify-between mb-2">
-                        <Text className="w-1/2 text-gray-600 text-sm">{product.productName}</Text>
+                        <Text className="w-1/2 text-gray-600 text-sm">{product.productName} #{product.productId}</Text>
                         <Text className="w-1/4 text-gray-600 text-sm">X {product.quantity}</Text>
                         <Text className="w-1/4 text-gray-800 font-bold text-sm">KES {(product.quantity * product.price).toLocaleString()}</Text>
                       </View>
@@ -239,6 +238,7 @@ const Checkout = () => {
                           scrollEnabled: true,
                           nestedScrollEnabled: true
                         }}
+                        dropDownDirection='BOTTOM'
                       />
                     </View>
                   )}
@@ -271,9 +271,8 @@ const Checkout = () => {
               )}
             </Formik>
           )}
-        </>
-      )}
-    />
+        </View>
+    </ScrollView>
   );
 };
 

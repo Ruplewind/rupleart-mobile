@@ -236,6 +236,7 @@ const updatead = () => {
                   borderColor: '#EEEEEE',
                 }}
                 zIndex={1000}
+                dropDownDirection='BOTTOM'
               />
             </View>
 

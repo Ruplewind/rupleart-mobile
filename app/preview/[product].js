@@ -13,6 +13,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import useCart from '../../context/CartContext';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import RelatedProducts from '../../components/RelatedProducts';
+import Entypo from '@expo/vector-icons/Entypo';
+import EvilIcons from '@expo/vector-icons/EvilIcons';
 
 const { width } = Dimensions.get('window');
 
@@ -118,16 +120,19 @@ const Preview = () => {
               {[1, 2, 3, 4].map((star) => (
                 <AntDesign key={star} name="star" size={14} color="#FFD700" />
               ))}
-              <AntDesign name="staro" size={14} color="#9CA3AF" />
+              {/* <AntDesign name="staro" size={14} color="#9CA3AF" /> */}
+              <EvilIcons name="star" size={18} color="#9CA3AF" />
             </View>
             <TouchableOpacity onPress={handleShare}>
-              <AntDesign name="sharealt" size={22} color="#ff9933" />
+              {/* <AntDesign name="sharealt" size={22} color="#ff9933" /> */}
+              <Entypo name="share" size={22} color="#ff9933" />
             </TouchableOpacity>
           </View>
 
           {/* Name & Price */}
           <View className="flex-row justify-between items-center mb-4">
             <View className="w-3/5">
+              <Text className="text-purple-700 text-sm mt-1">#{item.productId}</Text>
               <Text className="text-2xl font-bold text-gray-800">{item.productName}</Text>
               <Text className="text-purple-700 text-sm mt-1">{item.type}</Text>
             </View>

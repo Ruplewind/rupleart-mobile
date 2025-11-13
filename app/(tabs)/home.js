@@ -102,6 +102,7 @@ export default function Home() {
                   scrollEnabled:true,
                   nestedScrollEnabled: true
                 }}
+                dropDownDirection='BOTTOM'
             />
           </View>
         </View>

@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, SafeAreaView, Alert, TextInput, ActivityIndicator, ScrollView, KeyboardAvoidingView, Platform, RefreshControl, Linking } from 'react-native'
+import { View, Text, TouchableOpacity, Alert, TextInput, ActivityIndicator, ScrollView, KeyboardAvoidingView, Platform, RefreshControl, Linking } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useAuthContext } from '../../context/AuthProvider';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
@@ -11,7 +11,7 @@ const profile = () => {
   const [ firstName, setFirstName] = useState(null);
   const [ secondName, setSecondName] = useState(null);
   const [ email, setEmail] = useState(null);
-  //const [ phoneNumber, setPhoneNumber] = useState(null);
+  const [ phoneNumber, setPhoneNumber] = useState(null);
   const [ loading, setLoading] = useState(false);
 
   const { userId, token, logout } = useAuthContext();
@@ -39,7 +39,7 @@ const profile = () => {
           setEmail(data.email);
           setFirstName(data.first_name);
           setSecondName(data.second_name);
-          //setPhoneNumber(data.phoneNumber);
+          setPhoneNumber(data.phoneNumber);
           setLoading(false);        
           setRefreshing(false);
 
@@ -66,7 +66,7 @@ const handleSubmit = () =>{
           'Authorization':`Bearer ${token}`
       },
       body: JSON.stringify({
-        firstname: firstName, secondname: secondName, email, //phoneNumber
+        firstname: firstName, secondname: secondName, email, phoneNumber
       })
   })
   .then((res)=>{
@@ -159,10 +159,10 @@ const handleDeleteAccount = () => {
               <Text className='font-montserrat-light text-sm'>Last Name:</Text>
               <TextInput value={secondName} onChangeText={setSecondName} className='border border-gray-200 p-2 py-3 rounded-lg text-sm text-black'/>
             </View>
-            {/* <View className='gap-2 mb-5'>
+            <View className='gap-2 mb-5'>
               <Text className='font-montserrat-light text-sm'>Phone Number:</Text>
               <TextInput value={phoneNumber} onChangeText={setPhoneNumber} className='border border-gray-200 p-2 py-3 rounded-lg text-sm text-black'/>
-            </View> */}
+            </View>
           </View>      
         }
 

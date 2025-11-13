@@ -195,6 +195,7 @@ const ad = () => {
         {/* Product Name & Price */}
         <View className="flex-row items-center justify-between mb-4">
             <View className="flex-1 pr-4">
+            <Text className="text-sm text-gray-800 mb-1">#{item.productId}</Text>
             <Text className="text-2xl font-bold text-gray-800 mb-1">{item.productName}</Text>
             <Text className="text-sm font-medium text-purple-700 uppercase tracking-wide">{item.type}</Text>
             </View>

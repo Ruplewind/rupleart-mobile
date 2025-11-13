@@ -7,6 +7,7 @@ import { router } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Entypo from '@expo/vector-icons/Entypo';
 import { AntDesign } from '@expo/vector-icons';
+import Foundation from '@expo/vector-icons/Foundation';
 
 const Myads = () => {
   const [myads, setMyads] = useState([]);
@@ -116,7 +117,8 @@ const Myads = () => {
             Linking.openURL('https://rupleart.com/terms');
           }}
         >
-          <AntDesign name="earth" size={18} color="white" style={{ marginRight: 6 }} />
+          {/* <AntDesign name="earth" size={18} color="white" style={{ marginRight: 6 }} /> */}
+          <Foundation name="web" size={18} color="white" style={{ marginRight: 6 }}/>
           <Text className="text-white text-center">Terms</Text>
         </TouchableOpacity>
       </View>
@@ -132,7 +134,8 @@ const Myads = () => {
                 Linking.openURL('https://rupleart.com/terms');
             }}
         >
-            <AntDesign name="earth" size={18} color="white" style={{ marginRight: 6 }} />
+            {/* <AntDesign name="earth" size={18} color="white" style={{ marginRight: 6 }} /> */}
+            <Foundation name="web" size={18} color="white" style={{ marginRight: 6 }}/>
             <Text className="text-white text-center">Terms</Text>
         </TouchableOpacity>
         <TouchableOpacity 
@@ -188,6 +191,7 @@ const Myads = () => {
                 />
               </View>
               <View className="flex-1 w-6/10">
+                <Text className="text-sm text-blue-600">#{item.productId}</Text>
                 <Text className="text-lg font-montserrat-semibold">{item.productName}</Text>
                 <Text className="mt-1 font-montserrat-light text-sm">Size: {item.size}</Text>
                 <Text className="mt-2 font-montserrat-regular text-sm">Ksh. {item.price.toLocaleString()}</Text>
