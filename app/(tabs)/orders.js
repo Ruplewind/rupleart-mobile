@@ -160,6 +160,12 @@ const Orders = () => {
                                         <MaterialIcons name="pending" size={12} color="black" />
                                         <Text className="text-black text-xs">Pending Delivery</Text>
                                     </View>
+                                ) : order.delivery_status === 'transit'? (
+                                    <View style={{ backgroundColor: '#FFBF00' }} className="flex-row items-center gap-2 px-2 rounded-lg text-xs p-1 w-full lg:w-3/4 mx-auto">
+                                        {/* <MaterialCommunityIcons name="truck-delivery" size={12} color="black" /> */}
+                                        <MaterialIcons name="delivery-dining" size={15} color="black" />
+                                        <Text className="text-black text-xs">In Transit</Text>
+                                    </View>
                                 ) : (
                                     <View style={{ backgroundColor: '#4A148C' }} className="flex-row items-center gap-2 px-2 rounded-lg text-xs p-1 w-full lg:w-3/4 mx-auto">
                                         <MaterialCommunityIcons name="truck-delivery" size={12} color="white" />
