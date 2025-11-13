@@ -158,7 +158,7 @@ const Orders = () => {
                                 {order.delivery_status === 'pending' ? (
                                     <View  className="flex-row items-center gap-2 px-2 bg-gray-300 text-xs rounded-lg p-1 w-full lg:w-3/4 mx-auto">
                                         <MaterialIcons name="pending" size={12} color="black" />
-                                        <Text className="text-black text-xs">Pending Delivery</Text>
+                                        <Text className="text-black text-xs">Pending Confirmation</Text>
                                     </View>
                                 ) : order.delivery_status === 'transit'? (
                                     <View style={{ backgroundColor: '#FFBF00' }} className="flex-row items-center gap-2 px-2 rounded-lg text-xs p-1 w-full lg:w-3/4 mx-auto">
