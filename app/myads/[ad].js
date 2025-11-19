@@ -23,14 +23,14 @@ const ad = () => {
   };
 
   const nextImage = () => {
-    if (activeIndex < item.image.length - 1) {
+    if (activeIndex < item.image.length - 1 && scrollRef.current) {
       scrollRef.current.scrollTo({ x: (activeIndex + 1) * width, animated: true });
       setActiveIndex(activeIndex + 1);
     }
   };
 
   const prevImage = () => {
-    if (activeIndex > 0) {
+    if (activeIndex > 0 && scrollRef.current) {
       scrollRef.current.scrollTo({ x: (activeIndex - 1) * width, animated: true });
       setActiveIndex(activeIndex - 1);
     }

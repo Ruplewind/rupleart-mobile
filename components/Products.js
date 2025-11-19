@@ -1,6 +1,6 @@
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
-import { Image } from 'expo-image';
 import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, ScrollView, StyleSheet, Pressable } from 'react-native';
+import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import useCart from '../context/CartContext';
 
@@ -36,7 +36,7 @@ const Products = ({ products, category }) => {
         <ScrollView ref={scrollViewRef} className="p-4 mb-56 max-h-screen bg-white">
             <View style={styles.container}>
                 {displayedProducts.map((item) => (
-                    <TouchableOpacity 
+                    <Pressable 
                         key={item._id} 
                         style={styles.card} 
                         onPress={() => {
@@ -54,33 +54,33 @@ const Products = ({ products, category }) => {
                             {item.productName}
                         </Text>
                         <Text style={styles.price}>Ksh {item.price.toLocaleString()}</Text>
-                        <TouchableOpacity 
+                        <Pressable 
                             style={styles.addToCartButton}
                             onPress={() => addToCart({ ...item, quantity: 1 })}
                         >
                             <Text style={styles.buttonText}>Add to Cart</Text>
-                        </TouchableOpacity>
-                    </TouchableOpacity>
+                        </Pressable>
+                    </Pressable>
                 ))}
             </View>
-            
+
             <View style={styles.paginationContainer}>
                 {page > 0 && (
-                    <TouchableOpacity 
+                    <Pressable 
                         className='border border-purple-900 p-2 rounded-lg'
                         onPress={() => handlePageChange(page - 1)}
                     >
                         <Text style={styles.paginationTextOutline}>Previous Products</Text>
-                    </TouchableOpacity>
+                    </Pressable>
                 )}
                 
                 {page < totalPages - 1 && (
-                    <TouchableOpacity 
+                    <Pressable 
                         style={styles.paginationButton} 
                         onPress={() => handlePageChange(page + 1)}
                     >
                         <Text style={styles.paginationText}>Load More</Text>
-                    </TouchableOpacity>
+                    </Pressable>
                 )}
             </View>
         </ScrollView>
