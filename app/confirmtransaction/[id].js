@@ -11,6 +11,7 @@ const ConfirmTransaction = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(()=>{
+      setTimeout(()=>{
         fetch(`${process.env.EXPO_PUBLIC_API_URL}/ConfirmPayment/${id}`)
         .then(res => {
             if(res.ok){
@@ -24,12 +25,12 @@ const ConfirmTransaction = () => {
         .catch(err =>{
             setLoading(false);
         })
-
+      }, 2000)
     },[])
   return (
     <View>
       {
-          loading && <View class="flex-row items-center justify-center h-screen mt-28">
+          loading && <View className="flex-row items-center justify-center mt-28">
             <ActivityIndicator color="black" size={60}/>
         </View>
       }

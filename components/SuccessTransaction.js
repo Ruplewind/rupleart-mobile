@@ -14,7 +14,7 @@ const SuccessTransaction = () => {
     },[])
   return (
     <View className="p-5 mt-20">
-        <View className="flex-row justify-center">
+        <View className="flex-row justify-center mt-10">
           <Ionicons name="checkmark-circle" size={100} color="green" />
         </View>
 
@@ -28,16 +28,16 @@ const SuccessTransaction = () => {
             <Text className="flex justify-center text-center mt-5 text-lg">
                 Thank You!
             </Text>
-            <Text className="flex justify-center text-center px-10 ml-5 mb-5 text-lg" style={{fontSize:'3em'}}>&#x1F38A;</Text>
+            <Text className="flex justify-center text-center px-10 ml-5 mb-5" style={{fontSize: 50}}>&#x1F38A;</Text>
 
             <TouchableOpacity 
-            className="w-1/2 px-2 py-3 rounded-2xl mx-auto bg-purple-900 mt-10 flex-row justify-center items-center gap-4" 
-            onPress={()=>{
-              router.push('/')
-            }}
+              className="w-3/4 px-5 py-3 rounded-2xl mx-auto bg-purple-900 mt-5 flex-row justify-center items-center gap-4" 
+              onPress={()=>{
+                router.push('/')
+              }}
             >
-                  <Ionicons name="arrow-back" size={24} color="white" />
-                  <Text className="text-white">GO TO HOMEPAGE</Text>
+              <Ionicons name="arrow-back" size={24} color="white" />
+              <Text className="text-white">GO TO HOMEPAGE</Text>
             </TouchableOpacity>
       </View>
       
