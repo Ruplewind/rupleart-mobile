@@ -1,4 +1,4 @@
-import { View, Text, Image, ScrollView, Alert, ActivityIndicator, Linking } from 'react-native';
+import { View, Text, Image, ScrollView, Alert, ActivityIndicator, Linking, RefreshControl } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import Entypo from '@expo/vector-icons/Entypo';
@@ -13,9 +13,11 @@ const Orders = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
+    const [refreshing, setRefreshing] = useState(false);
 
     const fetchOrders = () => {
         if (!token) {
+            console.log("no token")
             setLoading(false);
             return;
         }
@@ -60,6 +62,12 @@ const Orders = () => {
         fetchOrders();
     }, [token]);
 
+    const onRefresh = () => {
+        setRefreshing(true);
+        fetchOrders();
+        setRefreshing(false);
+    };
+
     // If no token, show login button
     if (!token) {
         return (
@@ -96,9 +104,89 @@ const Orders = () => {
         );
     }
 
+    const cancelAlert = (id) => {
+        Alert.alert('Cancel Order', 'Are you sure you want to cancel order?', [
+          {
+            text: 'Cancel',
+            onPress: () => {},
+            style: 'cancel',
+          },
+          { text: 'OK', onPress: () => handleCancel(id) },
+        ]);
+    };
+    
+    const [cancelLoading, setCancelLoading] = useState(false);
+
+    const handleCancel = (id) => {
+        setCancelLoading(true);
+        fetch(`${process.env.EXPO_PUBLIC_API_URL}/cancel_order/`+id,{
+            method: 'GET',
+            headers: {
+                'Authorization':`Bearer ${token}`
+            }
+        })
+        .then( data => {
+            if(data.ok){
+                Alert.alert(
+                    'Success',
+                    "Order Succesfully Cancelled",
+                    [
+                        {
+                            text: 'OK',
+                            onPress: () => {
+                                fetchOrders()
+                            }
+                        }
+                    ],
+                    { cancelable: false }
+                )
+                setCancelLoading(false);
+            }else{
+                data.json().then(err => {
+                Alert.alert(
+                    'Failed',
+                    err,
+                    [
+                        {
+                            text: 'OK',
+                            onPress: () => {
+                                //router.push('login')
+                            }
+                        }
+                    ],
+                    { cancelable: false }
+                )
+                setCancelLoading(false);
+                })
+            }
+        })
+        .catch(err => {
+            Alert.alert(
+                'Failed',
+                err,
+                [
+                    {
+                    text: 'OK',
+                    onPress: () => {
+                        //router.push('login')
+                    }
+                    }
+                ],
+                { cancelable: false }
+            )
+            setCancelLoading(false);
+        })
+    }
+
     return (
         <View style={{ flex: 1 }}>
-            <ScrollView contentContainerStyle={{ paddingBottom: 120 }} className="p-4">
+            <ScrollView 
+            contentContainerStyle={{ paddingBottom: 120 }} 
+            className="p-4"
+            refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+            >
                 {!loading && orders.length < 1 && (
                     <View className="flex-col justify-center items-center gap-3 mt-52">
                         <Text className="text-sm font-montserrat-regular">You Have Not Placed Any Order</Text>
@@ -166,14 +254,47 @@ const Orders = () => {
                                         <MaterialIcons name="delivery-dining" size={15} color="black" />
                                         <Text className="text-black text-xs">In Transit</Text>
                                     </View>
-                                ) : (
+                                ) : order.delivery_status === 'cancelled'? (
+                                    <View style={{ backgroundColor: '#F22E07' }} className="flex-row items-center gap-2 px-2 rounded-lg text-xs p-1 w-full lg:w-3/4 mx-auto">
+                                        <MaterialIcons name="cancel" size={12} color="white" />
+                                        <Text className="text-white text-xs">Cancelled</Text>
+                                    </View>
+                                ):
+                                (
                                     <View style={{ backgroundColor: '#4A148C' }} className="flex-row items-center gap-2 px-2 rounded-lg text-xs p-1 w-full lg:w-3/4 mx-auto">
                                         <MaterialCommunityIcons name="truck-delivery" size={12} color="white" />
                                         <Text className="text-white text-xs">Delivered</Text>
                                     </View>
-                                )}
+                                )
+                                }
                             </View>
                         </View>
+                        { order.delivery_status === 'pending'? 
+                            <View>
+                                { !cancelLoading ? 
+                                <View className="w-5/6 mx-auto mt-4">
+                                    <TouchableOpacity
+                                        className="border border-red-500 rounded-xl py-3"
+                                        onPress={() => cancelAlert(order._id)}
+                                        activeOpacity={0.7}
+                                    >
+                                        <View className="flex flex-row items-center justify-center space-x-2">
+                                        <MaterialIcons name="cancel" size={18} color="red" />
+                                        <Text className="text-red-500 text-base font-medium">
+                                            Cancel Order
+                                        </Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
+                                :
+                                <View className="flex-row items-center justify-center mt-2">
+                                    <ActivityIndicator color="black" size={60}/>
+                                </View>
+                                }
+                            </View>
+                            :
+                            <View></View>
+                        }
                     </TouchableOpacity>
                 ))}
             </ScrollView>
