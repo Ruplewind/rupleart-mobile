@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, ActivityIndicator, Alert, RefreshControl, Linking } from 'react-native';
+import { View, Text, ScrollView, ActivityIndicator, Alert, RefreshControl, Linking, Switch } from 'react-native';
 import { Image } from 'expo-image';
 import React, { useEffect, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
@@ -87,7 +87,6 @@ const Myads = () => {
       });
   };
 
-  // If no token, show login button
   if (!token) {
     return (
       <View className="p-5 flex-1 justify-center items-center">
@@ -125,6 +124,32 @@ const Myads = () => {
     );
   }
 
+  const handleAvailabilityToggle = (id, value) => {
+    fetch(`${process.env.EXPO_PUBLIC_API_URL}/change_availability/${id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ value })
+    })
+      .then((response) => {
+        if (response.ok) {
+          Alert.alert("Success", "Availability Updated");
+          setMyads((prev) =>
+            prev.map((ad) =>
+              ad._id === id ? { ...ad, availability: value } : ad
+            )
+          );
+        } else {
+          Alert.alert("Error", "Failed to update availability");
+        }
+      })
+      .catch(() => {
+        Alert.alert("Server Error", "Something went wrong");
+      });
+  };
+
   return (
     <View className="p-5">
       <View className="flex-row justify-between">
@@ -134,7 +159,6 @@ const Myads = () => {
                 Linking.openURL('https://rupleart.com/terms');
             }}
         >
-            {/* <AntDesign name="earth" size={18} color="white" style={{ marginRight: 6 }} /> */}
             <Foundation name="web" size={18} color="white" style={{ marginRight: 6 }}/>
             <Text className="text-white text-center">Terms</Text>
         </TouchableOpacity>
@@ -195,7 +219,22 @@ const Myads = () => {
                 <Text className="text-lg font-montserrat-semibold">{item.productName}</Text>
                 <Text className="mt-1 font-montserrat-light text-sm">Size: {item.size}</Text>
                 <Text className="mt-2 font-montserrat-regular text-sm">Ksh. {item.price.toLocaleString()}</Text>
-                <View className="text-center mt-2">
+                <View className="mt-3 flex-row items-center">
+                <Text className="mr-2 text-sm font-montserrat-regular">
+                  In Stock?:
+                </Text>
+                <View className="scale-75">
+                  <Switch
+                    value={item.availability}
+                    onValueChange={(val) => {
+                      handleAvailabilityToggle(item._id, val);
+                    }}
+                    thumbColor={item.availability ? "#4CAF50" : "#f4f3f4"}
+                    trackColor={{ true: "#A5D6A7", false: "#D1D5DB" }}
+                  />
+                </View>
+              </View>
+                <View className="text-center mt-4">
                   {item.approvalStatus === 0 ? (
                     <View className="bg-gray-300 text-xs rounded-2xl p-1 w-full px-1">
                       <Text className="text-center text-xs">Pending approval</Text>

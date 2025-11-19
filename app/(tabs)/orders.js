@@ -129,7 +129,7 @@ const Orders = () => {
             if(data.ok){
                 Alert.alert(
                     'Success',
-                    "Order Succesfully Cancelled",
+                    "Order Succesfully Cancelled. Await Refund",
                     [
                         {
                             text: 'OK',
