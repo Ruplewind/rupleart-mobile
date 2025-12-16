@@ -6,7 +6,6 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
-  FlatList,
   Alert,
   ActivityIndicator,
 } from 'react-native';
@@ -148,155 +147,158 @@ const updatead = () => {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1 }}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
     >
-      <FlatList
-        data={[{ key: 'form' }]}
-        renderItem={() => (
-          <>
-            <Text className="my-4 mx-5 font-montserrat-light">Update Product Images:</Text>
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
+        <Text className="my-4 mx-5 font-montserrat-light">Update Product Images:</Text>
 
-            {/* Existing Images */}
-            {existingImages.length > 0 && (
-              <ScrollView horizontal style={{ marginHorizontal: 15, marginBottom: 10 }}>
-                {existingImages.map((img, index) => (
-                  <View key={index} style={{ marginRight: 10, position: 'relative' }}>
-                    <Image
-                      source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/uploads/${img}` }}
-                      style={{ width: 100, height: 100, borderRadius: 8 }}
-                    />
-                    <TouchableOpacity
-                      style={{ position: 'absolute', top: 0, right: 0, backgroundColor: 'red' }}
-                      onPress={() => removeExistingImage(index)}
-                    >
-                      <Entypo name="cross" size={20} color="white" />
-                    </TouchableOpacity>
-                  </View>
-                ))}
-              </ScrollView>
-            )}
-
-            {/* New Images */}
-            {images.length > 0 && (
-              <ScrollView horizontal style={{ marginHorizontal: 15 }}>
-                {images.map((img, index) => (
-                  <View key={index} style={{ marginRight: 10, position: 'relative' }}>
-                    <Image
-                      source={{ uri: img }}
-                      style={{ width: 100, height: 100, borderRadius: 8 }}
-                    />
-                    <TouchableOpacity
-                      style={{ position: 'absolute', top: 0, right: 0, backgroundColor: 'red' }}
-                      onPress={() => removeNewImage(index)}
-                    >
-                      <Entypo name="cross" size={20} color="white" />
-                    </TouchableOpacity>
-                  </View>
-                ))}
-              </ScrollView>
-            )}
-
-            <TouchableOpacity onPress={pickImage}>
-              <View className="border border-dashed border-blue-500 w-11/12 h-20 mb-5 bg-white mx-auto rounded-3xl flex justify-center items-center mt-2">
-                <Entypo name="upload-to-cloud" size={20} color="blue" />
-                <Text className="text-blue-700 text-center">
-                  {images.length > 0 ? 'Add More Images' : 'Select Images'}
-                </Text>
+        {/* Existing Images */}
+        {existingImages.length > 0 && (
+          <ScrollView horizontal style={{ marginHorizontal: 15, marginBottom: 10 }}>
+            {existingImages.map((img, index) => (
+              <View key={index} style={{ marginRight: 10, position: 'relative' }}>
+                <Image
+                  source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/uploads/${img}` }}
+                  style={{ width: 100, height: 100, borderRadius: 8 }}
+                />
+                <TouchableOpacity
+                  style={{ position: 'absolute', top: 0, right: 0, backgroundColor: 'red' }}
+                  onPress={() => removeExistingImage(index)}
+                >
+                  <Entypo name="cross" size={20} color="white" />
+                </TouchableOpacity>
               </View>
-            </TouchableOpacity>
-
-            {/* Product Details */}
-            <Text className="my-2 mx-5 font-montserrat-light">Product Title:</Text>
-            <TextInput
-              className="border border-gray-200 p-2 py-3 mx-3 rounded-lg bg-white text-black"
-              value={productName}
-              onChangeText={setProductName}
-            />
-
-            <Text className="my-2 mx-5 mb-1 font-montserrat-light text-black">
-              Current Category:
-              <Text className="text-purple-900 font-montserrat-bold"> {data.type}</Text>
-            </Text>
-            <View className="mx-3">
-              <DropDownPicker
-                open={open}
-                value={type}
-                items={categories.map((item) => ({
-                  label: `${item.category}`,
-                  value: item.category,
-                }))}
-                placeholder="Select New Category"
-                setOpen={setOpen}
-                setValue={setType}
-                style={{
-                  borderColor: '#EEEEEE',
-                }}
-                dropDownContainerStyle={{
-                  borderColor: '#EEEEEE',
-                }}
-                zIndex={1000}
-                dropDownDirection='BOTTOM'
-              />
-            </View>
-
-            <Text className="my-2 mx-5 font-montserrat-light">Description:</Text>
-            <TextInput
-              editable
-              multiline={true}
-              numberOfLines={4}
-              className="border border-gray-200 p-2 py-3 mx-3 rounded-lg bg-white h-18 text-black"
-              value={description}
-              onChangeText={setDescription}
-            />
-
-            <Text className="my-2 mx-5 font-montserrat-light">Size (small/medium/large/cm):</Text>
-            <TextInput
-              className="border border-gray-200 p-2 py-3 mx-3 rounded-lg bg-white text-black"
-              value={size}
-              onChangeText={setSize}
-            />
-
-            <Text className="my-2 mx-5 font-montserrat-light">Price:</Text>
-            <TextInput
-              placeholder="0"
-              keyboardType="numeric"
-              className="border border-gray-200 p-2 py-3 mx-3 rounded-lg bg-white text-black"
-              value={price}
-              onChangeText={setPrice}
-            />
-
-            <View style={styles.section}>
-              <Checkbox style={styles.checkbox} value={isChecked} onValueChange={setChecked} />
-              <Text className="text-sm">
-                I have read the terms and conditions. If not, read{' '}
-                <Link className="text-blue-400" href={'https://rupleart.com/terms'}>
-                  here
-                </Link>
-              </Text>
-            </View>
-
-            <View className="w-full flex-row justify-center gap-10 mt-5 mb-20">
-              <TouchableOpacity
-                className="border border-purple-900 px-4 py-3 rounded-lg bg-white"
-                onPress={() => router.push('myads')}
-              >
-                <Text className="text-purple-900">Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                className="bg-purple-900 py-3 px-4 rounded-lg"
-                onPress={handleSubmit}
-              >
-                {loading ? (
-                  <ActivityIndicator color={'white'} size={20} />
-                ) : (
-                  <Text className="text-white">Update</Text>
-                )}
-              </TouchableOpacity>
-            </View>
-          </>
+            ))}
+          </ScrollView>
         )}
-      />
+
+        {/* New Images */}
+        {images.length > 0 && (
+          <ScrollView horizontal style={{ marginHorizontal: 15 }}>
+            {images.map((img, index) => (
+              <View key={index} style={{ marginRight: 10, position: 'relative' }}>
+                <Image
+                  source={{ uri: img }}
+                  style={{ width: 100, height: 100, borderRadius: 8 }}
+                />
+                <TouchableOpacity
+                  style={{ position: 'absolute', top: 0, right: 0, backgroundColor: 'red' }}
+                  onPress={() => removeNewImage(index)}
+                >
+                  <Entypo name="cross" size={20} color="white" />
+                </TouchableOpacity>
+              </View>
+            ))}
+          </ScrollView>
+        )}
+
+        <TouchableOpacity onPress={pickImage}>
+          <View className="border border-dashed border-blue-500 w-11/12 h-20 mb-5 bg-white mx-auto rounded-3xl flex justify-center items-center mt-2">
+            <Entypo name="upload-to-cloud" size={20} color="blue" />
+            <Text className="text-blue-700 text-center">
+              {images.length > 0 ? 'Add More Images' : 'Select Images'}
+            </Text>
+          </View>
+        </TouchableOpacity>
+
+        {/* Product Details */}
+        <Text className="my-2 mx-5 font-montserrat-light">Product Title:</Text>
+        <TextInput
+          className="border border-gray-200 p-2 py-3 mx-3 rounded-lg bg-white text-black"
+          value={productName}
+          onChangeText={setProductName}
+        />
+
+        <Text className="my-2 mx-5 mb-1 font-montserrat-light text-black">
+          Current Category:
+          <Text className="text-purple-900 font-montserrat-bold"> {data.type}</Text>
+        </Text>
+        <View className="mx-3" style={{ zIndex: 1000 }}>
+          <DropDownPicker
+            open={open}
+            value={type}
+            items={categories.map((item) => ({
+              label: `${item.category}`,
+              value: item.category,
+            }))}
+            placeholder="Select New Category"
+            setOpen={setOpen}
+            setValue={setType}
+            style={{
+              borderColor: '#EEEEEE',
+            }}
+            dropDownContainerStyle={{
+              borderColor: '#EEEEEE',
+            }}
+            zIndex={1000}
+            dropDownDirection='BOTTOM'
+          />
+        </View>
+
+        <Text className="my-2 mx-5 font-montserrat-light">Description:</Text>
+        <TextInput
+          editable
+          multiline={true}
+          numberOfLines={4}
+          textAlignVertical="top"
+          scrollEnabled={false}
+          className="border border-gray-200 p-2 py-3 mx-3 rounded-lg bg-white text-black"
+          style={{ minHeight: 70 }}
+          value={description}
+          onChangeText={setDescription}
+        />
+
+        <Text className="my-2 mx-5 font-montserrat-light">Size (small/medium/large/cm):</Text>
+        <TextInput
+          className="border border-gray-200 p-2 py-3 mx-3 rounded-lg bg-white text-black"
+          value={size}
+          onChangeText={setSize}
+        />
+
+        <Text className="my-2 mx-5 font-montserrat-light">Price:</Text>
+        <TextInput
+          placeholder="0"
+          keyboardType="numeric"
+          className="border border-gray-200 p-2 py-3 mx-3 rounded-lg bg-white text-black"
+          value={price}
+          onChangeText={setPrice}
+        />
+
+        <View style={styles.section}>
+          <Checkbox style={styles.checkbox} value={isChecked} onValueChange={setChecked} />
+          <Text className="text-sm">
+            I have read the terms and conditions. If not, read{' '}
+            <Link className="text-blue-400" href={'https://rupleart.com/terms'}>
+              here
+            </Link>
+          </Text>
+        </View>
+
+        <View className="w-full flex-row justify-center gap-10 mt-5 mb-20">
+          <TouchableOpacity
+            className="border border-purple-900 px-4 py-3 rounded-lg bg-white"
+            onPress={() => router.push('myads')}
+          >
+            <Text className="text-purple-900">Cancel</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            className="bg-purple-900 py-3 px-4 rounded-lg"
+            onPress={handleSubmit}
+          >
+            {loading ? (
+              <ActivityIndicator color={'white'} size={20} />
+            ) : (
+              <Text className="text-white">Update</Text>
+            )}
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 };

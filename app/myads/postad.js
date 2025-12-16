@@ -6,7 +6,6 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
-  FlatList,
   Alert,
   ActivityIndicator,
 } from 'react-native';
@@ -138,138 +137,141 @@ const postad = () => {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1 }}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
     >
-      <FlatList
-        data={[{ key: 'form' }]}
-        renderItem={() => (
-          <>
-            <Text className="my-4 mx-5 font-montserrat-light">Upload Product Images:</Text>
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
+        <Text className="my-4 mx-5 font-montserrat-light">Upload Product Images:</Text>
 
-            <TouchableOpacity onPress={pickImage}>
-              <View className="border border-dashed border-blue-500 w-11/12 h-40 mb-5 bg-white mx-auto rounded-3xl flex justify-center items-center">
-                <Entypo name="upload-to-cloud" size={32} color="blue" />
-                <Text className="text-blue-700 text-center">Select Images</Text>
-              </View>
-            </TouchableOpacity>
+        <TouchableOpacity onPress={pickImage}>
+          <View className="border border-dashed border-blue-500 w-11/12 h-40 mb-5 bg-white mx-auto rounded-3xl flex justify-center items-center">
+            <Entypo name="upload-to-cloud" size={32} color="blue" />
+            <Text className="text-blue-700 text-center">Select Images</Text>
+          </View>
+        </TouchableOpacity>
 
-            {images.length > 0 && (
-              <ScrollView horizontal style={{ marginHorizontal: 15 }}>
-                {images.map((img, index) => (
-                  <View key={index} style={{ marginRight: 10 }}>
-                    <Image
-                      source={{ uri: img }}
-                      style={{ width: 100, height: 100, borderRadius: 8 }}
-                    />
-                  </View>
-                ))}
-              </ScrollView>
-            )}
-
-            {images.length > 0 && <Button title="Replace Images" onPress={pickImage} />}
-
-            <Text className="my-2 mx-5 font-montserrat-light">Product Title:</Text>
-            <TextInput
-              className="border border-gray-200 p-2 py-3 mx-3 rounded-lg bg-white text-black"
-              onChangeText={setProductName}
-            />
-
-            <Text className="my-2 mx-5 mb-1 font-montserrat-light">Select Category:</Text>
-            <View className="mx-3">
-              {categories.length < 1 && (
-                <Text className="text-black bg-white my-2 border border-gray-200 px-2 py-3 rounded-lg">
-                  Loading...
-                </Text>
-              )}
-              {categories.length > 0 && (
-                <DropDownPicker
-                  open={open}
-                  value={type}
-                  items={categories.map((item) => ({
-                    label: `${item.category}`,
-                    value: item.category,
-                  }))}
-                  placeholder="Select category"
-                  setOpen={setOpen}
-                  setValue={setType}
-                  style={{
-                    borderColor: '#EEEEEE',
-                  }}
-                  dropDownContainerStyle={{
-                    borderColor: '#EEEEEE',
-                  }}
-                  zIndex={1000}
-                  listMode="SCROLLVIEW"
-                  scrollViewProps={{
-                    scrollEnabled: true,
-                    nestedScrollEnabled: true,
-                  }}
-                  dropDownDirection='BOTTOM'
+        {images.length > 0 && (
+          <ScrollView horizontal style={{ marginHorizontal: 15 }}>
+            {images.map((img, index) => (
+              <View key={index} style={{ marginRight: 10 }}>
+                <Image
+                  source={{ uri: img }}
+                  style={{ width: 100, height: 100, borderRadius: 8 }}
                 />
-              )}
-            </View>
-
-            <Text className="my-2 mx-5 font-montserrat-light">Description:</Text>
-            <TextInput
-              editable
-              multiline={true}
-              numberOfLines={4}
-              className="border border-gray-200 p-2 py-3 mx-3 rounded-lg bg-white h-18 text-black"
-              onChangeText={setDescription}
-            />
-
-            <Text className="my-2 mx-5 font-montserrat-light">Size (small/medium/large/cm):</Text>
-            <TextInput
-              className="border border-gray-200 p-2 py-3 mx-3 rounded-lg bg-white text-black"
-              onChangeText={setSize}
-            />
-
-            <Text className="my-2 mx-5 font-montserrat-light">Price:</Text>
-            <TextInput
-              placeholder="0"
-              keyboardType="numeric"
-              className="border border-gray-200 p-2 py-3 mx-3 rounded-lg bg-white text-black"
-              onChangeText={setPrice}
-            />
-
-            <View style={styles.section}>
-              <Checkbox style={styles.checkbox} value={isChecked} onValueChange={setChecked} />
-              <Text className="text-sm">
-                I have read the terms and conditions. If not, read{' '}
-                <Link className="text-blue-400" href={'https://rupleart.com/terms'}>
-                  here
-                </Link>
-              </Text>
-            </View>
-
-            <View className="w-full flex-row justify-center gap-10 mt-5 mb-20">
-              <TouchableOpacity
-                className="border border-purple-900 px-4 py-3 rounded-lg bg-white"
-                onPress={() => {
-                  router.push({
-                    pathname: 'myads',
-                  });
-                }}
-              >
-                <Text className="text-purple-900">Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                className="bg-purple-900 py-3 px-4 rounded-lg"
-                onPress={() => {
-                  handleSubmit();
-                }}
-              >
-                {loading ? (
-                  <ActivityIndicator color={'white'} size={20} />
-                ) : (
-                  <Text className="text-white">Submit</Text>
-                )}
-              </TouchableOpacity>
-            </View>
-          </>
+              </View>
+            ))}
+          </ScrollView>
         )}
-      />
+
+        {images.length > 0 && <Button title="Replace Images" onPress={pickImage} />}
+
+        <Text className="my-2 mx-5 font-montserrat-light">Product Title:</Text>
+        <TextInput
+          className="border border-gray-200 p-2 py-3 mx-3 rounded-lg bg-white text-black"
+          onChangeText={setProductName}
+        />
+
+        <Text className="my-2 mx-5 mb-1 font-montserrat-light">Select Category:</Text>
+        <View className="mx-3" style={{ zIndex: 1000 }}>
+          {categories.length < 1 && (
+            <Text className="text-black bg-white my-2 border border-gray-200 px-2 py-3 rounded-lg">
+              Loading...
+            </Text>
+          )}
+          {categories.length > 0 && (
+            <DropDownPicker
+              open={open}
+              value={type}
+              items={categories.map((item) => ({
+                label: `${item.category}`,
+                value: item.category,
+              }))}
+              placeholder="Select category"
+              setOpen={setOpen}
+              setValue={setType}
+              style={{
+                borderColor: '#EEEEEE',
+              }}
+              dropDownContainerStyle={{
+                borderColor: '#EEEEEE',
+              }}
+              zIndex={1000}
+              listMode="SCROLLVIEW"
+              scrollViewProps={{
+                scrollEnabled: true,
+                nestedScrollEnabled: true,
+              }}
+              dropDownDirection='BOTTOM'
+            />
+          )}
+        </View>
+
+        <Text className="my-2 mx-5 font-montserrat-light">Description:</Text>
+        <TextInput
+          editable
+          multiline={true}
+          numberOfLines={4}
+          textAlignVertical="top"
+          scrollEnabled={false}
+          className="border border-gray-200 p-2 py-3 mx-3 rounded-lg bg-white h-18 text-black"
+          style={{ minHeight: 70 }}
+          onChangeText={setDescription}
+        />
+
+        <Text className="my-2 mx-5 font-montserrat-light">Size (small/medium/large/cm):</Text>
+        <TextInput
+          className="border border-gray-200 p-2 py-3 mx-3 rounded-lg bg-white text-black"
+          onChangeText={setSize}
+        />
+
+        <Text className="my-2 mx-5 font-montserrat-light">Price:</Text>
+        <TextInput
+          placeholder="0"
+          keyboardType="numeric"
+          className="border border-gray-200 p-2 py-3 mx-3 rounded-lg bg-white text-black"
+          onChangeText={setPrice}
+        />
+
+        <View style={styles.section}>
+          <Checkbox style={styles.checkbox} value={isChecked} onValueChange={setChecked} />
+          <Text className="text-sm">
+            I have read the terms and conditions. If not, read{' '}
+            <Link className="text-blue-400" href={'https://rupleart.com/terms'}>
+              here
+            </Link>
+          </Text>
+        </View>
+
+        <View className="w-full flex-row justify-center gap-10 mt-5 mb-20">
+          <TouchableOpacity
+            className="border border-purple-900 px-4 py-3 rounded-lg bg-white"
+            onPress={() => {
+              router.push({
+                pathname: 'myads',
+              });
+            }}
+          >
+            <Text className="text-purple-900">Cancel</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            className="bg-purple-900 py-3 px-4 rounded-lg"
+            onPress={() => {
+              handleSubmit();
+            }}
+          >
+            {loading ? (
+              <ActivityIndicator color={'white'} size={20} />
+            ) : (
+              <Text className="text-white">Submit</Text>
+            )}
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 };
