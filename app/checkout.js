@@ -237,7 +237,7 @@ const Checkout = () => {
                         listMode='SCROLLVIEW'
                         scrollViewProps={{
                           scrollEnabled: true,
-                          //nestedScrollEnabled: true
+                          nestedScrollEnabled: true
                         }}
                         dropDownDirection='BOTTOM'
                       />
