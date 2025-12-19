@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
+import { InteractionManager } from 'react-native'
 
 const { createContext } = require("react");
 const { useContext } = require("react");
@@ -29,10 +30,15 @@ export function AuthProvider({ children }){
         setToken(null);
         setUserId(null);
         setFullName(null);
-        await AsyncStorage.removeItem('rpl$token')
-        await AsyncStorage.removeItem('rpl$userId')
-        await AsyncStorage.removeItem('rpl$fullname')
-        router.push("home")
+        await AsyncStorage.multiRemove([
+            'rpl$token',
+            'rpl$userId',
+            'rpl$fullname',
+        ]);
+
+        InteractionManager.runAfterInteractions(() => {
+            router.replace('/home');
+        });
     }
 
     const isLoggedIn = async () => {

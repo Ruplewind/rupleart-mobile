@@ -237,7 +237,7 @@ const Checkout = () => {
                         listMode='SCROLLVIEW'
                         scrollViewProps={{
                           scrollEnabled: true,
-                          nestedScrollEnabled: true
+                          //nestedScrollEnabled: true
                         }}
                         dropDownDirection='BOTTOM'
                       />
@@ -265,7 +265,7 @@ const Checkout = () => {
                   {/* Pay Button */}
                   <TouchableOpacity
                     onPress={handleSubmit}
-                    className="bg-purple-900 p-4 rounded-lg mt-5 flex justify-center items-center"
+                    className="bg-purple-900 p-4 rounded-lg mt-5 flex justify-center items-center mb-16"
                   >
                     {loading ? <ActivityIndicator color="white" /> : <Text className="text-white text-lg font-bold">PAY NOW</Text>}
                   </TouchableOpacity>
