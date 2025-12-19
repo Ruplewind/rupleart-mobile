@@ -190,7 +190,7 @@ const Myads = () => {
           </View>
         )}
 
-        { loading && <ActivityIndicator color="black" size={100} style={{ marginTop: 28 }} />}
+        { loading && <ActivityIndicator color="black" size={20} style={{ marginTop: 28 }} />}
 
         {
         !error && !loading && myads.length > 0 &&

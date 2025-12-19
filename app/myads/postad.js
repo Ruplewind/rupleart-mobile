@@ -184,6 +184,7 @@ const postad = () => {
             </Text>
           )}
           {categories.length > 0 && (
+            <View className="mx-3" style={{ zIndex: 1000, minHeight: open ? 240 : 30 }}>
             <DropDownPicker
               open={open}
               value={type}
@@ -202,12 +203,14 @@ const postad = () => {
               }}
               zIndex={1000}
               listMode="SCROLLVIEW"
+              maxHeight={200}
               scrollViewProps={{
                 scrollEnabled: true,
                 nestedScrollEnabled: true,
               }}
               dropDownDirection='BOTTOM'
             />
+            </View>
           )}
         </View>
 

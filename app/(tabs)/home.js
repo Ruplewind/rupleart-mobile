@@ -60,7 +60,7 @@ export default function Home() {
         !loading && error && <Text className="mt-10 text-center font-montserrat-light text-sm">Error Fetching Data. Relaunch app.</Text>
       }
       {
-        !error && loading && <ActivityIndicator color="black" size={100} style={{ marginTop: 28 }} />
+        !error && loading && <ActivityIndicator color="black" size={20} style={{ marginTop: 28 }} />
       }
       { !error && !loading && <>
         {/* <LatestArtworks products={products.slice(0,10).reverse()} />     */}

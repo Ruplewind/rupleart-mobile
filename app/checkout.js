@@ -127,7 +127,7 @@ const Checkout = () => {
 
   return (
     <ScrollView
-      nestedScrollEnabled={true}
+      //nestedScrollEnabled={true}
       className="mt-1 mb-10 p-4 bg-gray-100"
       >
         <View>
@@ -221,6 +221,7 @@ const Checkout = () => {
                   {!allVideos && (
                     <View className="mb-4 mt-4">
                       <Text className="mb-2 font-semibold text-gray-700">Select delivery location:</Text>
+                      <View className="mx-1" style={{ zIndex: 1000, minHeight: open ? 240 : 30 }}>
                       <DropDownPicker
                         open={open}
                         value={location}
@@ -240,6 +241,7 @@ const Checkout = () => {
                         }}
                         dropDownDirection='BOTTOM'
                       />
+                      </View>
                     </View>
                   )}
 

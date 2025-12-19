@@ -9,18 +9,25 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { TouchableOpacity } from 'react-native';
 import useCart from '../../context/CartContext';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import {
+  SafeAreaProvider,
+  SafeAreaView,
+} from "react-native-safe-area-context";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function TabLayout() {
 
     const { products } = useCart();
-    const insets = useSafeAreaInsets();
+    //const insets = useSafeAreaInsets();
     return (
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <SafeAreaProvider>
+            <SafeAreaView style={{ flex: 1 }} edges={["top"]}>
       <Tabs
         screenOptions={{
             headerStyle: {
                 backgroundColor: '#fff',
-                height: 70
+                height: 50
             },
             // headerLeft: ()=> (
             //     <Ionicons name="menu" size={20} color="black" className="ml-5" />
@@ -31,7 +38,7 @@ export default function TabLayout() {
                   }}>
                     <View style={{flexDirection: 'row', alignItems: 'flex-start'}}>
                         <AntDesign name="shopping-cart" size={18} color="black"  className="" />
-                        <Text style={{fontSize: 11, lineHeight: 10}}>{products.length}</Text>
+                        <Text style={{fontSize: 11, lineHeight: 11}}>{products.length}</Text>
                     </View>
                 </TouchableOpacity>
             ),
@@ -40,8 +47,6 @@ export default function TabLayout() {
             tabBarActiveTintColor: '#4A148C',
             tabBarStyle: {
                 backgroundColor: '#fff',
-                paddingBottom: insets.bottom || 8,
-                height: 55 + (insets.bottom || 0),
             },
             tabBarLabelStyle: {
               marginTop: 0,
@@ -97,6 +102,9 @@ export default function TabLayout() {
             ),
         }} />
       </Tabs>
+          </SafeAreaView>
+        </SafeAreaProvider>
+      </GestureHandlerRootView>
     )
 }
 

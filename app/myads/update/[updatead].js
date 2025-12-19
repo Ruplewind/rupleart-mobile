@@ -219,7 +219,7 @@ const updatead = () => {
           Current Category:
           <Text className="text-purple-900 font-montserrat-bold"> {data.type}</Text>
         </Text>
-        <View className="mx-3" style={{ zIndex: 1000 }}>
+        <View className="mx-1" style={{ zIndex: 1000, minHeight: open ? 240 : 30 }}>
           <DropDownPicker
             open={open}
             value={type}
@@ -237,6 +237,11 @@ const updatead = () => {
               borderColor: '#EEEEEE',
             }}
             zIndex={1000}
+            listMode="SCROLLVIEW"
+              scrollViewProps={{
+                scrollEnabled: true,
+                nestedScrollEnabled: true,
+              }}
             dropDownDirection='BOTTOM'
           />
         </View>

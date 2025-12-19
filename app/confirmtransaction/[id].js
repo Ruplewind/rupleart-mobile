@@ -31,7 +31,7 @@ const ConfirmTransaction = () => {
     <View>
       {
           loading && <View className="flex-row items-center justify-center mt-28">
-            <ActivityIndicator color="black" size={60}/>
+            <ActivityIndicator color="black" size={20}/>
         </View>
       }
       {

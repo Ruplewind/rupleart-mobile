@@ -10,6 +10,10 @@ import { TouchableOpacity } from "react-native";
 import useCart, { CartProvider } from "../context/CartContext";
 import * as SplashScreen from 'expo-splash-screen';
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import {
+  SafeAreaProvider,
+  SafeAreaView,
+} from "react-native-safe-area-context";
 
 export default function RootLayout() {
 
@@ -47,6 +51,9 @@ export default function RootLayout() {
   if(!fontsLoaded && !error) return null;
 
   return (
+<GestureHandlerRootView style={{ flex: 1 }}>
+  <SafeAreaProvider>
+    <SafeAreaView style={{ flex: 1 }} edges={["top"]}>
     <CartProvider>
     <AuthProvider>
     <Stack>
@@ -147,5 +154,8 @@ export default function RootLayout() {
     <StatusBar backgroundColor="#000000" style='light' />
     </AuthProvider>
     </CartProvider>
+    </SafeAreaView>
+  </SafeAreaProvider>
+</GestureHandlerRootView>
   );
 }
