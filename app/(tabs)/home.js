@@ -21,32 +21,68 @@ export default function Home() {
   const [error, setError] = useState(false);
   const colorScheme = useColorScheme();
 
-    useEffect(()=>{
-      fetch(`${process.env.EXPO_PUBLIC_API_URL}/get_categories`)
+  // Define the priority order for categories
+  const priorityOrder = [
+    "Home/office decor",
+    "Lighting & illumination",
+    "Fashion & design",
+    "Painting"
+  ];
+
+  // Function to sort categories with priority items first
+  const sortCategories = (categoriesArray) => {
+    // Separate priority and non-priority categories
+    const priorityCategories = [];
+    const otherCategories = [];
+    
+    // First, organize categories into priority and non-priority
+    categoriesArray.forEach(cat => {
+      const trimmedCategory = cat.category.trim();
+      const priorityIndex = priorityOrder.findIndex(p => p.toLowerCase() === trimmedCategory.toLowerCase());
+      
+      if (priorityIndex !== -1) {
+        priorityCategories.push({ ...cat, priorityIndex });
+      } else {
+        otherCategories.push(cat);
+      }
+    });
+    
+    // Sort priority categories by their index in priorityOrder
+    priorityCategories.sort((a, b) => a.priorityIndex - b.priorityIndex);
+    
+    // Remove the priorityIndex property before returning
+    const sortedPriority = priorityCategories.map(({ priorityIndex, ...cat }) => cat);
+    
+    // Return priority categories first, then others
+    return [...sortedPriority, ...otherCategories];
+  };
+
+  useEffect(() => {
+    fetch(`${process.env.EXPO_PUBLIC_API_URL}/get_categories`)
       .then(res => res.json())
       .then(data => {
-          setCategories(data);
-          setLoading(false);
+        setCategories(sortCategories(data));
+        setLoading(false);
       })
-      .catch(()=>{
-          setLoading(false);
-          setError(true);
+      .catch(() => {
+        setLoading(false);
+        setError(true);
       })
-  },[])
+  }, [])
 
-  useEffect(()=>{
-      fetch(`${process.env.EXPO_PUBLIC_API_URL}/get_approved_products`)
-      .then((res)=> res.json())
-      .then((res)=>{
-          let data = res.reverse()
-          setProducts(data);
-          setLoading(false);
+  useEffect(() => {
+    fetch(`${process.env.EXPO_PUBLIC_API_URL}/get_approved_products`)
+      .then((res) => res.json())
+      .then((res) => {
+        let data = res.reverse()
+        setProducts(data);
+        setLoading(false);
       })
       .catch(err => {
-          setLoading(false);
-          setError(true)
+        setLoading(false);
+        setError(true)
       })
-  },[])
+  }, [])
 
   const [expanded, setExpanded] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -54,7 +90,7 @@ export default function Home() {
 
   return (
     <ScrollView
-    className="flex-1"
+      className="flex-1"
     >
       {
         !loading && error && <Text className="mt-10 text-center font-montserrat-light text-sm">Error Fetching Data. Relaunch app.</Text>
@@ -62,11 +98,11 @@ export default function Home() {
       {
         !error && loading && <ActivityIndicator color="black" size={20} style={{ marginTop: 28 }} />
       }
-      { !error && !loading && <>
+      {!error && !loading && <>
         {/* <LatestArtworks products={products.slice(0,10).reverse()} />     */}
 
         <Carousel />
-        
+
         <View className="p-4 flex-row items-center bg-white text-xs">
           <Text className="text-black w-1/2">Sort By Category</Text>
           <View className="flex-row justify-end w-1/2">
@@ -76,39 +112,39 @@ export default function Home() {
             placeholder="All" 
             /> */}
             <DropDownPicker
-                open={open}
-                value={selectedCategory}
-                items={[
-                    { label: "All", value: "All" },
-                    ...categories.map((item) => ({
-                        label: item.category,
-                        value: item.category
-                    }))
-                ]}
-                placeholder="Select category"
-                setOpen={setOpen}
-                setValue={setSelectedCategory}
-                //   setItems={setItems}
-                style={{
-                    borderColor:'#EEEEEE',
-                    padding:4
-                }}
-                dropDownContainerStyle={{
-                  borderColor: "#EEEEEE"
-                }}
-                zIndex={1000}
-                listMode='SCROLLVIEW'
-                scrollViewProps={{
-                  scrollEnabled:true,
-                  nestedScrollEnabled: true
-                }}
-                dropDownDirection='BOTTOM'
+              open={open}
+              value={selectedCategory}
+              items={[
+                { label: "All", value: "All" },
+                ...categories.map((item) => ({
+                  label: item.category,
+                  value: item.category
+                }))
+              ]}
+              placeholder="Select category"
+              setOpen={setOpen}
+              setValue={setSelectedCategory}
+              //   setItems={setItems}
+              style={{
+                borderColor: '#EEEEEE',
+                padding: 4
+              }}
+              dropDownContainerStyle={{
+                borderColor: "#EEEEEE"
+              }}
+              zIndex={1000}
+              listMode='SCROLLVIEW'
+              scrollViewProps={{
+                scrollEnabled: true,
+                nestedScrollEnabled: true
+              }}
+              dropDownDirection='BOTTOM'
             />
           </View>
         </View>
 
-        <Products products={products} category={selectedCategory} className=""/>
-      </> }
+        <Products products={products} category={selectedCategory} className="" />
+      </>}
       {/* <StatusBar style={colorScheme === 'dark' ? 'dark' : 'dark'} /> */}
       {/* <StatusBar backgroundColor="#" style='da' /> */}
     </ScrollView>

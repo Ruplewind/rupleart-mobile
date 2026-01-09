@@ -6,7 +6,7 @@ import useCart from '../context/CartContext';
 
 const Products = ({ products, category }) => {
     const [page, setPage] = useState(0);
-    const itemsPerPage = 10;
+    const itemsPerPage = 50;
     const scrollViewRef = useRef(null); // Reference for scrolling
 
     // Reset page number when category changes
