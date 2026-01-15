@@ -87,10 +87,15 @@ export default function Home() {
   const [expanded, setExpanded] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [open, setOpen] = useState(false);
-
+  const scrollViewRef = useRef(null);
   return (
     <ScrollView
       className="flex-1"
+      scrollViewProps={{
+        scrollEnabled: true,
+        nestedScrollEnabled: true
+      }}
+      ref={scrollViewRef}
     >
       {
         !loading && error && <Text className="mt-10 text-center font-montserrat-light text-sm">Error Fetching Data. Relaunch app.</Text>
@@ -143,7 +148,7 @@ export default function Home() {
           </View>
         </View>
 
-        <Products products={products} category={selectedCategory} className="" />
+        <Products products={products} category={selectedCategory} scrollViewRef={scrollViewRef} className="" />
       </>}
       {/* <StatusBar style={colorScheme === 'dark' ? 'dark' : 'dark'} /> */}
       {/* <StatusBar backgroundColor="#" style='da' /> */}

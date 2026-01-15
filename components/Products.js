@@ -4,10 +4,9 @@ import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import useCart from '../context/CartContext';
 
-const Products = ({ products, category }) => {
+const Products = ({ products, category, scrollViewRef }) => {
     const [page, setPage] = useState(0);
     const itemsPerPage = 50;
-    const scrollViewRef = useRef(null); // Reference for scrolling
 
     // Reset page number when category changes
     useEffect(() => {
@@ -29,11 +28,32 @@ const Products = ({ products, category }) => {
 
     const handlePageChange = (newPage) => {
         setPage(newPage);
-        scrollViewRef.current?.scrollTo({ y: 0, animated: true }); // Scroll to top
+        scrollViewRef.current.scrollTo({ x:0, y: 0, animated: true }); // Scroll to top
     };
 
     return (
-        <ScrollView ref={scrollViewRef} className="p-4 mb-56 max-h-screen bg-white">
+        <ScrollView className="p-4 mb-56 max-h-screen bg-white">
+
+            {/* <View style={styles.paginationContainerTop}>
+                {page > 0 && (
+                    <Pressable 
+                        className='border border-purple-900 p-2 rounded-lg'
+                        onPress={() => handlePageChange(page - 1)}
+                    >
+                        <Text style={styles.paginationTextOutline}>Previous Products</Text>
+                    </Pressable>
+                )}
+                
+                {page < totalPages - 1 && (
+                    <Pressable 
+                        style={styles.paginationButton} 
+                        onPress={() => handlePageChange(page + 1)}
+                    >
+                        <Text style={styles.paginationText}>Load More</Text>
+                    </Pressable>
+                )}
+            </View> */}
+
             <View style={styles.container}>
                 {displayedProducts.map((item) => (
                     <Pressable 
@@ -137,6 +157,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginTop: 10,
+    },
+    paginationContainerTop: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 10,
     },
     paginationButton: {
         backgroundColor: 'gray',
