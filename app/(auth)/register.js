@@ -15,7 +15,8 @@ const Register = () => {
     lastName: '',
     email: '',
     phoneNumber: '',
-    password: ''
+    password: '',
+    referralCode: ''
   })
 
   const [loading, setLoading] = useState(false)
@@ -39,7 +40,8 @@ const Register = () => {
         second_name: form.lastName,
         email: form.email,
         password: form.password,
-        phoneNumber: form.phoneNumber
+        phoneNumber: form.phoneNumber,
+        referralCode: form.referralCode.trim() === '' ? null : form.referralCode
       })
     })
       .then((res) => {
@@ -132,6 +134,14 @@ const Register = () => {
               handleChangeText={(e) => setForm({ ...form, password: e })}
               otherStyles="mt-4"
               secureTextEntry
+            />
+
+            <FormField
+              title="Referral Code (Optional)"
+              value={form.referralCode}
+              placeholder="ABC123"
+              handleChangeText={(e) => setForm({ ...form, referralCode: e })}
+              otherStyles="mt-4"
             />
 
             {!loading && (
