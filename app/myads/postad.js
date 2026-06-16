@@ -1,90 +1,81 @@
 import {
-  View,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-  TextInput,
-  KeyboardAvoidingView,
-  Platform,
-  Alert,
-  ActivityIndicator,
+  View, Text, TouchableOpacity, ScrollView, TextInput,
+  KeyboardAvoidingView, Platform, Alert, ActivityIndicator,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { Button, Image, StyleSheet } from 'react-native';
+import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
-import Entypo from '@expo/vector-icons/Entypo';
 import Checkbox from 'expo-checkbox';
 import { Link, router } from 'expo-router';
 import { useAuthContext } from '../../context/AuthProvider';
 import DropDownPicker from 'react-native-dropdown-picker';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
-const postad = () => {
-  const [images, setImages] = useState([]);
-  const [isChecked, setChecked] = useState(false);
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(false);
+// ── Field wrapper ─────────────────────────────────────────────────────────────
+const Field = ({ label, icon, children }) => (
+  <View className="mb-4">
+    <View className="flex-row items-center gap-1.5 mb-1.5">
+      <MaterialIcons name={icon} size={13} color="#7C3AED" />
+      <Text className="text-xs font-montserrat-light text-gray-500 uppercase tracking-wide">{label}</Text>
+    </View>
+    {children}
+  </View>
+);
+
+const inputClass = "border border-gray-200 px-3 py-3 rounded-2xl bg-white text-sm text-gray-800";
+
+// ── Main ──────────────────────────────────────────────────────────────────────
+const PostAd = () => {
+  const [images, setImages]           = useState([]);
+  const [isChecked, setChecked]       = useState(false);
+  const [categories, setCategories]   = useState([]);
+  const [loading, setLoading]         = useState(false);
+  const [open, setOpen]               = useState(false);
 
   const [productName, setProductName] = useState(null);
-  const [type, setType] = useState(null);
-  const [price, setPrice] = useState(0);
+  const [type, setType]               = useState(null);
+  const [price, setPrice]             = useState(0);
   const [description, setDescription] = useState(null);
-  const [size, setSize] = useState(null);
+  const [size, setSize]               = useState(null);
 
-  const { userId, token } = useAuthContext();
+  const { token } = useAuthContext();
 
   useEffect(() => {
     fetch(`${process.env.EXPO_PUBLIC_API_URL}/get_categories`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` },
     })
-      .then((data) => data.json())
-      .then((data) => {
-        setCategories(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      .then(r => r.json())
+      .then(setCategories)
+      .catch(console.error);
   }, []);
 
   const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      //mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    const result = await ImagePicker.launchImageLibraryAsync({
       allowsMultipleSelection: true,
       allowsEditing: false,
       quality: 1,
     });
-
     if (!result.canceled) {
-      setImages((prev) => [...prev, ...result.assets.map((asset) => asset.uri)]);
+      setImages(prev => [...prev, ...result.assets.map(a => a.uri)]);
     }
   };
 
-  const [open, setOpen] = useState(false);
+  const removeImage = (index) => {
+    setImages(prev => prev.filter((_, i) => i !== index));
+  };
 
   const handleSubmit = () => {
-    setLoading(true);
-
-    if (
-      productName == null ||
-      productName.length < 1 ||
-      price < 1 ||
-      images.length === 0 ||
-      type == null ||
-      size == null ||
-      description == null
-    ) {
-      Alert.alert('All fields must be filled');
-      setLoading(false);
+    if (!productName || price < 1 || images.length === 0 || !type || !size || !description) {
+      Alert.alert('Missing Fields', 'Please fill in all fields and upload at least one image.');
       return;
     }
-
     if (!isChecked) {
-      Alert.alert('Terms and conditions must be checked');
-      setLoading(false);
+      Alert.alert('Terms Required', 'Please accept the terms and conditions to continue.');
       return;
     }
 
+    setLoading(true);
     const formData = new FormData();
     formData.append('productName', productName);
     formData.append('type', type);
@@ -92,209 +83,230 @@ const postad = () => {
     formData.append('description', description);
     formData.append('size', size);
 
-    images.forEach((imgUri, index) => {
-      const fileType = imgUri.endsWith('.png') ? 'image/png' : 'image/jpeg';
-      const extension = imgUri.endsWith('.png') ? 'png' : 'jpeg';
+    images.forEach((uri, i) => {
+      const isPng = uri.endsWith('.png');
       formData.append('image', {
-        uri: imgUri,
-        name: `product_image_${index}.${extension}`,
-        type: fileType,
+        uri,
+        name: `product_image_${i}.${isPng ? 'png' : 'jpeg'}`,
+        type: isPng ? 'image/png' : 'image/jpeg',
       });
     });
 
     fetch(`${process.env.EXPO_PUBLIC_API_URL}/add_product`, {
       method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` },
       body: formData,
     })
-      .then((response) => {
-        if (response.ok) {
-          setLoading(false);
-          Alert.alert('Success', 'Your Ad Has Been Posted. Await Verification.', [
-            {
-              text: 'OK',
-              onPress: () => {
-                router.push({
-                  pathname: 'myads',
-                });
-              },
-            },
+      .then(res => {
+        setLoading(false);
+        if (res.ok) {
+          Alert.alert('Posted!', 'Your ad has been submitted and is awaiting verification.', [
+            { text: 'OK', onPress: () => router.push({ pathname: 'myads' }) },
           ]);
         } else {
-          response.json().then((err) => {
-            setLoading(false);
-            Alert.alert('Failed to Submit. Retry');
-          });
+          Alert.alert('Failed', 'Could not submit your ad. Please try again.');
         }
       })
-      .catch((err) => {
-        setLoading(false);
-        Alert.alert('Failed to Submit. Retry');
-      });
+      .catch(() => { setLoading(false); Alert.alert('Error', 'Something went wrong. Please retry.'); });
   };
 
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={{ flex: 1 }}
+      style={{ flex: 1, backgroundColor: '#F9FAFB' }}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
     >
       <ScrollView
-        contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}
+        contentContainerStyle={{ padding: 16, paddingBottom: 40 }}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        <Text className="my-4 mx-5 font-montserrat-light">Upload Product Images:</Text>
-
-        <TouchableOpacity onPress={pickImage}>
-          <View className="border border-dashed border-blue-500 w-11/12 h-40 mb-5 bg-white mx-auto rounded-3xl flex justify-center items-center">
-            <Entypo name="upload-to-cloud" size={32} color="blue" />
-            <Text className="text-blue-700 text-center">Select Images</Text>
+        {/* Header */}
+        <View className="items-center mb-6 mt-2">
+          <View className="w-14 h-14 rounded-full bg-purple-100 items-center justify-center mb-3">
+            <MaterialIcons name="add-box" size={26} color="#6B21A8" />
           </View>
-        </TouchableOpacity>
-
-        {images.length > 0 && (
-          <ScrollView horizontal style={{ marginHorizontal: 15 }}>
-            {images.map((img, index) => (
-              <View key={index} style={{ marginRight: 10 }}>
-                <Image
-                  source={{ uri: img }}
-                  style={{ width: 100, height: 100, borderRadius: 8 }}
-                />
-              </View>
-            ))}
-          </ScrollView>
-        )}
-
-        {images.length > 0 && <Button title="Replace Images" onPress={pickImage} />}
-
-        <Text className="my-2 mx-5 font-montserrat-light">Product Title:</Text>
-        <TextInput
-          className="border border-gray-200 p-2 py-3 mx-3 rounded-lg bg-white text-black"
-          onChangeText={setProductName}
-        />
-
-        <Text className="my-2 mx-5 mb-1 font-montserrat-light">Select Category:</Text>
-        <View className="mx-3" style={{ zIndex: 1000 }}>
-          {categories.length < 1 && (
-            <Text className="text-black bg-white my-2 border border-gray-200 px-2 py-3 rounded-lg">
-              Loading...
-            </Text>
-          )}
-          {categories.length > 0 && (
-            <View className="mx-3" style={{ zIndex: 1000, minHeight: open ? 240 : 30 }}>
-            <DropDownPicker
-              open={open}
-              value={type}
-              items={categories.map((item) => ({
-                label: `${item.category}`,
-                value: item.category,
-              }))}
-              placeholder="Select category"
-              setOpen={setOpen}
-              setValue={setType}
-              style={{
-                borderColor: '#EEEEEE',
-              }}
-              dropDownContainerStyle={{
-                borderColor: '#EEEEEE',
-              }}
-              zIndex={1000}
-              listMode="SCROLLVIEW"
-              maxHeight={200}
-              scrollViewProps={{
-                scrollEnabled: true,
-                nestedScrollEnabled: true,
-              }}
-              dropDownDirection='BOTTOM'
-            />
-            </View>
-          )}
-        </View>
-
-        <Text className="my-2 mx-5 font-montserrat-light">Description:</Text>
-        <TextInput
-          editable
-          multiline={true}
-          numberOfLines={4}
-          textAlignVertical="top"
-          scrollEnabled={false}
-          className="border border-gray-200 p-2 py-3 mx-3 rounded-lg bg-white h-18 text-black"
-          style={{ minHeight: 70 }}
-          onChangeText={setDescription}
-        />
-
-        <Text className="my-2 mx-5 font-montserrat-light">Size (small/medium/large/cm):</Text>
-        <TextInput
-          className="border border-gray-200 p-2 py-3 mx-3 rounded-lg bg-white text-black"
-          onChangeText={setSize}
-        />
-
-        <Text className="my-2 mx-5 font-montserrat-light">Price:</Text>
-        <TextInput
-          placeholder="0"
-          keyboardType="numeric"
-          className="border border-gray-200 p-2 py-3 mx-3 rounded-lg bg-white text-black"
-          onChangeText={setPrice}
-        />
-
-        <View style={styles.section}>
-          <Checkbox style={styles.checkbox} value={isChecked} onValueChange={setChecked} />
-          <Text className="text-sm">
-            I have read the terms and conditions. If not, read{' '}
-            <Link className="text-blue-400" href={'https://rupleart.com/terms'}>
-              here
-            </Link>
+          <Text className="text-gray-800 font-montserrat-semibold text-lg">Post a New Ad</Text>
+          <Text className="text-gray-400 font-montserrat-light text-xs mt-1 text-center">
+            Fill in the details below and await verification
           </Text>
         </View>
 
-        <View className="w-full flex-row justify-center gap-10 mt-5 mb-20">
-          <TouchableOpacity
-            className="border border-purple-900 px-4 py-3 rounded-lg bg-white"
-            onPress={() => {
-              router.push({
-                pathname: 'myads',
-              });
-            }}
-          >
-            <Text className="text-purple-900">Cancel</Text>
+        {/* ── Image Upload ── */}
+        <View
+          className="bg-white rounded-3xl px-4 py-5 mb-4"
+          style={{ shadowColor: '#6B21A8', shadowOpacity: 0.06, shadowRadius: 10, elevation: 2 }}
+        >
+          <View className="flex-row items-center gap-1.5 mb-3">
+            <MaterialIcons name="photo-library" size={13} color="#7C3AED" />
+            <Text className="text-xs font-montserrat-light text-gray-500 uppercase tracking-wide">
+              Product Images {images.length > 0 && `(${images.length})`}
+            </Text>
+          </View>
+
+          {/* Upload zone */}
+          <TouchableOpacity onPress={pickImage} activeOpacity={0.8}>
+            <View className="border-2 border-dashed border-purple-200 rounded-2xl h-36 items-center justify-center bg-purple-50">
+              <View className="w-12 h-12 rounded-full bg-purple-100 items-center justify-center mb-2">
+                <MaterialIcons name="cloud-upload" size={24} color="#7C3AED" />
+              </View>
+              <Text className="text-purple-700 font-montserrat-semibold text-sm">Tap to select images</Text>
+              <Text className="text-purple-400 font-montserrat-light text-xs mt-1">PNG or JPEG supported</Text>
+            </View>
           </TouchableOpacity>
-          <TouchableOpacity
-            className="bg-purple-900 py-3 px-4 rounded-lg"
-            onPress={() => {
-              handleSubmit();
-            }}
-          >
-            {loading ? (
-              <ActivityIndicator color={'white'} size={20} />
+
+          {/* Preview strip */}
+          {images.length > 0 && (
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} className="mt-3">
+              {images.map((img, i) => (
+                <View key={i} className="mr-2 relative">
+                  <Image
+                    source={{ uri: img }}
+                    style={{ width: 80, height: 80, borderRadius: 12 }}
+                    contentFit="cover"
+                  />
+                  <TouchableOpacity
+                    onPress={() => removeImage(i)}
+                    className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-500 items-center justify-center"
+                  >
+                    <AntDesign name="close" size={10} color="white" />
+                  </TouchableOpacity>
+                </View>
+              ))}
+              {/* Add more */}
+              <TouchableOpacity
+                onPress={pickImage}
+                className="w-20 h-20 rounded-xl border-2 border-dashed border-purple-200 items-center justify-center bg-purple-50"
+              >
+                <AntDesign name="plus" size={20} color="#7C3AED" />
+              </TouchableOpacity>
+            </ScrollView>
+          )}
+        </View>
+
+        {/* ── Product Details ── */}
+        <View
+          className="bg-white rounded-3xl px-4 py-5 mb-4"
+          style={{ shadowColor: '#6B21A8', shadowOpacity: 0.06, shadowRadius: 10, elevation: 2 }}
+        >
+          <Field label="Product Title" icon="label">
+            <TextInput
+              className={inputClass}
+              onChangeText={setProductName}
+              placeholder="e.g. Abstract Canvas Print"
+              placeholderTextColor="#D1D5DB"
+            />
+          </Field>
+
+          <Field label="Category" icon="category">
+            {categories.length === 0 ? (
+              <View className="border border-gray-200 px-3 py-3 rounded-2xl bg-gray-50 flex-row items-center gap-2">
+                <ActivityIndicator size={12} color="#7C3AED" />
+                <Text className="text-gray-400 text-sm">Loading categories…</Text>
+              </View>
             ) : (
-              <Text className="text-white">Submit</Text>
+              <View style={{ zIndex: 1000, minHeight: open ? 220 : 52 }}>
+                <DropDownPicker
+                  open={open}
+                  value={type}
+                  items={categories.map(c => ({ label: c.category, value: c.category }))}
+                  placeholder="Select a category"
+                  setOpen={setOpen}
+                  setValue={setType}
+                  style={{ borderColor: '#E5E7EB', borderRadius: 16 }}
+                  dropDownContainerStyle={{ borderColor: '#E5E7EB', borderRadius: 16 }}
+                  placeholderStyle={{ color: '#D1D5DB', fontSize: 14 }}
+                  labelStyle={{ fontSize: 14, color: '#1F2937' }}
+                  zIndex={1000}
+                  listMode="SCROLLVIEW"
+                  maxHeight={180}
+                  scrollViewProps={{ nestedScrollEnabled: true }}
+                  dropDownDirection="BOTTOM"
+                />
+              </View>
             )}
+          </Field>
+
+          <Field label="Description" icon="description">
+            <TextInput
+              multiline
+              numberOfLines={4}
+              textAlignVertical="top"
+              scrollEnabled={false}
+              className={inputClass}
+              style={{ minHeight: 90 }}
+              onChangeText={setDescription}
+              placeholder="Describe your artwork…"
+              placeholderTextColor="#D1D5DB"
+            />
+          </Field>
+
+          <Field label="Size (small / medium / large / cm)" icon="straighten">
+            <TextInput
+              className={inputClass}
+              onChangeText={setSize}
+              placeholder="e.g. 30x40cm"
+              placeholderTextColor="#D1D5DB"
+            />
+          </Field>
+
+          <Field label="Price (Ksh)" icon="attach-money">
+            <TextInput
+              keyboardType="numeric"
+              className={inputClass}
+              onChangeText={setPrice}
+              placeholder="0"
+              placeholderTextColor="#D1D5DB"
+            />
+          </Field>
+        </View>
+
+        {/* ── Terms ── */}
+        <TouchableOpacity
+          onPress={() => setChecked(v => !v)}
+          activeOpacity={0.8}
+          className="flex-row items-center gap-3 bg-white rounded-2xl px-4 py-4 mb-6"
+          style={{ shadowColor: '#6B21A8', shadowOpacity: 0.05, shadowRadius: 8, elevation: 2 }}
+        >
+          <Checkbox
+            value={isChecked}
+            onValueChange={setChecked}
+            color={isChecked ? '#581C87' : undefined}
+          />
+          <Text className="text-sm font-montserrat-light text-gray-600 flex-1">
+            I have read and agree to the{' '}
+            <Link className="text-purple-700 font-montserrat-semibold" href="https://rupleart.com/terms">
+              terms and conditions
+            </Link>
+          </Text>
+        </TouchableOpacity>
+
+        {/* ── Buttons ── */}
+        <View className="flex-row gap-3">
+          <TouchableOpacity
+            className="flex-1 border border-purple-200 rounded-2xl py-3.5 items-center"
+            onPress={() => router.back()}
+            activeOpacity={0.8}
+          >
+            <Text className="text-purple-700 font-montserrat-semibold text-sm">Cancel</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            className="flex-1 bg-purple-950 rounded-2xl py-3.5 items-center"
+            onPress={handleSubmit}
+            disabled={loading}
+            activeOpacity={0.88}
+          >
+            {loading
+              ? <ActivityIndicator color="white" size={18} />
+              : <Text className="text-white font-montserrat-semibold text-sm">Submit Ad</Text>
+            }
           </TouchableOpacity>
         </View>
+
       </ScrollView>
     </KeyboardAvoidingView>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginHorizontal: 16,
-    marginVertical: 32,
-  },
-  section: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  paragraph: {
-    fontSize: 15,
-  },
-  checkbox: {
-    margin: 8,
-  },
-});
-
-export default postad;
+export default PostAd;

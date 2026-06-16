@@ -66,13 +66,22 @@ export default function TabLayout() {
         }} />
 
         <Tabs.Screen 
+        name="categories" 
+        options={{
+            title: 'Categories',
+            tabBarIcon: ({ color, focused}) => (
+                <FontAwesome5 name={focused ? 'clipboard-list' : 'clipboard-list'} color={color} size={20} />
+            ),
+        }} />
+
+        {/* <Tabs.Screen 
         name="myads" 
         options={{
             title: 'My Ads',
             tabBarIcon: ({ color, focused}) => (
                 <FontAwesome5 name={focused ? 'clipboard-list' : 'clipboard-list'} color={color} size={20} />
             ),
-        }} />
+        }} /> */}
 
         <Tabs.Screen 
         name="orders" 
@@ -95,7 +104,7 @@ export default function TabLayout() {
         <Tabs.Screen 
         name="profile" 
         options={{
-            title: 'Account',
+            title: 'Account & MyAds',
             headerTitle:'My Profile',
             tabBarIcon: ({ color, focused}) => (
                 <FontAwesome name={focused ? 'user' : 'user'} color={color} size={20} />
