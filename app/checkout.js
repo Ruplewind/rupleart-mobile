@@ -8,6 +8,8 @@ import { useAuthContext } from '../context/AuthProvider';
 import { WebView } from 'react-native-webview';
 import DropDownPicker from 'react-native-dropdown-picker';
 
+const TAX_RATE = 0.015; // 1.5%
+
 const Checkout = () => {
   const { products, total } = useCart();
   const { token } = useAuthContext();
@@ -27,6 +29,10 @@ const Checkout = () => {
   const [open, setOpen] = useState(false);
 
   const myRegex = /^07\d{8}$/;
+
+  // Tax is calculated on the items total (pre-delivery)
+  const tax = total * TAX_RATE;
+  const grandTotal = total + deliveryCost + tax;
 
   useEffect(() => {
     fetch(`${process.env.EXPO_PUBLIC_API_URL}/get_locations`)
@@ -72,7 +78,7 @@ const Checkout = () => {
       .string()
       .nullable()
       .matches(myRegex, { message: 'Phone number is not valid', excludeEmptyString: true }),
-    minPrice: yup.number().min(deliveryCost + total, `Minimum price is ${deliveryCost + total}`)
+    minPrice: yup.number().min(deliveryCost + total + tax, `Minimum price is ${(deliveryCost + total + tax).toFixed(2)}`)
   });
 
   const handleSubmit = (data) => {
@@ -83,7 +89,7 @@ const Checkout = () => {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify({ ...data, products, location })
+      body: JSON.stringify({ ...data, products, location, tax, grandTotal })
     })
       .then(res => {
         if (res.ok) {
@@ -146,7 +152,7 @@ const Checkout = () => {
                 secondname: secondName,
                 email,
                 phoneNumber,
-                minPrice: deliveryCost + total
+                minPrice: deliveryCost + total + tax
               }}
               enableReinitialize
               validationSchema={checkoutSchema}
@@ -249,16 +255,21 @@ const Checkout = () => {
                   <View className="bg-white p-4 rounded-lg shadow mt-4">
                     <Text className="text-gray-700 font-bold mb-2 text-center">Price Summary</Text>
                     <View className="flex-row justify-between mb-1">
+                      <Text className="text-gray-600">Items Total:</Text>
+                      <Text className="font-bold">KES {total.toLocaleString()}</Text>
+                    </View>
+                    <View className="flex-row justify-between mb-1">
                       <Text className="text-gray-600">Delivery Cost:</Text>
                       <Text className="font-bold">KES {deliveryCost.toLocaleString()}</Text>
                     </View>
                     <View className="flex-row justify-between mb-1">
-                      <Text className="text-gray-600">Total Items Cost:</Text>
-                      <Text className="font-bold">KES {total.toLocaleString()}</Text>
+                      <Text className="text-gray-600">Tax (1.5%):</Text>
+                      <Text className="font-bold">KES {tax.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Text>
                     </View>
+                    <View className="h-px bg-gray-200 my-2" />
                     <View className="flex-row justify-between">
                       <Text className="font-bold">Total:</Text>
-                      <Text className="font-bold text-blue-900">KES {(total + deliveryCost).toLocaleString()}</Text>
+                      <Text className="font-bold text-blue-900">KES {grandTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Text>
                     </View>
                   </View>
 
