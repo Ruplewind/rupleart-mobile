@@ -31,7 +31,7 @@ const Checkout = () => {
   const myRegex = /^07\d{8}$/;
 
   // Tax is calculated on the items total (pre-delivery)
-  const tax = total * TAX_RATE;
+  const tax = (total + deliveryCost) * TAX_RATE;
   const grandTotal = total + deliveryCost + tax;
 
   useEffect(() => {
@@ -82,6 +82,7 @@ const Checkout = () => {
   });
 
   const handleSubmit = (data) => {
+    console.log(data)
     setLoading(true);
     fetch(`${process.env.EXPO_PUBLIC_API_URL}/Checkout`, {
       method: 'POST',
