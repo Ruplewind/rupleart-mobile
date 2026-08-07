@@ -92,9 +92,9 @@ const CategorySection = ({ categoryName, index, allProducts }) => {
           <Text className="text-gray-800 font-montserrat-semibold text-sm">{categoryName}</Text>
         </View>
         <View className="flex-row items-center gap-2">
-          <View className="bg-purple-200 rounded-full px-2 py-0.5">
+          {/* <View className="bg-purple-200 rounded-full px-2 py-0.5">
             <Text className="text-purple-800 text-xs">{total} item{total !== 1 ? 's' : ''}</Text>
-          </View>
+          </View> */}
           <AntDesign name={open ? 'up' : 'down'} size={13} color="#7C3AED" />
         </View>
       </Pressable>
@@ -137,7 +137,7 @@ const CategorySection = ({ categoryName, index, allProducts }) => {
                       android_ripple={{ color: '#6D28D9' }}
                     >
                       <Text className="text-white text-xs font-montserrat-semibold">
-                        Load More ({total - displayed.length} left)
+                        Load More
                       </Text>
                     </Pressable>
                   )}
@@ -197,9 +197,6 @@ const Categories = () => {
           <MaterialIcons name="grid-view" size={16} color="#6B21A8" />
         </View>
         <Text className="text-gray-800 font-montserrat-semibold text-base">Browse by Category</Text>
-        <View className="bg-purple-950 rounded-full px-2 py-0.5 ml-1">
-          <Text className="text-white text-xs">{categories.length}</Text>
-        </View>
       </View>
 
       {categories.map((item, index) => (

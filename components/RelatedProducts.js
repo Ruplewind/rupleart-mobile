@@ -92,7 +92,8 @@ const RelatedProducts = ({ category }) => {
 
     useEffect(() => {
         if (category && products.length > 0) {
-            const related = products.filter(product => product.type === category).slice(0, 6);
+            // const related = products.filter(product => product.type === category).slice(0, 6);
+            const related = products.reverse().slice(0, 6);
             setFilteredProducts(related);
             if (related.length > 0) {
                 setActiveItem(related[0]._id);

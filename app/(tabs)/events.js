@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { ActivityIndicator, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
+import { ActivityIndicator, Animated, BackHandler, Modal, Pressable, ScrollView, StatusBar as RNStatusBar, Text, TouchableOpacity, View } from 'react-native'
 import { Image } from 'expo-image';
 import Fontisto from '@expo/vector-icons/Fontisto';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
@@ -27,8 +27,65 @@ const SectionHeader = ({ title, count, upcoming }) => (
   </View>
 );
 
+// ── Event Poster (shows full image, no cropping, tap to zoom) ─────────────────
+const EventPoster = ({ event, upcoming, onPress }) => {
+  const uri = `${process.env.EXPO_PUBLIC_API_URL}/uploads/${event.poster}`;
+
+  return (
+    <Pressable onPress={() => onPress(uri)}>
+      <View className="relative" style={{ width: '100%', height: 220, backgroundColor: '#F3F4F6' }}>
+        {/* Blurred backdrop fills the frame so there's no empty letterboxing */}
+        <Image
+          source={{ uri }}
+          style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
+          contentFit="cover"
+          blurRadius={35}
+          transition={200}
+        />
+        {/* Dark scrim so the blur reads as a backdrop, not a second image */}
+        <View
+          style={{
+            position: 'absolute',
+            top: 0, left: 0, right: 0, bottom: 0,
+            backgroundColor: 'rgba(0,0,0,0.25)',
+          }}
+        />
+        {/* Full, uncropped image on top */}
+        <Image
+          source={{ uri }}
+          style={{ width: '100%', height: '100%' }}
+          contentFit="contain"
+          transition={200}
+        />
+
+        {/* Past overlay */}
+        {!upcoming && (
+          <View
+            className="absolute inset-0 bg-gray-900"
+            style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.35 }}
+          />
+        )}
+
+        {/* Status pill */}
+        <View className={`absolute top-3 right-3 flex-row items-center gap-1 px-3 py-1 rounded-full ${upcoming ? 'bg-purple-950' : 'bg-gray-700'}`}>
+          <View className={`w-1.5 h-1.5 rounded-full ${upcoming ? 'bg-green-400' : 'bg-gray-400'}`} />
+          <Text className="text-white text-xs font-montserrat-semibold">{upcoming ? 'Upcoming' : 'Past'}</Text>
+        </View>
+
+        {/* Expand hint */}
+        <View
+          className="absolute bottom-3 right-3 w-8 h-8 rounded-full items-center justify-center"
+          style={{ backgroundColor: 'rgba(0,0,0,0.45)' }}
+        >
+          <MaterialIcons name="zoom-out-map" size={16} color="white" />
+        </View>
+      </View>
+    </Pressable>
+  );
+};
+
 // ── Event Card ────────────────────────────────────────────────────────────────
-const EventCard = ({ event, upcoming }) => (
+const EventCard = ({ event, upcoming, onImagePress }) => (
   <TouchableOpacity
     activeOpacity={0.92}
     className="mb-4 rounded-3xl overflow-hidden bg-white"
@@ -40,23 +97,7 @@ const EventCard = ({ event, upcoming }) => (
       elevation: upcoming ? 4 : 2,
     }}
   >
-    {/* Poster */}
-    <View className="relative">
-      <Image
-        source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/uploads/${event.poster}` }}
-        style={{ width: '100%', height: 200 }}
-        contentFit="cover"
-      />
-      {/* Past overlay */}
-      {!upcoming && (
-        <View className="absolute inset-0 bg-gray-900 opacity-40" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
-      )}
-      {/* Status pill */}
-      <View className={`absolute top-3 right-3 flex-row items-center gap-1 px-3 py-1 rounded-full ${upcoming ? 'bg-purple-950' : 'bg-gray-700'}`}>
-        <View className={`w-1.5 h-1.5 rounded-full ${upcoming ? 'bg-green-400' : 'bg-gray-400'}`} />
-        <Text className="text-white text-xs font-montserrat-semibold">{upcoming ? 'Upcoming' : 'Past'}</Text>
-      </View>
-    </View>
+    <EventPoster event={event} upcoming={upcoming} onPress={onImagePress} />
 
     {/* Content */}
     <View className="p-4">
@@ -113,12 +154,90 @@ const EmptyState = ({ upcoming }) => (
   </View>
 );
 
+// ── Full-screen Image Lightbox ─────────────────────────────────────────────────
+const ImageLightbox = ({ uri, onClose }) => {
+  const opacity = useRef(new Animated.Value(0)).current;
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    if (uri) {
+      setMounted(true);
+      Animated.timing(opacity, { toValue: 1, duration: 180, useNativeDriver: true }).start();
+    } else if (mounted) {
+      Animated.timing(opacity, { toValue: 0, duration: 150, useNativeDriver: true }).start(() => {
+        setMounted(false);
+      });
+    }
+  }, [uri]);
+
+  // Close on Android hardware back button while open
+  useEffect(() => {
+    if (!mounted) return;
+    const sub = BackHandler.addEventListener('hardwareBackPress', () => {
+      onClose();
+      return true;
+    });
+    return () => sub.remove();
+  }, [mounted]);
+
+  if (!mounted) return null;
+
+  return (
+    <Animated.View
+      pointerEvents={uri ? 'auto' : 'none'}
+      style={{
+        position: 'absolute',
+        top: 0, left: 0, right: 0, bottom: 0,
+        backgroundColor: 'rgba(0,0,0,0.92)',
+        alignItems: 'center',
+        justifyContent: 'center',
+        opacity,
+        zIndex: 999,
+        elevation: 999,
+      }}
+    >
+      <Pressable
+        onPress={onClose}
+        style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}
+      >
+        <TouchableOpacity
+          onPress={onClose}
+          style={{
+            position: 'absolute',
+            top: (RNStatusBar.currentHeight || 40) + 12,
+            right: 20,
+            zIndex: 10,
+            width: 40,
+            height: 40,
+            borderRadius: 20,
+            backgroundColor: 'rgba(255,255,255,0.15)',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <MaterialIcons name="close" size={22} color="white" />
+        </TouchableOpacity>
+
+        {uri && (
+          <Image
+            source={{ uri }}
+            style={{ width: '100%', height: '80%' }}
+            contentFit="contain"
+            transition={150}
+          />
+        )}
+      </Pressable>
+    </Animated.View>
+  );
+};
+
 // ── Main ──────────────────────────────────────────────────────────────────────
 export default function Events() {
   const [upcomingEvents, setUpcomingEvents] = useState([]);
   const [pastEvents, setPastEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [lightboxUri, setLightboxUri] = useState(null);
 
   useEffect(() => {
     fetch(`${process.env.EXPO_PUBLIC_API_URL}/events`)
@@ -152,33 +271,41 @@ export default function Events() {
   }
 
   return (
-    <ScrollView className="flex-1 bg-gray-50" contentContainerStyle={{ padding: 16, paddingBottom: 60 }}>
+    <View className="flex-1" style={{ position: 'relative' }}>
+      <ScrollView className="flex-1 bg-gray-50" contentContainerStyle={{ padding: 16, paddingBottom: 60 }}>
 
-      {/* Page header */}
-      <View className="bg-purple-950 rounded-3xl px-5 py-6 mb-2 items-center">
-        <View className="w-12 h-12 rounded-full bg-purple-800 items-center justify-center mb-3">
-          <MaterialIcons name="event" size={24} color="white" />
+        {/* Page header */}
+        <View className="bg-purple-950 rounded-3xl px-5 py-6 mb-2 items-center">
+          <View className="w-12 h-12 rounded-full bg-purple-800 items-center justify-center mb-3">
+            <MaterialIcons name="event" size={24} color="white" />
+          </View>
+          <Text className="text-white font-montserrat-black text-xl tracking-wide">Events</Text>
+          <Text className="text-purple-300 font-montserrat-light text-xs mt-1">
+            {upcomingEvents.length} upcoming · {pastEvents.length} past
+          </Text>
         </View>
-        <Text className="text-white font-montserrat-black text-xl tracking-wide">Events</Text>
-        <Text className="text-purple-300 font-montserrat-light text-xs mt-1">
-          {upcomingEvents.length} upcoming · {pastEvents.length} past
-        </Text>
-      </View>
 
-      {/* Upcoming */}
-      <SectionHeader title="Upcoming" count={upcomingEvents.length} upcoming={true} />
-      {upcomingEvents.length > 0
-        ? upcomingEvents.map((event, i) => <EventCard key={i} event={event} upcoming={true} />)
-        : <EmptyState upcoming={true} />
-      }
+        {/* Upcoming */}
+        <SectionHeader title="Upcoming" count={upcomingEvents.length} upcoming={true} />
+        {upcomingEvents.length > 0
+          ? upcomingEvents.map((event, i) => (
+              <EventCard key={i} event={event} upcoming={true} onImagePress={setLightboxUri} />
+            ))
+          : <EmptyState upcoming={true} />
+        }
 
-      {/* Past */}
-      <SectionHeader title="Past Events" count={pastEvents.length} upcoming={false} />
-      {pastEvents.length > 0
-        ? pastEvents.map((event, i) => <EventCard key={i} event={event} upcoming={false} />)
-        : <EmptyState upcoming={false} />
-      }
+        {/* Past */}
+        <SectionHeader title="Past Events" count={pastEvents.length} upcoming={false} />
+        {pastEvents.length > 0
+          ? pastEvents.map((event, i) => (
+              <EventCard key={i} event={event} upcoming={false} onImagePress={setLightboxUri} />
+            ))
+          : <EmptyState upcoming={false} />
+        }
 
-    </ScrollView>
+      </ScrollView>
+
+      <ImageLightbox uri={lightboxUri} onClose={() => setLightboxUri(null)} />
+    </View>
   );
 }

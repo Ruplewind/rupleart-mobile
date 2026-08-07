@@ -2,7 +2,7 @@
   "expo": {
     "name": "RupleArt",
     "slug": "rupleart",
-    "version": "19.0.0",
+    "version": "21.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/newsplash.png",
     "resizeMode": "cover",
@@ -14,7 +14,7 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "buildNumber": "18",
+      "buildNumber": "22",
       "supportsTablet": true,
       "package": "com.rupleartapp.app",
       "bundleIdentifier": "com.rupleartapp.app",
@@ -23,7 +23,7 @@
       }
     },
     "android": {
-      "versionCode": 19,
+      "versionCode": 20,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"

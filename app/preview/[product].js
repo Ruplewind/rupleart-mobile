@@ -169,8 +169,8 @@ const Preview = () => {
         </Text>
 
         {/* Price Banner */}
-        <View className="bg-purple-950 rounded-2xl px-5 py-3 flex-row justify-between items-center mb-5">
-          <Text className="text-purple-300 text-xs font-montserrat-light">Price</Text>
+        <View className="bg-black rounded-2xl px-5 py-3 flex-row justify-between items-center mb-5">
+          <Text className="text-white text-xs font-montserrat-light">Price</Text>
           <Text className="text-white text-2xl font-montserrat-black">
             Ksh {item.price.toLocaleString()}
           </Text>

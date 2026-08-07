@@ -6,7 +6,7 @@ import useCart from '../context/CartContext';
 
 const Products = ({ products, category, scrollViewRef }) => {
     const [page, setPage] = useState(0);
-    const itemsPerPage = 50;
+    const itemsPerPage = 25;
 
     // Reset page number when category changes
     useEffect(() => {

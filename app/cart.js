@@ -167,7 +167,7 @@ const Cart = () => {
               </Text>
               <Text className="text-gray-800 font-montserrat-semibold text-base">Order Total</Text>
             </View>
-            <Text className="text-purple-950 font-montserrat-black text-2xl">
+            <Text className="text-black font-montserrat-black text-2xl">
               Ksh {total.toLocaleString()}
             </Text>
           </View>
