@@ -70,7 +70,7 @@ const ColorPicker = ({ colors, selected, onSelect }) => {
   return (
     <View className="mb-5">
       <View className="flex-row items-center justify-between mb-2">
-        <Text className="text-gray-400 text-xs font-montserrat-light uppercase tracking-wide">Color</Text>
+        <Text className="text-gray-700 text-sm font-montserrat-semibold uppercase tracking-wide">Color</Text>
         <Text className="text-gray-700 text-xs font-montserrat-semibold">{selected}</Text>
       </View>
       <View className="flex-row flex-wrap gap-3">
@@ -86,8 +86,8 @@ const ColorPicker = ({ colors, selected, onSelect }) => {
               activeOpacity={0.8}
               className="items-center justify-center"
               style={{
-                width: 40,
-                height: 40,
+                width: 20,
+                height: 20,
                 borderRadius: 20,
                 backgroundColor: swatch,
                 borderWidth: isActive ? 2 : isLight ? 1 : 0,
@@ -97,7 +97,7 @@ const ColorPicker = ({ colors, selected, onSelect }) => {
               {isActive && (
                 <AntDesign
                   name="check"
-                  size={16}
+                  size={11}
                   color={isLight ? '#111827' : '#FFFFFF'}
                 />
               )}
@@ -229,9 +229,9 @@ const Preview = () => {
         </Text>
 
         {/* Price Banner */}
-        <View className="bg-black rounded-2xl px-5 py-3 flex-row justify-between items-center mb-5">
-          <Text className="text-white text-xs font-montserrat-light">Price</Text>
-          <Text className="text-white text-2xl font-montserrat-black">
+        <View className="bg-gray-100 rounded-2xl px-5 py-3 flex-row justify-between items-center mb-5">
+          <Text className="text-black text-xs font-montserrat-semibold">Price</Text>
+          <Text className="text-black text-2xl font-montserrat-black">
             Ksh {item.price.toLocaleString()}
           </Text>
         </View>
@@ -250,7 +250,7 @@ const Preview = () => {
         />
 
         {/* Description */}
-        <Text className="text-gray-400 text-xs font-montserrat-light uppercase tracking-wide mb-2">Description</Text>
+        <Text className="text-gray-700 text-sm font-montserrat-semibold uppercase tracking-wide mb-2">Description</Text>
         <Text className="text-gray-700 text-sm leading-6 font-montserrat-regular mb-6">
           {item.description}
         </Text>
@@ -304,7 +304,7 @@ const Preview = () => {
           <View className="flex-1 h-px bg-gray-100" />
         </View>
         <View className="px-5">
-          <RelatedProducts category={item.type} />
+          <RelatedProducts currentItemId={item._id} category={item.type} />
         </View>
       </View>
 

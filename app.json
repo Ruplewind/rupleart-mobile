@@ -2,7 +2,7 @@
   "expo": {
     "name": "RupleArt",
     "slug": "rupleart",
-    "version": "21.0.0",
+    "version": "23.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/newsplash.png",
     "resizeMode": "cover",
@@ -23,7 +23,7 @@
       }
     },
     "android": {
-      "versionCode": 20,
+      "versionCode": 23,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"

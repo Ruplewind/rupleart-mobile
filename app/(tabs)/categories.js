@@ -108,9 +108,9 @@ const CategorySection = ({ categoryName, index, allProducts }) => {
             </View>
           ) : (
             <>
-              <Text className="text-gray-400 text-xs font-montserrat-light mb-3">
+              {/* <Text className="text-gray-400 text-xs font-montserrat-light mb-3">
                 Showing {displayed.length} of {total}
-              </Text>
+              </Text> */}
 
               <View className="flex-row flex-wrap justify-between">
                 {displayed.map(item => (

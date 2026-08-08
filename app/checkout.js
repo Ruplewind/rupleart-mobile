@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, FlatList, Alert, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, FlatList, Alert, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import * as yup from 'yup';
 import { Formik } from 'formik';
 import { router } from 'expo-router';
@@ -139,9 +139,13 @@ const Checkout = () => {
   };
 
   return (
-    <ScrollView
-      //nestedScrollEnabled={true}
-      className="mt-1 mb-10 p-4 bg-gray-100"
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+    >
+      <ScrollView
+        className="mt-1 mb-10 p-4 bg-gray-100"
+        keyboardShouldPersistTaps="handled"
       >
         <View>
           {showIframe ? (
@@ -268,6 +272,16 @@ const Checkout = () => {
                           nestedScrollEnabled: true
                         }}
                         dropDownDirection='BOTTOM'
+                        searchable={true}
+                        searchPlaceholder="Search delivery location..."
+                        searchContainerStyle={{
+                          borderBottomColor: '#EEEEEE',
+                        }}
+                        searchTextInputStyle={{
+                          borderColor: '#D1D5DB',
+                          backgroundColor: '#FFFFFF',
+                          color: '#111827',
+                        }}
                       />
                       </View>
                     </View>
@@ -308,6 +322,7 @@ const Checkout = () => {
           )}
         </View>
     </ScrollView>
+</KeyboardAvoidingView>
   );
 };
 

@@ -33,7 +33,7 @@ export default function Home() {
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [loadingMore, setLoadingMore] = useState(false);
   const colorScheme = useColorScheme();
-  const isDark = colorScheme === "dark";
+  const isDark = false;// colorScheme === "dark";
 
   const priorityOrder = [
     "Home/office decor",
