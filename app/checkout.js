@@ -82,7 +82,6 @@ const Checkout = () => {
   });
 
   const handleSubmit = (data) => {
-    console.log(data)
     setLoading(true);
     fetch(`${process.env.EXPO_PUBLIC_API_URL}/Checkout`, {
       method: 'POST',
