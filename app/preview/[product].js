@@ -17,6 +17,13 @@ import RelatedProducts from '../../components/RelatedProducts';
 
 const { width } = Dimensions.get('window');
 
+const COLOR_SWATCHES = {
+  Black: '#000000', White: '#FFFFFF', Grey: '#808080', Red: '#DC2626',
+  Orange: '#EA580C', Yellow: '#EAB308', Green: '#16A34A', Blue: '#2563EB',
+  Navy: '#1E3A8A', Purple: '#9333EA', Pink: '#EC4899', Brown: '#78350F',
+  Beige: '#D8C3A5', Gold: '#D4AF37', Silver: '#C0C0C0'
+};
+
 // ── Dot Indicators ────────────────────────────────────────────────────────────
 const Dots = ({ total, active }) => (
   <View className="flex-row justify-center items-center gap-1.5 mt-3">
@@ -56,6 +63,52 @@ const Chip = ({ label, value, icon }) => (
   </View>
 );
 
+// ── Color Picker ──────────────────────────────────────────────────────────────
+const ColorPicker = ({ colors, selected, onSelect }) => {
+  if (!colors || colors.length === 0) return null;
+
+  return (
+    <View className="mb-5">
+      <View className="flex-row items-center justify-between mb-2">
+        <Text className="text-gray-400 text-xs font-montserrat-light uppercase tracking-wide">Color</Text>
+        <Text className="text-gray-700 text-xs font-montserrat-semibold">{selected}</Text>
+      </View>
+      <View className="flex-row flex-wrap gap-3">
+        {colors.map(color => {
+          const isActive = color === selected;
+          const swatch = COLOR_SWATCHES[color] || '#CCCCCC';
+          const isLight = ['White', 'Beige', 'Silver', 'Yellow'].includes(color);
+
+          return (
+            <TouchableOpacity
+              key={color}
+              onPress={() => onSelect(color)}
+              activeOpacity={0.8}
+              className="items-center justify-center"
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: 20,
+                backgroundColor: swatch,
+                borderWidth: isActive ? 2 : isLight ? 1 : 0,
+                borderColor: isActive ? '#581C87' : '#E5E7EB',
+              }}
+            >
+              {isActive && (
+                <AntDesign
+                  name="check"
+                  size={16}
+                  color={isLight ? '#111827' : '#FFFFFF'}
+                />
+              )}
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+    </View>
+  );
+};
+
 // ── Main ──────────────────────────────────────────────────────────────────────
 const Preview = () => {
   const { product } = useLocalSearchParams();
@@ -63,6 +116,9 @@ const Preview = () => {
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
   const [activeIndex, setActiveIndex] = useState(0);
+  const [selectedColor, setSelectedColor] = useState(
+    item.colors && item.colors.length > 0 ? item.colors[0] : null
+  );
   const scrollRef = useRef(null);
 
   const increaseQuantity = () => setQuantity(q => q + 1);
@@ -87,6 +143,10 @@ const Preview = () => {
 
   const scrollTo = index => {
     scrollRef.current?.scrollTo({ x: index * width, animated: true });
+  };
+
+  const handleAddToCart = () => {
+    addToCart({ ...item, quantity, color: selectedColor });
   };
 
   return (
@@ -182,6 +242,13 @@ const Preview = () => {
           <Chip label="Category" value={item.type} icon="category" />
         </View>
 
+        {/* Color Picker */}
+        <ColorPicker
+          colors={item.colors}
+          selected={selectedColor}
+          onSelect={setSelectedColor}
+        />
+
         {/* Description */}
         <Text className="text-gray-400 text-xs font-montserrat-light uppercase tracking-wide mb-2">Description</Text>
         <Text className="text-gray-700 text-sm leading-6 font-montserrat-regular mb-6">
@@ -218,7 +285,7 @@ const Preview = () => {
         <TouchableOpacity
           className="bg-purple-950 py-4 rounded-2xl flex-row items-center justify-center gap-2 shadow-sm"
           activeOpacity={0.88}
-          onPress={() => addToCart({ ...item, quantity })}
+          onPress={handleAddToCart}
         >
           <MaterialIcons name="shopping-cart" size={18} color="white" />
           <Text className="text-white text-base font-montserrat-semibold">

@@ -10,6 +10,13 @@ import DropDownPicker from 'react-native-dropdown-picker';
 
 const TAX_RATE = 0.015; // 1.5%
 
+const COLOR_SWATCHES = {
+  Black: '#000000', White: '#FFFFFF', Grey: '#808080', Red: '#DC2626',
+  Orange: '#EA580C', Yellow: '#EAB308', Green: '#16A34A', Blue: '#2563EB',
+  Navy: '#1E3A8A', Purple: '#9333EA', Pink: '#EC4899', Brown: '#78350F',
+  Beige: '#D8C3A5', Gold: '#D4AF37', Silver: '#C0C0C0'
+};
+
 const Checkout = () => {
   const { products, total } = useCart();
   const { token } = useAuthContext();
@@ -160,11 +167,6 @@ const Checkout = () => {
             >
               {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
                 <View className="w-full">
-                  {/* Header */}
-                  {/* <View className="bg-blue-900 p-4 rounded-lg mb-4">
-                    <Text className="text-white text-lg font-bold text-center">Checkout</Text>
-                  </View> */}
-
                   {/* Account Info */}
                   <Text className="font-bold mb-3 text-center text-lg text-gray-700">Account Information</Text>
 
@@ -215,8 +217,28 @@ const Checkout = () => {
                   <View className="bg-white rounded-lg shadow p-4 mb-4 mt-4">
                     <Text className="font-bold mb-3 text-center text-gray-700">Order Summary</Text>
                     {products.map(product => (
-                      <View key={product._id} className="flex-row justify-between mb-2">
-                        <Text className="w-1/2 text-gray-600 text-sm">{product.productName} #{product.productId}</Text>
+                      <View
+                        key={product.cartItemId ?? `${product._id}-${product.color ?? 'default'}`}
+                        className="flex-row justify-between items-center mb-2"
+                      >
+                        <View className="w-1/2 flex-row items-center gap-1.5 flex-wrap">
+                          <Text className="text-gray-600 text-sm">
+                            {product.productName} #{product.productId}
+                          </Text>
+                          {product.color && (
+                            <View className="flex-row items-center gap-1">
+                              <View
+                                style={{
+                                  width: 9, height: 9, borderRadius: 4.5,
+                                  backgroundColor: COLOR_SWATCHES[product.color] || '#CCCCCC',
+                                  borderWidth: product.color === 'White' ? 1 : 0,
+                                  borderColor: '#E5E7EB',
+                                }}
+                              />
+                              <Text className="text-gray-500 text-xs">{product.color}</Text>
+                            </View>
+                          )}
+                        </View>
                         <Text className="w-1/4 text-gray-600 text-sm">X {product.quantity}</Text>
                         <Text className="w-1/4 text-gray-800 font-bold text-sm">KES {(product.quantity * product.price).toLocaleString()}</Text>
                       </View>

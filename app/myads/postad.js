@@ -12,6 +12,20 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
+const AVAILABLE_COLORS = [
+  'Black', 'White', 'Grey', 'Red', 'Orange', 'Yellow',
+  'Green', 'Blue', 'Navy', 'Purple', 'Pink', 'Brown', 'Beige', 'Gold', 'Silver'
+];
+
+const COLOR_SWATCHES = {
+  Black: '#000000', White: '#FFFFFF', Grey: '#808080', Red: '#DC2626',
+  Orange: '#EA580C', Yellow: '#EAB308', Green: '#16A34A', Blue: '#2563EB',
+  Navy: '#1E3A8A', Purple: '#9333EA', Pink: '#EC4899', Brown: '#78350F',
+  Beige: '#D8C3A5', Gold: '#D4AF37', Silver: '#C0C0C0'
+};
+
+const LIGHT_COLORS = ['White', 'Beige', 'Silver', 'Yellow'];
+
 // ── Field wrapper ─────────────────────────────────────────────────────────────
 const Field = ({ label, icon, children }) => (
   <View className="mb-4">
@@ -20,6 +34,51 @@ const Field = ({ label, icon, children }) => (
       <Text className="text-xs font-montserrat-light text-gray-500 uppercase tracking-wide">{label}</Text>
     </View>
     {children}
+  </View>
+);
+
+// ── Color multi-select ────────────────────────────────────────────────────────
+const ColorSelect = ({ selected, onToggle }) => (
+  <View className="flex-row flex-wrap gap-2.5">
+    {AVAILABLE_COLORS.map(color => {
+      const isActive = selected.includes(color);
+      const swatch = COLOR_SWATCHES[color];
+      const isLight = LIGHT_COLORS.includes(color);
+
+      return (
+        <TouchableOpacity
+          key={color}
+          onPress={() => onToggle(color)}
+          activeOpacity={0.8}
+          className="flex-row items-center gap-1.5 pl-1.5 pr-3 py-1.5 rounded-full"
+          style={{
+            backgroundColor: isActive ? '#EDE9FE' : '#F9FAFB',
+            borderWidth: 1,
+            borderColor: isActive ? '#7C3AED' : '#E5E7EB',
+          }}
+        >
+          <View
+            className="items-center justify-center"
+            style={{
+              width: 20, height: 20, borderRadius: 10,
+              backgroundColor: swatch,
+              borderWidth: isLight ? 1 : 0,
+              borderColor: '#D1D5DB',
+            }}
+          >
+            {isActive && (
+              <AntDesign name="check" size={10} color={isLight ? '#111827' : '#FFFFFF'} />
+            )}
+          </View>
+          <Text
+            className="text-xs font-montserrat-semibold"
+            style={{ color: isActive ? '#581C87' : '#6B7280' }}
+          >
+            {color}
+          </Text>
+        </TouchableOpacity>
+      );
+    })}
   </View>
 );
 
@@ -38,6 +97,7 @@ const PostAd = () => {
   const [price, setPrice]             = useState(0);
   const [description, setDescription] = useState(null);
   const [size, setSize]               = useState(null);
+  const [colors, setColors]           = useState([]);
 
   const { token } = useAuthContext();
 
@@ -65,9 +125,19 @@ const PostAd = () => {
     setImages(prev => prev.filter((_, i) => i !== index));
   };
 
+  const toggleColor = (color) => {
+    setColors(prev =>
+      prev.includes(color) ? prev.filter(c => c !== color) : [...prev, color]
+    );
+  };
+
   const handleSubmit = () => {
     if (!productName || price < 1 || images.length === 0 || !type || !size || !description) {
       Alert.alert('Missing Fields', 'Please fill in all fields and upload at least one image.');
+      return;
+    }
+    if (colors.length === 0) {
+      Alert.alert('Colors Required', 'Please select at least one available color.');
       return;
     }
     if (!isChecked) {
@@ -82,6 +152,7 @@ const PostAd = () => {
     formData.append('price', price);
     formData.append('description', description);
     formData.append('size', size);
+    colors.forEach(color => formData.append('colors', color));
 
     images.forEach((uri, i) => {
       const isPng = uri.endsWith('.png');
@@ -101,7 +172,7 @@ const PostAd = () => {
         setLoading(false);
         if (res.ok) {
           Alert.alert('Posted!', 'Your ad has been submitted and is awaiting verification.', [
-            { text: 'OK', onPress: () => router.push({ pathname: 'myads' }) },
+            { text: 'OK', onPress: () => router.push({ pathname: 'profile' }) },
           ]);
         } else {
           Alert.alert('Failed', 'Could not submit your ad. Please try again.');
@@ -258,6 +329,10 @@ const PostAd = () => {
               placeholder="0"
               placeholderTextColor="#D1D5DB"
             />
+          </Field>
+
+          <Field label={`Available Colors ${colors.length > 0 ? `(${colors.length})` : ''}`} icon="palette">
+            <ColorSelect selected={colors} onToggle={toggleColor} />
           </Field>
         </View>
 

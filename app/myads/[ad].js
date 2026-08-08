@@ -8,6 +8,15 @@ import { useAuthContext } from '../../context/AuthProvider';
 
 const { width } = Dimensions.get('window');
 
+const COLOR_SWATCHES = {
+  Black: '#000000', White: '#FFFFFF', Grey: '#808080', Red: '#DC2626',
+  Orange: '#EA580C', Yellow: '#EAB308', Green: '#16A34A', Blue: '#2563EB',
+  Navy: '#1E3A8A', Purple: '#9333EA', Pink: '#EC4899', Brown: '#78350F',
+  Beige: '#D8C3A5', Gold: '#D4AF37', Silver: '#C0C0C0'
+};
+
+const LIGHT_COLORS = ['White', 'Beige', 'Silver', 'Yellow'];
+
 // ── Dots ──────────────────────────────────────────────────────────────────────
 const Dots = ({ total, active }) => (
   <View className="flex-row justify-center items-center gap-1.5 mt-3">
@@ -61,6 +70,45 @@ const InfoRow = ({ icon, label, value }) => (
   </View>
 );
 
+// ── Colors Row ────────────────────────────────────────────────────────────────
+const ColorsRow = ({ colors }) => {
+  if (!colors || colors.length === 0) return null;
+
+  return (
+    <View className="flex-row items-start gap-3 py-3 border-b border-gray-50">
+      <View className="w-7 h-7 rounded-full bg-purple-50 items-center justify-center mt-0.5">
+        <MaterialIcons name="palette" size={14} color="#7C3AED" />
+      </View>
+      <View className="flex-1">
+        <Text className="text-gray-400 text-xs font-montserrat-light uppercase tracking-wide mb-2">
+          Available Colors ({colors.length})
+        </Text>
+        <View className="flex-row flex-wrap gap-2">
+          {colors.map(color => {
+            const isLight = LIGHT_COLORS.includes(color);
+            return (
+              <View
+                key={color}
+                className="flex-row items-center gap-1.5 pl-1 pr-2.5 py-1 rounded-full bg-gray-50"
+              >
+                <View
+                  style={{
+                    width: 14, height: 14, borderRadius: 7,
+                    backgroundColor: COLOR_SWATCHES[color] || '#CCCCCC',
+                    borderWidth: isLight ? 1 : 0,
+                    borderColor: '#D1D5DB',
+                  }}
+                />
+                <Text className="text-gray-700 text-xs font-montserrat-regular">{color}</Text>
+              </View>
+            );
+          })}
+        </View>
+      </View>
+    </View>
+  );
+};
+
 // ── Main ──────────────────────────────────────────────────────────────────────
 const Ad = () => {
   const { product } = useLocalSearchParams();
@@ -84,7 +132,7 @@ const Ad = () => {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(res => {
-        if (res.ok) router.replace('/myads');
+        if (res.ok) router.replace('/profile');
         else Alert.alert('Error', 'Failed to delete listing.');
       })
       .catch(() => Alert.alert('Error', 'Something went wrong.'));
@@ -164,6 +212,7 @@ const Ad = () => {
 
           {/* Info rows */}
           <InfoRow icon="straighten"   label="Size"        value={item.size} />
+          <ColorsRow colors={item.colors} />
           <InfoRow icon="description"  label="Description" value={item.description} />
 
           {/* Status */}

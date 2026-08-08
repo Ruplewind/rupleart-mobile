@@ -12,6 +12,20 @@ import { useAuthContext } from '../../../context/AuthProvider';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
+const AVAILABLE_COLORS = [
+  'Black', 'White', 'Grey', 'Red', 'Orange', 'Yellow',
+  'Green', 'Blue', 'Navy', 'Purple', 'Pink', 'Brown', 'Beige', 'Gold', 'Silver'
+];
+
+const COLOR_SWATCHES = {
+  Black: '#000000', White: '#FFFFFF', Grey: '#808080', Red: '#DC2626',
+  Orange: '#EA580C', Yellow: '#EAB308', Green: '#16A34A', Blue: '#2563EB',
+  Navy: '#1E3A8A', Purple: '#9333EA', Pink: '#EC4899', Brown: '#78350F',
+  Beige: '#D8C3A5', Gold: '#D4AF37', Silver: '#C0C0C0'
+};
+
+const LIGHT_COLORS = ['White', 'Beige', 'Silver', 'Yellow'];
+
 // ── Field wrapper ─────────────────────────────────────────────────────────────
 const Field = ({ label, icon, children, hint }) => (
   <View className="mb-4">
@@ -21,6 +35,51 @@ const Field = ({ label, icon, children, hint }) => (
       {hint && <Text className="text-xs font-montserrat-semibold text-purple-700 ml-1">{hint}</Text>}
     </View>
     {children}
+  </View>
+);
+
+// ── Color multi-select ────────────────────────────────────────────────────────
+const ColorSelect = ({ selected, onToggle }) => (
+  <View className="flex-row flex-wrap gap-2.5">
+    {AVAILABLE_COLORS.map(color => {
+      const isActive = selected.includes(color);
+      const swatch = COLOR_SWATCHES[color];
+      const isLight = LIGHT_COLORS.includes(color);
+
+      return (
+        <TouchableOpacity
+          key={color}
+          onPress={() => onToggle(color)}
+          activeOpacity={0.8}
+          className="flex-row items-center gap-1.5 pl-1.5 pr-3 py-1.5 rounded-full"
+          style={{
+            backgroundColor: isActive ? '#EDE9FE' : '#F9FAFB',
+            borderWidth: 1,
+            borderColor: isActive ? '#7C3AED' : '#E5E7EB',
+          }}
+        >
+          <View
+            className="items-center justify-center"
+            style={{
+              width: 20, height: 20, borderRadius: 10,
+              backgroundColor: swatch,
+              borderWidth: isLight ? 1 : 0,
+              borderColor: '#D1D5DB',
+            }}
+          >
+            {isActive && (
+              <AntDesign name="check" size={10} color={isLight ? '#111827' : '#FFFFFF'} />
+            )}
+          </View>
+          <Text
+            className="text-xs font-montserrat-semibold"
+            style={{ color: isActive ? '#581C87' : '#6B7280' }}
+          >
+            {color}
+          </Text>
+        </TouchableOpacity>
+      );
+    })}
   </View>
 );
 
@@ -56,6 +115,7 @@ const UpdateAd = () => {
   const [price, setPrice]                   = useState(data.price.toString());
   const [description, setDescription]       = useState(data.description);
   const [size, setSize]                     = useState(data.size);
+  const [colors, setColors]                 = useState(data.colors || []);
   const [categories, setCategories]         = useState([]);
   const [images, setImages]                 = useState([]);
   const [existingImages, setExistingImages] = useState(data.image || []);
@@ -82,11 +142,21 @@ const UpdateAd = () => {
     }
   };
 
+  const toggleColor = (color) => {
+    setColors(prev =>
+      prev.includes(color) ? prev.filter(c => c !== color) : [...prev, color]
+    );
+  };
+
   const totalImages = existingImages.length + images.length;
 
   const handleSubmit = () => {
     if (!productName?.trim() || price < 1 || !type || !size || !description?.trim()) {
       Alert.alert('Missing Fields', 'Please fill in all fields.');
+      return;
+    }
+    if (colors.length === 0) {
+      Alert.alert('Colors Required', 'Please select at least one available color.');
       return;
     }
     if (!isChecked) {
@@ -101,6 +171,7 @@ const UpdateAd = () => {
     formData.append('price', price);
     formData.append('description', description);
     formData.append('size', size);
+    colors.forEach(color => formData.append('colors', color));
 
     existingImages.forEach(img => formData.append('image', img));
     images.forEach((uri, i) => {
@@ -121,7 +192,7 @@ const UpdateAd = () => {
         setLoading(false);
         if (res.ok) {
           Alert.alert('Updated!', 'Your ad has been updated and is awaiting re-verification.', [
-            { text: 'OK', onPress: () => router.push('myads') },
+            { text: 'OK', onPress: () => router.push('profile') },
           ]);
         } else {
           Alert.alert('Failed', 'Could not update your ad. Please try again.');
@@ -280,6 +351,10 @@ const UpdateAd = () => {
               onChangeText={setPrice}
               placeholderTextColor="#D1D5DB"
             />
+          </Field>
+
+          <Field label={`Available Colors ${colors.length > 0 ? `(${colors.length})` : ''}`} icon="palette">
+            <ColorSelect selected={colors} onToggle={toggleColor} />
           </Field>
         </View>
 

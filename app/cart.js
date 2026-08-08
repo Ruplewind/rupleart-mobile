@@ -8,6 +8,13 @@ import { useAuthContext } from '../context/AuthProvider';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
+const COLOR_SWATCHES = {
+  Black: '#000000', White: '#FFFFFF', Grey: '#808080', Red: '#DC2626',
+  Orange: '#EA580C', Yellow: '#EAB308', Green: '#16A34A', Blue: '#2563EB',
+  Navy: '#1E3A8A', Purple: '#9333EA', Pink: '#EC4899', Brown: '#78350F',
+  Beige: '#D8C3A5', Gold: '#D4AF37', Silver: '#C0C0C0'
+};
+
 const CartItem = ({ item, index, onRemove, onAdd, onMinus }) => {
   const rowBg = index % 2 === 0 ? '#F5F3FF' : '#EDE9FE'; // violet-50 / violet-100 alternating
 
@@ -32,15 +39,32 @@ const CartItem = ({ item, index, onRemove, onAdd, onMinus }) => {
           <Text className="text-gray-800 font-montserrat-semibold text-sm leading-5 mb-1" numberOfLines={2}>
             {item.productName}
           </Text>
-          <Text className="text-gray-400 text-xs font-montserrat-light">
-            Ksh {item.price.toLocaleString()} each
-          </Text>
+
+          <View className="flex-row items-center gap-2 mb-0.5">
+            <Text className="text-gray-400 text-xs font-montserrat-light">
+              Ksh {item.price.toLocaleString()} each
+            </Text>
+            {item.color && (
+              <View className="flex-row items-center gap-1">
+                <Text className="text-gray-300 text-xs">·</Text>
+                <View
+                  style={{
+                    width: 10, height: 10, borderRadius: 5,
+                    backgroundColor: COLOR_SWATCHES[item.color] || '#CCCCCC',
+                    borderWidth: item.color === 'White' ? 1 : 0,
+                    borderColor: '#E5E7EB',
+                  }}
+                />
+                <Text className="text-gray-400 text-xs font-montserrat-light">{item.color}</Text>
+              </View>
+            )}
+          </View>
 
           {/* Quantity + subtotal row */}
           <View className="flex-row items-center justify-between mt-3">
             <View className="flex-row items-center bg-gray-50 rounded-2xl overflow-hidden">
               <TouchableOpacity
-                onPress={() => onMinus(item._id)}
+                onPress={() => onMinus(item.cartItemId)}
                 disabled={item.quantity <= 1}
                 className="w-8 h-8 items-center justify-center"
                 style={{ backgroundColor: item.quantity <= 1 ? '#F3F4F6' : '#EDE9FE' }}
@@ -51,7 +75,7 @@ const CartItem = ({ item, index, onRemove, onAdd, onMinus }) => {
                 {item.quantity}
               </Text>
               <TouchableOpacity
-                onPress={() => onAdd(item._id)}
+                onPress={() => onAdd(item.cartItemId)}
                 className="w-8 h-8 items-center justify-center bg-purple-200"
               >
                 <Text className="text-purple-900 font-bold text-base">+</Text>
@@ -138,7 +162,7 @@ const Cart = () => {
         <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 160 }}>
           {products.map((item, index) => (
             <CartItem
-              key={item._id ?? index}
+              key={item.cartItemId ?? item._id ?? index}
               item={item}
               index={index}
               onRemove={removeFromCart}

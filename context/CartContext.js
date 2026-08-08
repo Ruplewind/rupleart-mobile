@@ -5,10 +5,12 @@ import Reducer, { initialState } from "../utils/Reducer";
 
 const CartContext =  createContext(initialState);
 
+const buildCartItemId = (product) =>
+    product.color ? `${product._id}-${product.color}` : `${product._id}`;
 
 export const CartProvider = ({ children, navigation }) =>{
     const [state, dispatch] = useReducer(Reducer, initialState);
-    
+
     useEffect(() => {
         const fetchCart = async () => {
           const storedState = await AsyncStorage.getItem('state');
@@ -21,9 +23,10 @@ export const CartProvider = ({ children, navigation }) =>{
 
     const addToCart = (product) =>{
 
-        const itemIndex = state.products.findIndex(item => item._id === product._id);
-        
-        if(itemIndex >= 0){ // Existing product
+        const cartItemId = buildCartItemId(product);
+        const itemIndex = state.products.findIndex(item => item.cartItemId === cartItemId);
+
+        if(itemIndex >= 0){ // Existing product + color combo
             if(product.quantity == 1){
                 state.products[itemIndex].quantity += 1;
                 updatedPrice(state.products);
@@ -31,19 +34,26 @@ export const CartProvider = ({ children, navigation }) =>{
                 state.products[itemIndex].quantity += product.quantity;
                 updatedPrice(state.products);
             }
+
+            dispatch({
+                type:"ADD_TO_CART",
+                payload: {
+                    products: state.products
+                }
+            })
         }else{
             let newProduct = {}
 
             if(product.quantity > 1){
-                newProduct = {...product, quantity: product.quantity}
+                newProduct = {...product, quantity: product.quantity, cartItemId}
             }else{
-                newProduct = {...product, quantity: 1}
+                newProduct = {...product, quantity: 1, cartItemId}
             }
 
             const updatedCart = state.products.concat(newProduct);
-    
+
             updatedPrice(updatedCart);
-    
+
             dispatch({
                 type:"ADD_TO_CART",
                 payload: {
@@ -55,11 +65,11 @@ export const CartProvider = ({ children, navigation }) =>{
         Alert.alert('Success','Product Has Been Added To Cart',[
             { text: 'OK', onPress: ()=>{} }
         ])
-        
+
     }
 
-    const addQuantity = (id) =>{
-        const itemIndex = state.products.findIndex(item => item._id === id);
+    const addQuantity = (cartItemId) =>{
+        const itemIndex = state.products.findIndex(item => item.cartItemId === cartItemId);
 
         if(itemIndex >= 0){
             state.products[itemIndex].quantity += 1;
@@ -68,8 +78,8 @@ export const CartProvider = ({ children, navigation }) =>{
         updatedPrice(state.products);
     }
 
-    const minusQuantity = (id) =>{
-        const itemIndex = state.products.findIndex(item => item._id === id);
+    const minusQuantity = (cartItemId) =>{
+        const itemIndex = state.products.findIndex(item => item.cartItemId === cartItemId);
 
         if(itemIndex >= 0){
             if(state.products[itemIndex].quantity > 1){
@@ -81,8 +91,8 @@ export const CartProvider = ({ children, navigation }) =>{
     }
 
     const removeFromCart = (product) =>{
-        const updatedCart = state.products.filter(currentProduct => 
-            currentProduct._id !== product._id
+        const updatedCart = state.products.filter(currentProduct =>
+            currentProduct.cartItemId !== product.cartItemId
         )
 
         updatedPrice(updatedCart);

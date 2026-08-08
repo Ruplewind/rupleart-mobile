@@ -19,6 +19,17 @@ const PAYMENT_STATUS = {
   confirmed: { label: 'Payment Confirmed',  bg: '#DCFCE7', text: '#166534' },
 };
 
+const COLOR_SWATCHES = {
+  Black: '#000000', White: '#FFFFFF', Grey: '#808080', Red: '#DC2626',
+  Orange: '#EA580C', Yellow: '#EAB308', Green: '#16A34A', Blue: '#2563EB',
+  Navy: '#1E3A8A', Purple: '#9333EA', Pink: '#EC4899', Brown: '#78350F',
+  Beige: '#D8C3A5', Gold: '#D4AF37', Silver: '#C0C0C0'
+};
+
+const LIGHT_COLORS = ['White', 'Beige', 'Silver', 'Yellow'];
+
+const TAX_RATE = 0.015; // 1.5%
+
 // ── Status Badge ──────────────────────────────────────────────────────────────
 const DeliveryBadge = ({ status }) => {
   const s = DELIVERY_STATUS[status] ?? DELIVERY_STATUS.pending;
@@ -42,7 +53,9 @@ const PaymentBadge = ({ status }) => {
 
 // ── Order Card ────────────────────────────────────────────────────────────────
 const OrderCard = ({ order, onCancel, cancelLoading }) => {
-  const total = order.total_price + order.delivery_cost;
+  const subtotal = order.total_price + order.delivery_cost;
+  const tax = Math.ceil(subtotal * TAX_RATE);
+  const grandTotal = subtotal + tax;
   const canCancel = order.delivery_status === 'pending';
 
   return (
@@ -53,7 +66,7 @@ const OrderCard = ({ order, onCancel, cancelLoading }) => {
       {/* Header stripe */}
       <View className="bg-purple-950 px-5 py-3 flex-row justify-between items-center">
         <Text className="text-white font-montserrat-black text-base">
-          Ksh {total.toLocaleString()}
+          Ksh {grandTotal.toLocaleString()}
         </Text>
         <View className="flex-row items-center gap-1.5">
           <MaterialIcons name="date-range" size={13} color="#C4B5FD" />
@@ -74,7 +87,23 @@ const OrderCard = ({ order, onCancel, cancelLoading }) => {
               <Text className="text-gray-800 text-sm font-montserrat-semibold" numberOfLines={1}>
                 {item.productName}
               </Text>
-              <Text className="text-purple-400 text-xs font-montserrat-light">#{item.productId}</Text>
+              <View className="flex-row items-center gap-1.5 mt-0.5">
+                <Text className="text-purple-400 text-xs font-montserrat-light">#{item.productId}</Text>
+                {item.color && (
+                  <>
+                    <Text className="text-gray-300 text-xs">·</Text>
+                    <View
+                      style={{
+                        width: 9, height: 9, borderRadius: 4.5,
+                        backgroundColor: COLOR_SWATCHES[item.color] || '#CCCCCC',
+                        borderWidth: LIGHT_COLORS.includes(item.color) ? 1 : 0,
+                        borderColor: '#E5E7EB',
+                      }}
+                    />
+                    <Text className="text-gray-400 text-xs font-montserrat-light">{item.color}</Text>
+                  </>
+                )}
+              </View>
             </View>
             <View className="items-end">
               <Text className="text-gray-700 text-sm font-montserrat-semibold">
@@ -95,6 +124,23 @@ const OrderCard = ({ order, onCancel, cancelLoading }) => {
             <Text className="text-gray-400 text-xs font-montserrat-light">
               Delivery fee: Ksh {order.delivery_cost.toLocaleString()}
             </Text>
+          </View>
+        </View>
+
+        {/* Price breakdown */}
+        <View className="mt-3 px-1">
+          <View className="flex-row justify-between mb-1">
+            <Text className="text-gray-400 text-xs font-montserrat-light">Items + Delivery</Text>
+            <Text className="text-gray-600 text-xs font-montserrat-semibold">Ksh {subtotal.toLocaleString()}</Text>
+          </View>
+          <View className="flex-row justify-between mb-1">
+            <Text className="text-gray-400 text-xs font-montserrat-light">Tax (1.5%)</Text>
+            <Text className="text-gray-600 text-xs font-montserrat-semibold">Ksh {tax.toLocaleString()}</Text>
+          </View>
+          <View className="h-px bg-gray-100 my-1.5" />
+          <View className="flex-row justify-between">
+            <Text className="text-gray-800 text-sm font-montserrat-semibold">Total</Text>
+            <Text className="text-purple-900 text-sm font-montserrat-black">Ksh {grandTotal.toLocaleString()}</Text>
           </View>
         </View>
 
