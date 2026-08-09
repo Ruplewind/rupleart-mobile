@@ -84,6 +84,11 @@ const EventPoster = ({ event, upcoming, onPress }) => {
   );
 };
 
+const formatDate = (date) => {
+  const [year, month, day] = date.split('-');
+  return `${day}-${month}-${year}`;
+};
+
 // ── Event Card ────────────────────────────────────────────────────────────────
 const EventCard = ({ event, upcoming, onImagePress }) => (
   <TouchableOpacity
@@ -131,7 +136,7 @@ const EventCard = ({ event, upcoming, onImagePress }) => (
             <Fontisto name="date" size={12} color={upcoming ? '#7C3AED' : '#9CA3AF'} />
           </View>
           <Text className="font-montserrat-semibold text-xs text-gray-700">
-            {event.date}
+            {formatDate(event.date)}
           </Text>
         </View>
       </View>
