@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { ActivityIndicator, Animated, BackHandler, Modal, Pressable, ScrollView, StatusBar as RNStatusBar, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Animated, BackHandler, Modal, Pressable, ScrollView, Share, StatusBar as RNStatusBar, Text, TouchableOpacity, View } from 'react-native'
 import { Image } from 'expo-image';
 import Fontisto from '@expo/vector-icons/Fontisto';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import Entypo from '@expo/vector-icons/Entypo';
 
 // ── Section Header ────────────────────────────────────────────────────────────
 const SectionHeader = ({ title, count, upcoming }) => (
@@ -90,62 +91,87 @@ const formatDate = (date) => {
 };
 
 // ── Event Card ────────────────────────────────────────────────────────────────
-const EventCard = ({ event, upcoming, onImagePress }) => (
-  <TouchableOpacity
-    activeOpacity={0.92}
-    className="mb-4 rounded-3xl overflow-hidden bg-white"
-    style={{
-      shadowColor: upcoming ? '#6B21A8' : '#000',
-      shadowOpacity: upcoming ? 0.1 : 0.04,
-      shadowRadius: 12,
-      shadowOffset: { width: 0, height: 4 },
-      elevation: upcoming ? 4 : 2,
-    }}
-  >
-    <EventPoster event={event} upcoming={upcoming} onPress={onImagePress} />
+const EventCard = ({ event, upcoming, onImagePress }) => {
+  const handleShare = async () => {
+    try {
+      const url = `https://rupleart.com/events/${event._id}`;
+      await Share.share({
+        message: `Check out this event: ${event.title}\n${url}`,
+        url,
+        title: event.title,
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
-    {/* Content */}
-    <View className="p-4">
-      <Text
-        className={`font-montserrat-black text-xl tracking-wide text-center mb-2 ${upcoming ? 'text-purple-950' : 'text-gray-500'}`}
-        numberOfLines={2}
-      >
-        {event.title}
-      </Text>
+  return (
+    <TouchableOpacity
+      activeOpacity={0.92}
+      className="mb-4 rounded-3xl overflow-hidden bg-white"
+      style={{
+        shadowColor: upcoming ? '#6B21A8' : '#000',
+        shadowOpacity: upcoming ? 0.1 : 0.04,
+        shadowRadius: 12,
+        shadowOffset: { width: 0, height: 4 },
+        elevation: upcoming ? 4 : 2,
+      }}
+    >
+      <EventPoster event={event} upcoming={upcoming} onPress={onImagePress} />
 
-      <Text className="font-montserrat-regular text-gray-500 text-sm leading-5 mb-4 text-center">
-        {event.description}
-      </Text>
-
-      {/* Divider */}
-      <View className="h-px bg-gray-100 mb-3" />
-
-      {/* Meta row */}
-      <View className="flex-row justify-between items-center">
-        <View className="flex-row items-center gap-1.5 flex-1">
-          <View className={`w-7 h-7 rounded-full items-center justify-center ${upcoming ? 'bg-purple-50' : 'bg-gray-50'}`}>
-            <EvilIcons name="location" size={18} color={upcoming ? '#7C3AED' : '#9CA3AF'} />
-          </View>
-          <Text className="font-montserrat-semibold text-xs text-gray-700 flex-1" numberOfLines={1}>
-            {event.venue}
-          </Text>
+      {/* Content */}
+      <View className="p-4">
+        {/* Share row */}
+        <View className="flex-row justify-end mb-1">
+          <TouchableOpacity
+            onPress={handleShare}
+            className="w-8 h-8 rounded-full bg-purple-50 items-center justify-center"
+          >
+            <Entypo name="share" size={14} color="#7C3AED" />
+          </TouchableOpacity>
         </View>
 
-        <View className="flex-row items-center gap-1.5">
-          <View className={`w-7 h-7 rounded-full items-center justify-center ${upcoming ? 'bg-purple-50' : 'bg-gray-50'}`}>
-            <Fontisto name="date" size={12} color={upcoming ? '#7C3AED' : '#9CA3AF'} />
+        <Text
+          className={`font-montserrat-black text-xl tracking-wide text-center mb-2 ${upcoming ? 'text-purple-950' : 'text-gray-500'}`}
+          numberOfLines={2}
+        >
+          {event.title}
+        </Text>
+
+        <Text className="font-montserrat-regular text-gray-500 text-sm leading-5 mb-4 text-center">
+          {event.description}
+        </Text>
+
+        {/* Divider */}
+        <View className="h-px bg-gray-100 mb-3" />
+
+        {/* Meta row */}
+        <View className="flex-row justify-between items-center">
+          <View className="flex-row items-center gap-1.5 flex-1">
+            <View className={`w-7 h-7 rounded-full items-center justify-center ${upcoming ? 'bg-purple-50' : 'bg-gray-50'}`}>
+              <EvilIcons name="location" size={18} color={upcoming ? '#7C3AED' : '#9CA3AF'} />
+            </View>
+            <Text className="font-montserrat-semibold text-xs text-gray-700 flex-1" numberOfLines={1}>
+              {event.venue}
+            </Text>
           </View>
-          <Text className="font-montserrat-semibold text-xs text-gray-700">
-            {formatDate(event.date)}
-          </Text>
+
+          <View className="flex-row items-center gap-1.5">
+            <View className={`w-7 h-7 rounded-full items-center justify-center ${upcoming ? 'bg-purple-50' : 'bg-gray-50'}`}>
+              <Fontisto name="date" size={12} color={upcoming ? '#7C3AED' : '#9CA3AF'} />
+            </View>
+            <Text className="font-montserrat-semibold text-xs text-gray-700">
+              {formatDate(event.date)}
+            </Text>
+          </View>
         </View>
       </View>
-    </View>
 
-    {/* Bottom accent bar for upcoming */}
-    {upcoming && <View className="h-1 bg-purple-950" />}
-  </TouchableOpacity>
-);
+      {/* Bottom accent bar for upcoming */}
+      {upcoming && <View className="h-1 bg-purple-950" />}
+    </TouchableOpacity>
+  );
+};
 
 // ── Empty State ───────────────────────────────────────────────────────────────
 const EmptyState = ({ upcoming }) => (
