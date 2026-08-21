@@ -155,10 +155,10 @@ const UpdateAd = () => {
       Alert.alert('Missing Fields', 'Please fill in all fields.');
       return;
     }
-    if (colors.length === 0) {
-      Alert.alert('Colors Required', 'Please select at least one available color.');
-      return;
-    }
+    // if (colors.length === 0) {
+    //   Alert.alert('Colors Required', 'Please select at least one available color.');
+    //   return;
+    // }
     if (!isChecked) {
       Alert.alert('Terms Required', 'Please accept the terms and conditions to continue.');
       return;

@@ -128,7 +128,7 @@ const Preview = () => {
     try {
       const url = `https://rupleart.com/preview/${item._id}`;
       await Share.share({
-        message: `Check out this artwork: ${item.productName} — Ksh ${item.price.toLocaleString()}\n${url}`,
+        message: `Check out this item: ${item.productName} — Ksh ${item.price.toLocaleString()}\n${url}`,
         url,
         title: item.productName,
       });
