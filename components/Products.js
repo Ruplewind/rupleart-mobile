@@ -34,26 +34,6 @@ const Products = ({ products, category, scrollViewRef }) => {
     return (
         <ScrollView className="p-4 mb-56 max-h-screen bg-white">
 
-            {/* <View style={styles.paginationContainerTop}>
-                {page > 0 && (
-                    <Pressable 
-                        className='border border-purple-900 p-2 rounded-lg'
-                        onPress={() => handlePageChange(page - 1)}
-                    >
-                        <Text style={styles.paginationTextOutline}>Previous Products</Text>
-                    </Pressable>
-                )}
-                
-                {page < totalPages - 1 && (
-                    <Pressable 
-                        style={styles.paginationButton} 
-                        onPress={() => handlePageChange(page + 1)}
-                    >
-                        <Text style={styles.paginationText}>Load More</Text>
-                    </Pressable>
-                )}
-            </View> */}
-
             <View style={styles.container}>
                 {displayedProducts.map((item) => (
                     <Pressable 

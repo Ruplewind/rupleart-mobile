@@ -5,18 +5,11 @@
     "version": "26.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/newsplash.png",
-    "resizeMode": "cover",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
-    "splash": {
-      "image": "./assets/images/newsplash.png",
-      "resizeMode": "cover",
-      "backgroundColor": "#ffffff"
-    },
     "ios": {
       "buildNumber": "26",
       "supportsTablet": true,
-      "package": "com.rupleartapp.app",
       "bundleIdentifier": "com.rupleartapp.app",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
@@ -47,12 +40,14 @@
           "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
       ],
-      "expo-web-browser"
+      "expo-web-browser",
+      "expo-image",
+      "expo-splash-screen",
+      "expo-status-bar"
     ],
     "experiments": {
       "typedRoutes": true
     },
-    "newArchEnabled": true,
     "extra": {
       "router": {
         "origin": false

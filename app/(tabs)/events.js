@@ -274,9 +274,16 @@ export default function Events() {
     fetch(`${process.env.EXPO_PUBLIC_API_URL}/events`)
       .then(res => res.json())
       .then(data => {
-        const today = new Date().toISOString().split('T')[0];
-        setUpcomingEvents(data.filter(e => e.date >= today));
-        setPastEvents(data.filter(e => e.date < today));
+        // Local date (toISOString uses UTC, which is 3 hours behind Nairobi,
+        // so an event from yesterday could still show as upcoming after midnight)
+        const now = new Date();
+        const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
+        const byDateAsc = (a, b) => a.date.localeCompare(b.date);
+        const byDateDesc = (a, b) => b.date.localeCompare(a.date);
+
+        setUpcomingEvents(data.filter(e => e.date >= today).sort(byDateAsc));
+        setPastEvents(data.filter(e => e.date < today).sort(byDateDesc));
         setLoading(false);
       })
       .catch(() => { setLoading(false); setError(true); });
@@ -320,7 +327,7 @@ export default function Events() {
         <SectionHeader title="Upcoming" count={upcomingEvents.length} upcoming={true} />
         {upcomingEvents.length > 0
           ? upcomingEvents.map((event, i) => (
-              <EventCard key={i} event={event} upcoming={true} onImagePress={setLightboxUri} />
+              <EventCard key={event._id} event={event} upcoming={true} onImagePress={setLightboxUri} />
             ))
           : <EmptyState upcoming={true} />
         }
@@ -329,7 +336,7 @@ export default function Events() {
         <SectionHeader title="Past Events" count={pastEvents.length} upcoming={false} />
         {pastEvents.length > 0
           ? pastEvents.map((event, i) => (
-              <EventCard key={i} event={event} upcoming={false} onImagePress={setLightboxUri} />
+              <EventCard key={event._id} event={event} upcoming={false} onImagePress={setLightboxUri} />
             ))
           : <EmptyState upcoming={false} />
         }
