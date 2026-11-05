@@ -77,7 +77,7 @@ const profile = () => {
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
-  const { userId, token, logout } = useAuthContext();
+  const { userId, token, logout, canPostAds, updateCanPostAds } = useAuthContext();
 
   const fetchData = () => {
     if (!token) return;
@@ -92,6 +92,7 @@ const profile = () => {
         setFirstName(data.first_name);
         setSecondName(data.second_name);
         setPhoneNumber(data.phoneNumber);
+        updateCanPostAds(data.canPostAds);
         setLoading(false);
         setRefreshing(false);
       })
@@ -143,7 +144,7 @@ const profile = () => {
           </View>
           <Text className="text-xl font-montserrat-semibold mb-2 text-gray-800">Welcome back</Text>
           <Text className="text-sm font-montserrat-light text-gray-500 text-center mb-8 leading-5">
-            Sign in to manage your profile and listings
+            Sign in to manage your profile and orders
           </Text>
           <TouchableOpacity
             className="bg-purple-950 w-full py-3.5 rounded-2xl mb-3"
@@ -219,15 +220,17 @@ const profile = () => {
           </Section>
 
           {/* ── My Ads Section ── */}
-          <Section
-            title="My Ads"
-            icon={<MaterialIcons name="storefront" size={14} color="#6B21A8" />}
-            defaultOpen={false}
-          >
-            <View className="mt-2">
-              <Myads />
-            </View>
-          </Section>
+          {canPostAds && (
+            <Section
+              title="My Ads"
+              icon={<MaterialIcons name="storefront" size={14} color="#6B21A8" />}
+              defaultOpen={false}
+            >
+              <View className="mt-2">
+                <Myads />
+              </View>
+            </Section>
+          )}
 
           {/* ── Security Section ── */}
           <Section

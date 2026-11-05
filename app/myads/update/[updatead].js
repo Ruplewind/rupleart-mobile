@@ -11,6 +11,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { useAuthContext } from '../../../context/AuthProvider';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { File } from 'expo-file-system';
 
 const AVAILABLE_COLORS = [
   'Black', 'White', 'Grey', 'Red', 'Orange', 'Yellow',
@@ -107,7 +108,7 @@ const Thumb = ({ uri, onRemove, label }) => (
 const UpdateAd = () => {
   const { product } = useLocalSearchParams();
   const data = JSON.parse(decodeURIComponent(product));
-  const { token } = useAuthContext();
+  const { token, canPostAds, isLoading } = useAuthContext();
 
   const [loading, setLoading]               = useState(false);
   const [productName, setProductName]       = useState(data.productName);
@@ -174,13 +175,9 @@ const UpdateAd = () => {
     colors.forEach(color => formData.append('colors', color));
 
     existingImages.forEach(img => formData.append('image', img));
-    images.forEach((uri, i) => {
-      const isPng = uri.endsWith('.png');
-      formData.append('image', {
-        uri,
-        name: `product_image_${i}.${isPng ? 'png' : 'jpeg'}`,
-        type: isPng ? 'image/png' : 'image/jpeg',
-      });
+    
+    images.forEach((uri) => {
+      formData.append('image', new File(uri));
     });
 
     fetch(`${process.env.EXPO_PUBLIC_API_URL}/edit_product/${data._id}`, {
@@ -194,12 +191,29 @@ const UpdateAd = () => {
           Alert.alert('Updated!', 'Your ad has been updated and is awaiting re-verification.', [
             { text: 'OK', onPress: () => router.push('profile') },
           ]);
+        } else if (res.status === 403) {
+          Alert.alert('Not allowed', 'Your account is not authorised to edit ads.');
         } else {
           Alert.alert('Failed', 'Could not update your ad. Please try again.');
         }
       })
       .catch(() => { setLoading(false); Alert.alert('Error', 'Something went wrong. Please retry.'); });
   };
+
+  if (isLoading) return null;
+
+  if (!canPostAds) {
+    return (
+      <View className="flex-1 items-center justify-center bg-gray-50 px-8">
+        <Text className="text-gray-800 font-montserrat-semibold text-base mb-2 text-center">
+          Posting ads isn't enabled for your account
+        </Text>
+        <TouchableOpacity className="bg-purple-950 px-8 py-3 rounded-2xl mt-4" onPress={() => router.back()}>
+          <Text className="text-white font-montserrat-semibold">Go back</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   return (
     <KeyboardAvoidingView

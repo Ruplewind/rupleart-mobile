@@ -42,7 +42,7 @@ const Login = () => {
           res.json().then(response => {
             if(res.ok){
                 //Alert.alert('Success', "Logged In");
-                login(response.token, response.userId, `${response.first_name} ${response.second_name}`);
+                login(response.token, response.userId, `${response.first_name} ${response.second_name}`, response.canPostAds);
                 if(response.firstTime == true)
                 {
                   router.push({

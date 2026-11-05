@@ -15,7 +15,7 @@ import SkeletonGrid from "../../components/SkeletonGrid";
 import ProductCard from "../../components/ProductCard";
 import useCart from "../../context/CartContext";
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 6;
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 // Created once per app launch: new shuffle each launch, stable while scrolling

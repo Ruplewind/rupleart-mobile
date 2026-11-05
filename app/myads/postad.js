@@ -11,6 +11,7 @@ import { useAuthContext } from '../../context/AuthProvider';
 import DropDownPicker from 'react-native-dropdown-picker';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { File } from 'expo-file-system';
 
 const AVAILABLE_COLORS = [
   'Black', 'White', 'Grey', 'Red', 'Orange', 'Yellow',
@@ -99,7 +100,7 @@ const PostAd = () => {
   const [size, setSize]               = useState(null);
   const [colors, setColors]           = useState([]);
 
-  const { token } = useAuthContext();
+  const { token, canPostAds, isLoading } = useAuthContext();
 
   useEffect(() => {
     fetch(`${process.env.EXPO_PUBLIC_API_URL}/get_categories`, {
@@ -154,13 +155,17 @@ const PostAd = () => {
     formData.append('size', size);
     colors.forEach(color => formData.append('colors', color));
 
-    images.forEach((uri, i) => {
-      const isPng = uri.endsWith('.png');
-      formData.append('image', {
-        uri,
-        name: `product_image_${i}.${isPng ? 'png' : 'jpeg'}`,
-        type: isPng ? 'image/png' : 'image/jpeg',
-      });
+    // images.forEach((uri, i) => {
+    //   const isPng = uri.endsWith('.png');
+    //   formData.append('image', {
+    //     uri,
+    //     name: `product_image_${i}.${isPng ? 'png' : 'jpeg'}`,
+    //     type: isPng ? 'image/png' : 'image/jpeg',
+    //   });
+    // });
+
+    images.forEach((uri) => {
+      formData.append('image', new File(uri));
     });
 
     fetch(`${process.env.EXPO_PUBLIC_API_URL}/add_product`, {
@@ -174,12 +179,39 @@ const PostAd = () => {
           Alert.alert('Posted!', 'Your ad has been submitted and is awaiting verification.', [
             { text: 'OK', onPress: () => router.push({ pathname: 'profile' }) },
           ]);
+        } else if (res.status === 403) {
+          Alert.alert('Not allowed', 'Your account is not authorised to post ads.');
         } else {
           Alert.alert('Failed', 'Could not submit your ad. Please try again.');
         }
       })
-      .catch(() => { setLoading(false); Alert.alert('Error', 'Something went wrong. Please retry.'); });
+      .catch((e) => { 
+        console.log('add_product failed:', e?.message);
+        setLoading(false); 
+        Alert.alert('Error', 'Something went wrong. Please retry.');
+      });
   };
+
+  if (isLoading) return null;
+
+  if (!canPostAds) {
+    return (
+      <View className="flex-1 items-center justify-center bg-gray-50 px-8">
+        <View className="w-16 h-16 rounded-full bg-purple-100 items-center justify-center mb-4">
+          <MaterialIcons name="lock" size={28} color="#6B21A8" />
+        </View>
+        <Text className="text-gray-800 font-montserrat-semibold text-base mb-2 text-center">
+          Posting ads isn't enabled for your account
+        </Text>
+        <Text className="text-gray-400 font-montserrat-light text-sm text-center mb-6">
+          Only approved sellers can post ads. Please contact us if you'd like to become one.
+        </Text>
+        <TouchableOpacity className="bg-purple-950 px-8 py-3 rounded-2xl" onPress={() => router.back()}>
+          <Text className="text-white font-montserrat-semibold">Go back</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   return (
     <KeyboardAvoidingView

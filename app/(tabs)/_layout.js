@@ -14,10 +14,12 @@ import {
   SafeAreaView,
 } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { useAuthContext } from '../../context/AuthProvider';
 
 export default function TabLayout() {
 
     const { products } = useCart();
+    const { canPostAds } = useAuthContext();
     //const insets = useSafeAreaInsets();
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
@@ -101,10 +103,10 @@ export default function TabLayout() {
             ),
         }} />
 
-        <Tabs.Screen 
-        name="profile" 
+        <Tabs.Screen
+        name="profile"
         options={{
-            title: 'Account & MyAds',
+            title: canPostAds ? 'Account & MyAds' : 'Account',
             headerTitle:'My Profile',
             tabBarIcon: ({ color, focused}) => (
                 <FontAwesome name={focused ? 'user' : 'user'} color={color} size={20} />
