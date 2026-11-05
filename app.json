@@ -2,13 +2,12 @@
   "expo": {
     "name": "RupleArt",
     "slug": "rupleart",
-    "version": "26.0.0",
+    "version": "27.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/newsplash.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "buildNumber": "26",
       "supportsTablet": true,
       "bundleIdentifier": "com.rupleartapp.app",
       "infoPlist": {
@@ -16,7 +15,6 @@
       }
     },
     "android": {
-      "versionCode": 26,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"

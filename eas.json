@@ -1,6 +1,10 @@
 {
+  "cli": {
+    "appVersionSource": "remote"
+  },
   "build": {
     "preview": {
+      "autoIncrement": true,
       "android": {
         "buildType": "app-bundle"
       },
@@ -35,11 +39,8 @@
       }
     }
   },
-  "cli": {
-    "appVersionSource": "local"
-  },
-  "submit":{
-    "production":{
+  "submit": {
+    "production": {
       "ios": {
         "appleId": "ruplearta@gmail.com",
         "ascAppId": "XXXXXX",
