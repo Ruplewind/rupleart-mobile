@@ -14,6 +14,8 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Entypo from '@expo/vector-icons/Entypo';
 import RelatedProducts from '../../components/RelatedProducts';
+import useFlowerCategories from '../../hooks/useFlowerCategories';
+import { FlowerNotice } from '../../components/FlowerDeliveryForm';
 
 const { width } = Dimensions.get('window');
 
@@ -120,6 +122,9 @@ const Preview = () => {
     item.colors && item.colors.length > 0 ? item.colors[0] : null
   );
   const scrollRef = useRef(null);
+
+  const { flowerTypes } = useFlowerCategories();
+  const isFlower = flowerTypes.has(item.type);
 
   const increaseQuantity = () => setQuantity(q => q + 1);
   const decreaseQuantity = () => setQuantity(q => Math.max(1, q - 1));
@@ -238,7 +243,7 @@ const Preview = () => {
 
         {/* Info chips */}
         <View className="flex-row gap-2 mb-5">
-          <Chip label="Size" value={item.size} icon="straighten" />
+          {item.size ? <Chip label="Size" value={item.size} icon="straighten" /> : null}
           <Chip label="Category" value={item.type} icon="category" />
         </View>
 
@@ -280,6 +285,8 @@ const Preview = () => {
             </TouchableOpacity>
           </View>
         </View>
+
+        {isFlower && <FlowerNotice style={{ marginBottom: 12 }} />}
 
         {/* Add to Cart */}
         <TouchableOpacity

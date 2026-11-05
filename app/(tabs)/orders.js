@@ -51,6 +51,49 @@ const PaymentBadge = ({ status }) => {
   );
 };
 
+// ── Flower Delivery Info ──────────────────────────────────────────────────────
+// "2026-11-10" -> "10 Nov 2026"
+const fmtFlowerDate = (iso) => {
+  if (!iso) return '';
+  const [y, m, d] = iso.split('-').map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString('en-GB', {
+    day: 'numeric', month: 'short', year: 'numeric',
+  });
+};
+
+const FlowerDeliveryInfo = ({ order }) => {
+  const f = order.flowerDelivery;
+  if (!order.hasFlowers || !f) return null;
+
+  return (
+    <View className="border border-pink-300 bg-pink-50 rounded-2xl px-3 py-3 mt-3">
+      <View className="flex-row items-center gap-2 mb-2">
+        <MaterialIcons name="local-florist" size={16} color="#9D174D" />
+        <Text className="text-pink-900 text-xs font-montserrat-semibold uppercase tracking-wide">
+          {f.sameDay
+            ? 'Same-day delivery'
+            : f.preferredDate
+              ? `Deliver on ${fmtFlowerDate(f.preferredDate)}`
+              : 'Flower delivery'}
+        </Text>
+      </View>
+
+      <Text className="text-gray-800 text-sm font-montserrat-semibold">{f.recipientName}</Text>
+      <Text className="text-gray-500 text-xs font-montserrat-light mt-0.5">{f.recipientPhone}</Text>
+      <Text className="text-gray-600 text-xs font-montserrat-light mt-1 leading-4">
+        {f.recipientAddress}
+      </Text>
+
+      {!!f.note && (
+        <View className="mt-2 pt-2 border-t border-pink-200">
+          <Text className="text-pink-700 text-xs font-montserrat-light mb-0.5">Card message</Text>
+          <Text className="text-gray-700 text-xs italic leading-4">"{f.note}"</Text>
+        </View>
+      )}
+    </View>
+  );
+};
+
 // ── Order Card ────────────────────────────────────────────────────────────────
 const OrderCard = ({ order, onCancel, cancelLoading }) => {
   const subtotal = order.total_price + order.delivery_cost;
@@ -127,6 +170,9 @@ const OrderCard = ({ order, onCancel, cancelLoading }) => {
           </View>
         </View>
 
+        {/* Recipient, address and card message (flower orders only) */}
+        <FlowerDeliveryInfo order={order} />
+
         {/* Price breakdown */}
         <View className="mt-3 px-1">
           <View className="flex-row justify-between mb-1">
@@ -184,12 +230,19 @@ const Orders = () => {
   const fetchOrders = () => {
     if (!token) { setLoading(false); return; }
 
+    setError(false);
+
     fetch(`${process.env.EXPO_PUBLIC_API_URL}/GetMyOrders`, {
       headers: { 'Authorization': `Bearer ${token}` },
     })
       .then(res => {
         if (res.ok) return res.json();
-        if (res.status === 401) { logout(); router.push('/login'); }
+        if (res.status === 401) {
+          logout();
+          router.push('/login');
+          return []; // nothing to load; avoids crashing on result.map below
+        }
+        throw new Error('Failed to load orders');
       })
       .then(result =>
         Promise.all(
@@ -276,7 +329,7 @@ const Orders = () => {
       <View className="flex-1 items-center justify-center bg-white px-8">
         <MaterialIcons name="wifi-off" size={40} color="#D1D5DB" />
         <Text className="text-gray-500 font-montserrat-semibold mt-4 mb-1">Couldn't load orders</Text>
-        <TouchableOpacity onPress={fetchOrders} className="mt-3 bg-purple-50 px-6 py-2.5 rounded-xl">
+        <TouchableOpacity onPress={() => { setLoading(true); fetchOrders(); }} className="mt-3 bg-purple-50 px-6 py-2.5 rounded-xl">
           <Text className="text-purple-700 font-montserrat-semibold text-sm">Retry</Text>
         </TouchableOpacity>
       </View>

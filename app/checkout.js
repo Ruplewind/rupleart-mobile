@@ -7,6 +7,8 @@ import useCart from '../context/CartContext';
 import { useAuthContext } from '../context/AuthProvider';
 import { WebView } from 'react-native-webview';
 import DropDownPicker from 'react-native-dropdown-picker';
+import useFlowerCategories from '../hooks/useFlowerCategories';
+import FlowerDeliveryForm, { emptyFlowerDetails, validateFlowerDetails } from '../components/FlowerDeliveryForm';
 
 const TAX_RATE = 0.015; // 1.5%
 
@@ -34,6 +36,17 @@ const Checkout = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [redirected, setRedirected] = useState(false);
   const [open, setOpen] = useState(false);
+
+  const { flowerTypes, ready } = useFlowerCategories();
+  const hasFlowers = products.some((p) => flowerTypes.has(p.type));
+  const mixedCart = hasFlowers && !products.every((p) => flowerTypes.has(p.type));
+
+  const [flower, setFlower] = useState(emptyFlowerDetails);
+  const [flowerErrors, setFlowerErrors] = useState({});
+  const patchFlower = (patch) => {
+    setFlower((f) => ({ ...f, ...patch }));
+    setFlowerErrors({}); // clear stale errors once the user edits
+  };
 
   const myRegex = /^07\d{8}$/;
 
@@ -89,6 +102,15 @@ const Checkout = () => {
   });
 
   const handleSubmit = (data) => {
+    if (hasFlowers) {
+      const errs = validateFlowerDetails(flower);
+      setFlowerErrors(errs);
+      if (Object.keys(errs).length > 0) {
+        Alert.alert('Almost there', 'Please complete the flower delivery details.');
+        return;
+      }
+    }
+
     setLoading(true);
     fetch(`${process.env.EXPO_PUBLIC_API_URL}/Checkout`, {
       method: 'POST',
@@ -96,7 +118,10 @@ const Checkout = () => {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify({ ...data, products, location, tax, grandTotal })
+      body: JSON.stringify({
+        ...data, products, location, tax, grandTotal,
+        ...(hasFlowers && { flowerDetails: flower }),
+      })
     })
       .then(res => {
         if (res.ok) {
@@ -106,10 +131,18 @@ const Checkout = () => {
             setShowIframe(true);
           });
         } else {
-          res.json().then(response => Alert.alert(response));
+          // Show the server's own message (flower validation, min price, etc.)
+          res.json()
+            .then(msg => Alert.alert(typeof msg === 'string' ? msg : 'Something went wrong. Try again'))
+            .catch(() => Alert.alert('Something went wrong. Try again'))
+            .finally(() => setLoading(false));
         }
       })
-      .catch(err => console.error(err));
+      .catch(err => {
+        console.error(err);
+        setLoading(false);
+        Alert.alert('Network error. Try again');
+      });
   };
 
   useEffect(() => {
@@ -137,6 +170,31 @@ const Checkout = () => {
       setRedirected(true);
     }
   };
+
+  if (!ready) {
+    return (
+      <View className="flex-1 items-center justify-center bg-gray-100">
+        <ActivityIndicator color="#581C87" />
+      </View>
+    );
+  }
+
+  if (mixedCart) {
+    return (
+      <View className="flex-1 items-center justify-center bg-gray-100 px-8">
+        <Text className="font-bold text-gray-800 text-base mb-2 text-center">
+          Flowers must be ordered separately
+        </Text>
+        <Text className="text-gray-500 text-sm text-center mb-6">
+          Flowers are delivered to a recipient, while other items go to your own delivery location.
+          Please remove one kind from your cart and check out separately.
+        </Text>
+        <TouchableOpacity className="bg-purple-950 px-8 py-3 rounded-2xl" onPress={() => router.push('/cart')}>
+          <Text className="text-white font-semibold">Back to cart</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   return (
     <KeyboardAvoidingView
@@ -252,7 +310,9 @@ const Checkout = () => {
                   {/* Delivery Location */}
                   {!allVideos && (
                     <View className="mb-4 mt-4">
-                      <Text className="mb-2 font-semibold text-gray-700">Select delivery location:</Text>
+                      <Text className="mb-2 font-semibold text-gray-700">
+                        {hasFlowers ? 'Select delivery area:' : 'Select delivery location:'}
+                      </Text>
                       <View className="mx-1" style={{ zIndex: 1000, minHeight: open ? 240 : 30 }}>
                       <DropDownPicker
                         open={open}
@@ -285,6 +345,10 @@ const Checkout = () => {
                       />
                       </View>
                     </View>
+                  )}
+
+                  {hasFlowers && (
+                    <FlowerDeliveryForm value={flower} onChange={patchFlower} errors={flowerErrors} />
                   )}
 
                   {/* Delivery Summary */}

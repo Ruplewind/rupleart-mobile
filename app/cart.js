@@ -7,6 +7,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuthContext } from '../context/AuthProvider';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import useFlowerCategories from '../hooks/useFlowerCategories';
+import { FlowerNotice } from '../components/FlowerDeliveryForm';
 
 const COLOR_SWATCHES = {
   Black: '#000000', White: '#FFFFFF', Grey: '#808080', Red: '#DC2626',
@@ -106,6 +108,10 @@ const Cart = () => {
   const { products, total, removeFromCart, addQuantity, minusQuantity } = useCart();
   const { token } = useAuthContext();
 
+  const { flowerTypes } = useFlowerCategories();
+  const hasFlowers = products.some((p) => flowerTypes.has(p.type));
+  const mixedCart = hasFlowers && !products.every((p) => flowerTypes.has(p.type));
+
   const handleCheckout = () => {
     if (!token) {
       Alert.alert(
@@ -115,6 +121,13 @@ const Cart = () => {
           { text: 'Cancel', style: 'cancel' },
           { text: 'Login', onPress: () => router.push({ pathname: '/login', params: { referer: '/cart' } }) },
         ]
+      );
+      return;
+    }
+    if (mixedCart) {
+      Alert.alert(
+        'Flowers must be ordered separately',
+        'Please remove either the flowers or the other items to continue.'
       );
       return;
     }
@@ -159,6 +172,15 @@ const Cart = () => {
           </View>
         </View>
 
+        {hasFlowers && !mixedCart && <FlowerNotice style={{ marginBottom: 12 }} />}
+        {mixedCart && (
+          <View className="border border-red-300 bg-red-50 rounded-2xl p-3 mb-3">
+            <Text className="text-red-900 text-xs text-center">
+              Flowers must be ordered separately from other items. Please remove one kind to continue.
+            </Text>
+          </View>
+        )}
+
         <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 160 }}>
           {products.map((item, index) => (
             <CartItem
@@ -197,7 +219,8 @@ const Cart = () => {
           </View>
 
           <TouchableOpacity
-            className="bg-purple-950 rounded-2xl py-4 flex-row items-center justify-center gap-2"
+            className="rounded-2xl py-4 flex-row items-center justify-center gap-2"
+            style={{ backgroundColor: mixedCart ? '#D1D5DB' : '#3B0764' }}
             activeOpacity={0.88}
             onPress={handleCheckout}
           >
