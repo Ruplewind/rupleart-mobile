@@ -14,9 +14,17 @@ import Carousel from "../../components/Carousel";
 import SkeletonGrid from "../../components/SkeletonGrid";
 import ProductCard from "../../components/ProductCard";
 import useCart from "../../context/CartContext";
+import * as SplashScreen from "expo-splash-screen";
 
 const PAGE_SIZE = 6;
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
+
+let splashHidden = false;
+const hideSplash = () => {
+  if (splashHidden) return;
+  splashHidden = true;
+  setTimeout(() => SplashScreen.hideAsync().catch(() => {}), 2000);
+};
 
 // Created once per app launch: new shuffle each launch, stable while scrolling
 const SESSION_SEED = Math.random().toString(36).slice(2);
@@ -137,6 +145,10 @@ export default function Home() {
   useEffect(() => {
     loadProducts(true);
   }, [loadProducts]);
+
+  useEffect(() => {
+    if (!loading) hideSplash();
+  }, [loading]);
 
   const handleEndReached = useCallback(() => {
     if (products.length === 0 || loading) return;

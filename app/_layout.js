@@ -38,15 +38,16 @@ export default function RootLayout() {
     "Montserrat-ThinItalic": require('../assets/fonts/Montserrat-ThinItalic.ttf'),
   });
 
-  useEffect(()=>{
-    if(error) throw error;
+  SplashScreen.preventAutoHideAsync().catch(() => {});
 
-    if(fontsLoaded){
-      setTimeout(async () => {
-        await SplashScreen.hideAsync();
-      }, 1000);
-    }
-  },[fontsLoaded])
+  useEffect(() => {
+    if (error) throw error;
+  }, [error]);
+
+  useEffect(() => {
+    const t = setTimeout(() => SplashScreen.hideAsync().catch(() => {}), 6000);
+    return () => clearTimeout(t);
+  }, []);
 
   if(!fontsLoaded && !error) return null;
 
