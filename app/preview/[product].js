@@ -123,8 +123,8 @@ const Preview = () => {
   );
   const scrollRef = useRef(null);
 
-  const { flowerTypes } = useFlowerCategories();
-  const isFlower = flowerTypes.has(item.type);
+  const { isFlower } = useFlowerCategories();
+  const isFlowerItem = isFlower(item.type);
 
   const increaseQuantity = () => setQuantity(q => q + 1);
   const decreaseQuantity = () => setQuantity(q => Math.max(1, q - 1));
@@ -286,7 +286,7 @@ const Preview = () => {
           </View>
         </View>
 
-        {isFlower && <FlowerNotice style={{ marginBottom: 12 }} />}
+        {isFlowerItem && <FlowerNotice style={{ marginBottom: 12 }} />}
 
         {/* Add to Cart */}
         <TouchableOpacity

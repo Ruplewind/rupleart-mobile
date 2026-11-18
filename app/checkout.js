@@ -37,9 +37,9 @@ const Checkout = () => {
   const [redirected, setRedirected] = useState(false);
   const [open, setOpen] = useState(false);
 
-  const { flowerTypes, ready } = useFlowerCategories();
-  const hasFlowers = products.some((p) => flowerTypes.has(p.type));
-  const mixedCart = hasFlowers && !products.every((p) => flowerTypes.has(p.type));
+  const { isFlower, ready } = useFlowerCategories();
+  const hasFlowers = products.some((p) => isFlower(p.type));
+  const mixedCart = hasFlowers && !products.every((p) => isFlower(p.type));
 
   const [flower, setFlower] = useState(emptyFlowerDetails);
   const [flowerErrors, setFlowerErrors] = useState({});

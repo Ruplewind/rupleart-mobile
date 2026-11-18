@@ -108,9 +108,9 @@ const Cart = () => {
   const { products, total, removeFromCart, addQuantity, minusQuantity } = useCart();
   const { token } = useAuthContext();
 
-  const { flowerTypes } = useFlowerCategories();
-  const hasFlowers = products.some((p) => flowerTypes.has(p.type));
-  const mixedCart = hasFlowers && !products.every((p) => flowerTypes.has(p.type));
+  const { isFlower } = useFlowerCategories();
+  const hasFlowers = products.some((p) => isFlower(p.type));
+  const mixedCart = hasFlowers && !products.every((p) => isFlower(p.type));
 
   const handleCheckout = () => {
     if (!token) {

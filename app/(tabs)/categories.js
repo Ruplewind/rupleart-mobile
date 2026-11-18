@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, ActivityIndicator, Pressable, LayoutAnimation, Platform, UIManager } from 'react-native';
 import { Image } from 'expo-image';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useCallback, memo } from 'react';
 import { router } from 'expo-router';
 import { AntDesign } from '@expo/vector-icons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -10,10 +10,13 @@ if (Platform.OS === 'android') {
   UIManager.setLayoutAnimationEnabledExperimental?.(true);
 }
 
+const API_URL = process.env.EXPO_PUBLIC_API_URL;
 const PAGE_SIZE = 10;
+// One seed per app launch: stable order within a session, new order each launch
+const SESSION_SEED = Math.random().toString(36).slice(2);
 
 // ProductCard
-const ProductCard = ({ item }) => {
+const ProductCard = memo(({ item }) => {
   const { addToCart } = useCart();
   return (
     <Pressable
@@ -23,9 +26,12 @@ const ProductCard = ({ item }) => {
       android_ripple={{ color: '#EDE9FE' }}
     >
       <Image
-        source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/uploads/${item.image[0]}` }}
-        style={{ width: '100%', height: 130 }}
+        source={{ uri: `${API_URL}/thumb/${item.image[0]}` }}
+        style={{ width: '100%', height: 130, backgroundColor: '#EEE' }}
         contentFit="cover"
+        transition={150}
+        cachePolicy="memory-disk"
+        recyclingKey={item._id}
       />
       <View className="p-2">
         <Text className="text-gray-800 text-sm text-center mb-1" numberOfLines={1} ellipsizeMode="tail">
@@ -44,37 +50,68 @@ const ProductCard = ({ item }) => {
       </View>
     </Pressable>
   );
-};
+});
 
-// CategorySection
-const CategorySection = ({ categoryName, index, allProducts }) => {
+// CategorySection: fetches its own products, only once opened
+const CategorySection = ({ categoryName, index }) => {
   const [open, setOpen] = useState(false);
-  const [page, setPage] = useState(1);
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [loaded, setLoaded] = useState(false);
+
+  const pageRef = useRef(1);
+  const fetchingRef = useRef(false);
 
   const rowBg = index % 2 === 0 ? 'bg-purple-50' : 'bg-violet-50';
 
-  // All matching products, newest first
-  const allInCategory = allProducts
-    .filter(p => p.type?.toLowerCase().trim() === categoryName.toLowerCase().trim())
-    .reverse();
+  const fetchPage = useCallback(async () => {
+    if (fetchingRef.current) return;
+    fetchingRef.current = true;
+    setLoading(true);
+    setError(false);
 
-  const total = allInCategory.length;
-  const displayed = allInCategory.slice(0, page * PAGE_SIZE);
-  const hasMore = displayed.length < total;
+    try {
+      const params = new URLSearchParams({
+        page: String(pageRef.current),
+        limit: String(PAGE_SIZE),
+        seed: SESSION_SEED,
+        category: categoryName,
+        exact: '1',
+      });
+      const res = await fetch(`${API_URL}/get_approved_products?${params}`);
+      if (!res.ok) throw new Error('Request failed');
+      const json = await res.json();
+
+      const batch = Array.isArray(json) ? json : json.products ?? [];
+      setHasMore(Array.isArray(json) ? batch.length === PAGE_SIZE : Boolean(json.hasMore));
+      pageRef.current += 1;
+      setItems(prev => {
+        const seen = new Set(prev.map(p => p._id));
+        return [...prev, ...batch.filter(p => !seen.has(p._id))];
+      });
+      setLoaded(true);
+    } catch {
+      setError(true);
+    } finally {
+      fetchingRef.current = false;
+      setLoading(false);
+    }
+  }, [categoryName]);
 
   const toggle = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    setOpen(prev => !prev);
-  };
-
-  const loadMore = () => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    setPage(prev => prev + 1);
+    const next = !open;
+    setOpen(next);
+    if (next && !loaded) fetchPage(); // first open only
   };
 
   const showLess = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    setPage(1);
+    setItems(prev => prev.slice(0, PAGE_SIZE));
+    pageRef.current = 2;
+    setHasMore(true);
   };
 
   return (
@@ -91,37 +128,44 @@ const CategorySection = ({ categoryName, index, allProducts }) => {
           </View>
           <Text className="text-gray-800 font-montserrat-semibold text-sm">{categoryName}</Text>
         </View>
-        <View className="flex-row items-center gap-2">
-          {/* <View className="bg-purple-200 rounded-full px-2 py-0.5">
-            <Text className="text-purple-800 text-xs">{total} item{total !== 1 ? 's' : ''}</Text>
-          </View> */}
-          <AntDesign name={open ? 'up' : 'down'} size={13} color="#7C3AED" />
-        </View>
+        <AntDesign name={open ? 'up' : 'down'} size={13} color="#7C3AED" />
       </Pressable>
 
       {/* Body */}
       {open && (
         <View className="bg-white px-3 pt-3 pb-3">
-          {total === 0 ? (
+          {!loaded && loading && (
+            <View className="items-center py-6">
+              <ActivityIndicator color="#7C3AED" />
+            </View>
+          )}
+
+          {!loaded && error && (
+            <View className="items-center py-6">
+              <Text className="text-gray-400 text-xs font-montserrat-light mb-2">Couldn't load products</Text>
+              <Pressable onPress={fetchPage} className="bg-purple-50 px-4 py-2 rounded-xl">
+                <Text className="text-purple-700 text-xs font-montserrat-semibold">Retry</Text>
+              </Pressable>
+            </View>
+          )}
+
+          {loaded && items.length === 0 && (
             <View className="items-center py-6">
               <Text className="text-gray-400 text-xs font-montserrat-light">No products in this category</Text>
             </View>
-          ) : (
-            <>
-              {/* <Text className="text-gray-400 text-xs font-montserrat-light mb-3">
-                Showing {displayed.length} of {total}
-              </Text> */}
+          )}
 
+          {items.length > 0 && (
+            <>
               <View className="flex-row flex-wrap justify-between">
-                {displayed.map(item => (
+                {items.map(item => (
                   <ProductCard key={item._id} item={item} />
                 ))}
               </View>
 
-              {/* Pagination buttons */}
-              {(hasMore || page > 1) && (
+              {(hasMore || items.length > PAGE_SIZE) && (
                 <View className="flex-row gap-2 mt-3">
-                  {page > 1 && (
+                  {items.length > PAGE_SIZE && (
                     <Pressable
                       onPress={showLess}
                       className="flex-1 border border-purple-300 rounded-xl py-2.5 items-center"
@@ -132,13 +176,16 @@ const CategorySection = ({ categoryName, index, allProducts }) => {
                   )}
                   {hasMore && (
                     <Pressable
-                      onPress={loadMore}
+                      onPress={fetchPage}
+                      disabled={loading}
                       className="flex-1 bg-purple-950 rounded-xl py-2.5 items-center"
                       android_ripple={{ color: '#6D28D9' }}
                     >
-                      <Text className="text-white text-xs font-montserrat-semibold">
-                        Load More
-                      </Text>
+                      {loading
+                        ? <ActivityIndicator color="white" size="small" />
+                        : <Text className="text-white text-xs font-montserrat-semibold">
+                            {error ? 'Retry' : 'Load More'}
+                          </Text>}
                     </Pressable>
                   )}
                 </View>
@@ -154,18 +201,14 @@ const CategorySection = ({ categoryName, index, allProducts }) => {
 // Main
 const Categories = () => {
   const [categories, setCategories] = useState([]);
-  const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    Promise.all([
-      fetch(`${process.env.EXPO_PUBLIC_API_URL}/get_categories`).then(r => r.json()),
-      fetch(`${process.env.EXPO_PUBLIC_API_URL}/get_approved_products`).then(r => r.json()),
-    ])
-      .then(([cats, products]) => {
+    fetch(`${API_URL}/get_categories`)
+      .then(r => r.json())
+      .then(cats => {
         setCategories(Array.isArray(cats) ? cats : []);
-        setAllProducts(Array.isArray(products) ? products : []);
         setLoading(false);
       })
       .catch(() => { setLoading(false); setError(true); });
@@ -204,7 +247,6 @@ const Categories = () => {
           key={item._id ?? index}
           categoryName={item.category}
           index={index}
-          allProducts={allProducts}
         />
       ))}
     </ScrollView>
