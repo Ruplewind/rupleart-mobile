@@ -4,7 +4,7 @@
     "slug": "rupleart",
     "version": "27.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/newsplash.png",
+    "icon": "./assets/images/icon-1024.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "ios": {
@@ -40,7 +40,19 @@
       ],
       "expo-web-browser",
       "expo-image",
-      "expo-splash-screen",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#ffffff",
+          "android": {
+            "image": "./assets/images/splash-icon-android12.png",
+            "imageWidth": 200
+          }
+        }
+      ],
       "expo-status-bar"
     ],
     "experiments": {
